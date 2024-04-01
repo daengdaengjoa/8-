@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 상세 조회 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .post {
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .post h2 {
+            margin-top: 0;
+            display: inline-block;
+        }
+        .post .edit-buttons {
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .post .edit-buttons button {
+            margin-left: 10px;
+        }
+        .post p {
+            margin-bottom: 10px;
+        }
+        .comment {
+            background-color: #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .comment h3 {
+            margin-top: 0;
+            display: inline-block;
+        }
+        .comment .edit-buttons {
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .comment .edit-buttons button {
+            margin-left: 10px;
+        }
+        .comment p {
+            margin-bottom: 10px;
+        }
+        .scroll-buttons-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1;
+        }
+        .scroll-buttons-container .scroll-to-top {
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            text-align: center;
+            line-height: 50px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .scroll-buttons-container .other-buttons {
+            display: flex;
+            flex-direction: column;
+        }
+        .scroll-buttons-container .other-buttons button {
+            width: 50px;
+            height: 50px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            text-align: center;
+            line-height: 50px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="post">
+        <h2>영화 제목 1</h2>
+        <div class="edit-buttons">
+            <button>수정</button>
+            <button>삭제</button>
+        </div>
+        <p><strong>작성자:</strong> 작성자 1</p>
+        <p><strong>내용:</strong> 이 영화는 정말 좋았습니다. 강추합니다!</p>
+    </div>
+
+    <div class="comment">
+        <h3>댓글 제목 1</h3>
+        <div class="edit-buttons">
+            <button>수정</button>
+            <button>삭제</button>
+        </div>
+        <p>댓글 내용이 여기에 들어갑니다.</p>
+    </div>
+
+    <div class="scroll-buttons-container">
+        <a href="메인페이지 URL" class="scroll-to-top">메인</a>
+        <div class="other-buttons">
+            <button>버튼1</button>
+            <button>버튼2</button>
+        </div>
+    </div>
+</body>
+</html>
