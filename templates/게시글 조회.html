@@ -115,6 +115,15 @@
                     <button>삭제</button>
                 </div>
             </h2>
+            <div class="card">
+                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+                <h2>{{ data.title }}</h2>
+                <p><strong>개요:</strong> {{ data.info }}</p>
+                <p><strong>개봉:</strong> {{ data.date }}</p>
+                <p><strong>평점:</strong> {{ data.star }}</p>
+                <p><strong>관객수:</strong> {{ data.nums }}</p>
+                <p><strong>줄거리:</strong> {{ data.content }}</p>
+            </div>
             <p><strong>작성자:</strong> {{ posts.username }}</p>
             <p><strong>제목:</strong> {{ posts.posting_title }}</p>
             <p> {{ posts.review }}</p>

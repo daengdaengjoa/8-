@@ -113,10 +113,9 @@ def 게시글조회():
     # 게시글 내용 표시
     comments = Comment.query.filter_by(post_id=post_id).all()
 
-    return render_template("게시글 조회.html", comments=comments, posts=posts)
-
     # query = input('검색할 영화를 입력하세요: ')
-    query = "이터널선샤인"
+    query = posts.movie_title
+    print(query)
     url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+'%s'%query
     response = requests.get(url)
     html_text = response.text
@@ -134,7 +133,7 @@ def 게시글조회():
     data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content, 'image_url': image_url}
     print(data1)
 
-    return render_template("게시글 조회.html", data=data1)
+    return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts)
 
 
 if __name__ == "__main__":
