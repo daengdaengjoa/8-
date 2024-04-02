@@ -27,7 +27,7 @@ class Posting(db.Model):
     movie_title = db.Column(db.String, nullable=False)
     posting_title = db.Column(db.String, nullable=False)
     review = db.Column(db.String, nullable=False)
-    star = db.Column(db.Integer, nullable=False)
+    grade = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
 
 
