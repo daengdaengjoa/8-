@@ -34,35 +34,7 @@ class Comment(db.Model):
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
-
-@app.route("/login", methods=["POST"])
-def login():
-    user_info_id_receive = request.form.get("user_info_id")
-    user_id_receive = request.form.get("user_id")
-    pw_receive = request.form.get("user_pw")
-    name_receive = request.form.get("username")
-    age_receive = request.form.get("age")
-    gender_receive = request.form.get("gender")
-    area_receive = request.form.get("area")
-
-    login = UserInfo(user_info_id=user_info_id_receive, user_id=user_id_receive, user_pw=pw_receive, username=name_receive, age=age_receive, gender=gender_receive, area=area_receive)
-    db.session.add(login)
-    db.session.commit()
-
-    return redirect(url_for("회원가입.html"))
-
-@app.route("/comment", methods=["POST"])
-def comment():
-    comment_id_receive = request.form.get("comment_id")
-    user_id_receive = request.form.get("user_id")
-    detail_receive = request.form.get("detail")
-    date = datetime.now()
-
-    comment = Comment(comment_id=comment_id_receive, user_id=user_id_receive, detail=detail_receive, date=date)
-    db.session.add(comment)
-    db.session.commit()
-
-    return redirect(url_for("게시글 조회.html"))
+    
 
 @app.route("/submit", methods=["POST"])
 def submit():
