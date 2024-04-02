@@ -1,16 +1,17 @@
-import os
-from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
+from flask import Flask, render_template, request, redirect, url_for, session
 
-from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
+import os
+from datetime import datetime
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =\
+app.config['SECRET_KEY'] = '1234'
+app.config['SQLALCHEMY_DATABASE_URI'] = \
     'sqlite:///' + os.path.join(basedir, 'database.db')
 
 db = SQLAlchemy(app)
@@ -39,24 +40,78 @@ class Posting(db.Model):  # 게시글 정보 데이터
 
 class Comment(db.Model):  # 댓글 정보 데이터
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.String, nullable=False) # 이거 나중에 추가 되어야 함
+    post_id = db.Column(db.String, nullable=False)  # 이거 나중에 추가 되어야 함
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
 
+
 @app.route("/")
 def 메인화면():
-    posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
-    return render_template("메인화면.html", posts=posts)
+    print(session.get('user_id'))
+    # 로그인 세션정보('userid')가 있을 경우
+    if not session.get('user_id'):
+        posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
+        return render_template("메인화면.html", posts=posts)
+
+    # 로그인 세션정보가 없을 경우
+    else:
+        userid = session.get('user_id')
+        posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
+        return render_template("메인화면.html", posts=posts, userid=userid)
+
+
+@app.route("/로그인화면", methods=["GET", "POST"])
+def 로그인화면():
+    # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
+    if request.method == "POST" and request.form.get("name"):
+        # Posting테이블의 칼럼에 맞추어 변수의 값 입력
+        new_UserInfo = UserInfo(
+            user_id=request.form['user_id'],
+            pw=request.form['pw'],
+            name=request.form['name'],
+            age=request.form['age'],
+            gender=request.form['gender'],
+            area=request.form['area'],  # 데이터 반영 필요
+        )
+        # 데이터베이스 세션에 추가
+        db.session.add(new_UserInfo)
+
+        # 변경 사항 커밋
+        db.session.commit()
+
+    elif request.method == "POST" and not request.form.get("name"):
+        user_id = request.form.get('user_id')
+        pw = request.form.get('pw')
+        print(user_id)
+        # try:
+        login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first()
+        print(login)
+        print(login.user_id)
+        if login is not None:
+            session["user_id"] = login.user_id
+            return redirect(url_for('메인화면'))
+        # except:
+        #     return render_template("로그인 화면.html")
+    # 데이터 값 저장 만하고 보여줄 필요는 없으니 리턴 값 없음
+    return render_template("로그인 화면.html")
+
+
+@app.route("/로그아웃", methods=["GET"])
+def logout():
+    session.clear()
+    return redirect("/")
 
 
 @app.route("/게시글작성", methods=["GET", "POST"])
 def 게시글작성():
+    if not session.get('user_id'):
+        return render_template("로그인 화면.html")
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_Posting = Posting(
-            user_id='123', # 아직 유저 정보 없음....
+            user_id=session.get('userid'),
             username=request.form['username'],
             movie_title=request.form['movie_title'],
             posting_title=request.form['posting_title'],
@@ -99,9 +154,11 @@ def 게시글조회():
 
     # POST시 댓글 저장한다.
     if request.method == "POST":
+        if not session.get('userid'):
+            return render_template("로그인 화면.html")
         new_Comment = Comment(
             post_id=post_id,
-            user_id="심청이",
+            user_id=session.get('userid'),
             detail=request.form['detail'],
             date=datetime.now()
         )
@@ -116,7 +173,7 @@ def 게시글조회():
     # query = input('검색할 영화를 입력하세요: ')
     query = posts.movie_title
     print(query)
-    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+'%s'%query
+    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + '%s' % query
     response = requests.get(url)
     html_text = response.text
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -130,7 +187,8 @@ def 게시글조회():
     content = soup.select_one('.desc._text').text.strip()
     image_url = soup.select_one('a.thumb._item img')["src"]
 
-    data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content, 'image_url': image_url}
+    data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content,
+             'image_url': image_url}
     print(data1)
 
     return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts)
