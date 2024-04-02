@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 정보 카드</title>
+    <style>
+        .card {
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .card h2,
+        .card p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="image">
+            <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+        </div>
+        <div class="content">
+            <h2>{{ data.title }}</h2>
+            <p>개요: {{ data.info }}</p>
+            <p>개봉: {{ data.date }}</p>
+            <p>평점: {{ data.star }}</p>
+            <p>관객수: {{ data.nums }}</p>
+            <p>줄거리: {{ data.content }}</p>
+        </div>
+    </div>
+
+    <!-- <div class="row row-cols-1 row-cols-md-4 g-4 mx-auto w-75 pb-5">
+        {% for melon in data %}
+        <div class="col">
+            <div class="card h-100">
+                <img src="{{ melon.image }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ melon.title }}</h5>
+                    <p class="card-text">{{ melon.artist }}</p>
+                    <p class="card-text">추천 by 최지웅</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div> -->
+
+</body>
+
+</html>
