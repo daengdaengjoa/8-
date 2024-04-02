@@ -130,12 +130,12 @@
         </header>
         <div class="content">
             {% for post in posts %}
-                <a href="/게시글조회" style="text-decoration: none; color: inherit;">
+                <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
                     <div class="review">
-                        <h2>{{ post.movie }}</h2>
-                        <p><strong>작성자:</strong> {{ post.name }}</p>
-                        <p><strong>평점:</strong> {{ post.score }}/5</p>
-                        <p><strong>리뷰 내용:</strong> {{ post.title }}</p>
+                        <h2>{{ post.movie_title }}</h2>
+                        <p><strong>작성자:</strong> {{ post.username }}</p>
+                        <p><strong>평점:</strong> {{ post.grade }}/5.0</p>
+                        <p><strong>리뷰 내용:</strong> {{ post.review }}</p>
                     </div>
                 </a>
             {% endfor %}
@@ -145,13 +145,17 @@
             <div class="container">
                 <form method="POST">
                     <div class="search-container">
-                        <select class="search-select" name="tag">
-                            <option value="제목">제목</option>
-                            <option value="작성자">작성자</option>
-                            <option value="내용">내용</option>
-                            <option value="영화">영화</option>
-                        </select>
-                        <input type="text" id="find" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
+                        <label>
+                            <select class="search-select" name="tag">
+                                <option value="posting_title">제목</option>
+                                <option value="username">작성자</option>
+                                <option value="review">내용</option>
+                                <option value="movie_title">영화 이름</option>
+                            </select>
+                        </label>
+                        <label>
+                            <input type="text" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
+                        </label>
                         <button type="submit" class="search-button">검색</button>
                     </div>
                 </form>

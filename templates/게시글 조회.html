@@ -94,49 +94,42 @@
     </style>
 </head>
 <body>
-    he
     <header>
         <h1>글 상세 조회 페이지</h1>
     </header>
     <div class="container">
         <div class="post">
-            <h2>영화 제목 1
+            <h2>{{ posts.movie_title }}
                 <div class="edit-buttons">
                     <button>수정</button>
                     <button>삭제</button>
                 </div>
             </h2>
-            <p><strong>작성자:</strong> 작성자 1</p>
-            <p><strong>내용:</strong> 이 영화는 정말 좋았습니다. 강추합니다!</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
+            <p><strong>작성자:</strong> {{ posts.username }}</p>
+            <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+            <p> {{ posts.review }}</p>
         </div>
-        {% if content %}
-        <div class="comments">
-            <h3>{{ id }}, {{ name }}</h3>
-            <div class="comment">
-                <p>{{ content }}</p>
-                <p>{{ date }}</p>
-                <div class="comment-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comments">
+                    <h3>{{ comment.user_id }}</h3>
+                    <div class="comment">
+                        <p>{{ comment.detail }}</p>
+                        <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                        <div class="comment-buttons">
+                            <button>수정</button>
+                            <button>삭제</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         {% endif %}
-        </div>
-        
         <div class="comment-form">
             <h3>댓글 작성</h3>
-            <form>
-                <textarea name="comment" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea><br>
+            <form method="POST">
+                <label>
+                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+                </label><br>
                 <button type="submit">댓글 작성</button>
             </form>
         </div>

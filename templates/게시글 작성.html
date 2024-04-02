@@ -75,22 +75,22 @@
         <h1>글 작성</h1>
     </header>
     <div class="container">
-        <form action="/submit" method="POST">
+        <form action="/게시글작성" method="POST">
             <div>
                 <label for="author">작성자:</label>
-                <input type="text" id="author" name="author" required>
+                <input type="text" id="author" name="username" required>
             </div>
             <div>
                 <label for="movie">영화 이름:</label>
-                <input type="text" id="movie" name="movie" required>
+                <input type="text" id="movie" name="movie_title" required>
             </div>
             <div>
                 <label for="title">제목:</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="posting_title" required>
             </div>
             <div>
                 <label for="content">내용:</label>
-                <textarea id="content" name="content" required></textarea>
+                <textarea id="content" name="review" required></textarea>
             </div>
             <button type="submit">작성 완료</button>
         </form>
