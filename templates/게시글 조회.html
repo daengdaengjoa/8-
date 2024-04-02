@@ -24,7 +24,7 @@
         }
         .post {
             background-color: #f4f4f4;
-            padding: 20px;
+            padding: 30px;
             margin-bottom: 20px;
             position: relative;
         }
@@ -34,6 +34,16 @@
         .post p {
             margin-bottom: 10px;
         }
+
+        .card {
+            width: 1410px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         .edit-buttons {
             position: absolute;
             top: 20px; /* 변경된 부분 */
@@ -99,24 +109,36 @@
     </header>
     <div class="container">
         <div class="post">
-            <h2>영화 제목 1
+            <h2>글제목
                 <div class="edit-buttons">
                     <button>수정</button>
                     <button>삭제</button>
                 </div>
             </h2>
-            <p><strong>작성자:</strong> 작성자 1</p>
-            <p><strong>내용:</strong> 이 영화는 정말 좋았습니다. 강추합니다!</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
+            <div class="card">
+                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+                <h2>{{ data.title }}</h2>
+                <p><strong>개요:</strong> {{ data.info }}</p>
+                <p><strong>개봉:</strong> {{ data.date }}</p>
+                <p><strong>평점:</strong> {{ data.star }}</p>
+                <p><strong>관객수:</strong> {{ data.nums }}</p>
+                <p><strong>줄거리:</strong> {{ data.content }}</p>
+            </div>
+            <div>
+                <p><strong>작성자:</strong> 작성자 1</p>
+                <p><strong>내용:</strong> 이 영화는 정말 좋았습니다. 강추합니다!</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+                <p>내용</p>
+            </div>
+
         </div>
         
         <div class="comments">
