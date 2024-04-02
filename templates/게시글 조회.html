@@ -94,6 +94,7 @@
     </style>
 </head>
 <body>
+    he
     <header>
         <h1>글 상세 조회 페이지</h1>
     </header>
@@ -118,7 +119,7 @@
             <p>내용</p>
             <p>내용</p>
         </div>
-        
+        {% if  %}
         <div class="comments">
             <h3>댓글</h3>
             <div class="comment">
@@ -128,20 +129,7 @@
                     <button>삭제</button>
                 </div>
             </div>
-            <div class="comment">
-                <p>댓글 내용이 여기에 들어갑니다.</p>
-                <div class="comment-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
-                </div>
-            </div>
-            <div class="comment">
-                <p>댓글 내용이 여기에 들어갑니다.</p>
-                <div class="comment-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
-                </div>
-            </div>
+        {% endif %}
         </div>
         
         <div class="comment-form">

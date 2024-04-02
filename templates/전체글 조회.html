@@ -124,6 +124,7 @@
 
 <body>
     <div class="container">
+
         <header>
             <h1>게시글 조회 페이지</h1>
         </header>
@@ -195,12 +196,12 @@
         <footer>
             <div class="container">
                 <div class="search-container">
-                    <select class="search-select">
+                    <select class="search-select" name="tag">
                         <option value="제목">제목</option>
                         <option value="작성자">작성자</option>
                         <option value="내용">내용</option>
                     </select>
-                    <input type="text" class="search-box" placeholder="검색어를 입력하세요...">
+                    <input type="text" id="find" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
                     <button class="search-button">검색</button>
                 </div>
                 <div class="pagination">
