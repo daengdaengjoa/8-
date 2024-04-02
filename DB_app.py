@@ -59,7 +59,7 @@ def submit():
     # print("제목:", title)
     # print("내용:", content)
     # return redirect(url_for("게시글작성"))
-    return redirect(url_for('게시글 작성'))
+    return redirect(url_for('게시글작성'))
 
 
 @app.route("/login", methods=["POST"])
@@ -75,7 +75,7 @@ def login():
                      username=name_receive, age=age_receive, gender=gender_receive, area=area_receive)
     db.session.add(login)
     db.session.commit()
-    return redirect(url_for("회원가입.html"))
+    return redirect(url_for("회원가입"))
 
 
 @app.route("/comment", methods=["POST"])
@@ -88,7 +88,7 @@ def comment():
                       user_id=user_id_receive, detail=detail_receive, date=date)
     db.session.add(comment)
     db.session.commit()
-    return redirect(url_for("게시글 조회.html"))
+    return redirect(url_for("게시글조회"))
 
 
 with app.app_context():
