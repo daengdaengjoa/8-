@@ -10,8 +10,9 @@ from sqlalchemy import desc
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    basedir, "database.db"
+)
 
 db = SQLAlchemy(app)
 
@@ -39,10 +40,11 @@ class Posting(db.Model):  # 게시글 정보 데이터
 
 class Comment(db.Model):  # 댓글 정보 데이터
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.String, nullable=False) # 이거 나중에 추가 되어야 함
+    post_id = db.Column(db.String, nullable=False)  # 이거 나중에 추가 되어야 함
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
+
 
 @app.route("/")
 def 메인화면():
@@ -56,13 +58,13 @@ def 게시글작성():
     if request.method == "POST":
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_Posting = Posting(
-            user_id='123', # 아직 유저 정보 없음....
-            username=request.form['username'],
-            movie_title=request.form['movie_title'],
-            posting_title=request.form['posting_title'],
-            review=request.form['review'],
-            grade='3',  # 데이터 반영 필요
-            date=datetime.now()
+            user_id="123",  # 아직 유저 정보 없음....
+            username=request.form["username"],
+            movie_title=request.form["movie_title"],
+            posting_title=request.form["posting_title"],
+            review=request.form["review"],
+            grade="3",  # 데이터 반영 필요
+            date=datetime.now(),
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_Posting)
@@ -86,11 +88,10 @@ def 전체글조회():
     # 검색기능을 하지 않고 처음들어올 때에는 모든 게시글이 보일 수 있도록 한다.
     else:
         posts = Posting.query.all()
-        
-        
-    POSTS_PER_PAGE = 5    
+
+    POSTS_PER_PAGE = 5
     # 페이지 번호 가져오기
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
     # 해당 페이지에 표시할 게시글 범위 계산
     start_index = (page - 1) * POSTS_PER_PAGE
     end_index = start_index + POSTS_PER_PAGE
@@ -98,7 +99,12 @@ def 전체글조회():
     displayed_posts = posts[start_index:end_index]
     # 전체 페이지 수 계산
     total_pages = len(posts) // POSTS_PER_PAGE + (len(posts) % POSTS_PER_PAGE > 0)
-    return render_template('전체글 조회.html', posts=displayed_posts, total_pages=total_pages, current_page=page)
+    return render_template(
+        "전체글 조회.html",
+        posts=displayed_posts,
+        total_pages=total_pages,
+        current_page=page,
+    )
 
 
 @app.route("/게시글조회", methods=["POST", "GET"])
@@ -113,8 +119,8 @@ def 게시글조회():
         new_Comment = Comment(
             post_id=post_id,
             user_id="심청이",
-            detail=request.form['detail'],
-            date=datetime.now()
+            detail=request.form["detail"],
+            date=datetime.now(),
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_Comment)
@@ -127,26 +133,38 @@ def 게시글조회():
     # query = input('검색할 영화를 입력하세요: ')
     query = posts.movie_title
     print(query)
-    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+'%s'%query
+    url = (
+        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+        + "%s" % query
+    )
     response = requests.get(url)
     html_text = response.text
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.text, "html.parser")
 
     data1 = {}
-    title = soup.select_one('._text').text.strip()
+    title = soup.select_one("._text").text.strip()
     info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
-    print(title)
+
     date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
     star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
     nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
-    content = soup.select_one('.desc._text').text.strip()
-    image_url = soup.select_one('a.thumb._item img')["src"]
+    content = soup.select_one(".desc._text").text.strip()
+    image_url = soup.select_one("a.thumb._item img")["src"]
 
-    
-    data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content, 'image_url': image_url}
+    data1 = {
+        "title": title,
+        "info": info,
+        "date": date,
+        "star": star,
+        "nums": nums,
+        "content": content,
+        "image_url": image_url,
+    }
 
-
-    return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts)
+    print(data1)
+    return render_template(
+        "게시글 조회.html", data=data1, comments=comments, posts=posts
+    )
 
 
 if __name__ == "__main__":
