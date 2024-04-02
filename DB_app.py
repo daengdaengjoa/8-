@@ -5,8 +5,8 @@ from datetime import datetime
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+    os.path.join(basedir, 'database.db')
 
 db = SQLAlchemy(app)
 
@@ -38,5 +38,5 @@ class Comment(db.Model):
     date = db.Column(db.DateTime, nullable=False)
 
 
-with app.app_context():
-    db.create_all()
+if __name__ == "__main__":
+    app.run(debug=True)
