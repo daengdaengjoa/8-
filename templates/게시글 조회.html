@@ -119,11 +119,12 @@
             <p>내용</p>
             <p>내용</p>
         </div>
-        {% if  %}
+        {% if content %}
         <div class="comments">
-            <h3>댓글</h3>
+            <h3>{{ id }}, {{ name }}</h3>
             <div class="comment">
-                <p>댓글 내용이 여기에 들어갑니다.</p>
+                <p>{{ content }}</p>
+                <p>{{ date }}</p>
                 <div class="comment-buttons">
                     <button>수정</button>
                     <button>삭제</button>

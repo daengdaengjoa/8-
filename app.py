@@ -1,6 +1,7 @@
-import export
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
+# from flask_sqlalchemy import SQLAlchemy
+# import os
 # from flask_paginate import Pagination, get_page_args
 
 
@@ -21,7 +22,7 @@ def 전체글조회():
     # cur = get_cur()  # DB와 연결
     per_page = 10  # 게시글 10개 씩
     # page, _, offset = get_page_args(per_page=per_page)
-
+    print(request.method)
 
     # POST request라면,
     if request.method == "POST":
@@ -46,16 +47,16 @@ def 전체글조회():
         #     (tag, query_for_like),
         # )
         total = 1
-        posts = {
-            "id": "빌리",
+        posts = [{
+            "id": "이름",
             "content": "내용",
             "date": "날짜",
             "title": "제목",
             "movie": "영화이름",
             "review": "리뷰",
-            "score": "평점",
+            "score": "2",
             "name": "이름",
-        }
+        }]
 
     # POST가 아니라면, 즉 GET request라면,
     else:
@@ -69,7 +70,7 @@ def 전체글조회():
         #     (per_page, offset),
         # )
         total = 1
-        posts = {
+        posts = [{
             "id": "billy",
             "content": "content",
             "date": "date",
@@ -78,8 +79,17 @@ def 전체글조회():
             "review": "review",
             "score": "score",
             "name": "name",
-        }
-
+        },{
+            "id": "billy",
+            "content": "content",
+            "date": "date",
+            "title": "title",
+            "movie": "movie",
+            "review": "review",
+            "score": "score",
+            "name": "name",
+        },]
+    print(posts)
     # 모든 데이터 베이스 값 딕셔너리화 하기
     # posts = cur.fetchall()
 
