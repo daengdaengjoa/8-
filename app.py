@@ -1,5 +1,7 @@
 import os
 from datetime import datetime
+from bs4 import BeautifulSoup
+import requests
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -41,7 +43,6 @@ class Comment(db.Model):  # 댓글 정보 데이터
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
-
 
 @app.route("/")
 def 메인화면():
@@ -113,6 +114,28 @@ def 게시글조회():
     comments = Comment.query.filter_by(post_id=post_id).all()
 
     return render_template("게시글 조회.html", comments=comments, posts=posts)
+
+    # query = input('검색할 영화를 입력하세요: ')
+    query = "이터널선샤인"
+    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+'%s'%query
+    response = requests.get(url)
+    html_text = response.text
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    data1 = {}
+    title = soup.select_one('._text').text.strip()
+    info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+    date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+    star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+    nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+    content = soup.select_one('.desc._text').text.strip()
+    image_url = soup.select_one('a.thumb._item img')["src"]
+
+    data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content, 'image_url': image_url}
+    print(data1)
+
+    return render_template("게시글 조회.html", data=data1)
+
 
 
 @app.route("/submit", methods=["POST"])
