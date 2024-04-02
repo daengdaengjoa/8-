@@ -2,6 +2,10 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows
 .venv
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
