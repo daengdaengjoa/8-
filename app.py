@@ -86,8 +86,19 @@ def 전체글조회():
     # 검색기능을 하지 않고 처음들어올 때에는 모든 게시글이 보일 수 있도록 한다.
     else:
         posts = Posting.query.all()
-
-    return render_template("전체글 조회.html", posts=posts)  # 게시글 내용
+        
+        
+    POSTS_PER_PAGE = 5    
+    # 페이지 번호 가져오기
+    page = request.args.get('page', 1, type=int)
+    # 해당 페이지에 표시할 게시글 범위 계산
+    start_index = (page - 1) * POSTS_PER_PAGE
+    end_index = start_index + POSTS_PER_PAGE
+    # 현재 페이지에 해당하는 게시글만 추출
+    displayed_posts = posts[start_index:end_index]
+    # 전체 페이지 수 계산
+    total_pages = len(posts) // POSTS_PER_PAGE + (len(posts) % POSTS_PER_PAGE > 0)
+    return render_template('전체글 조회.html', posts=displayed_posts, total_pages=total_pages, current_page=page)
 
 
 @app.route("/게시글조회", methods=["POST", "GET"])
@@ -124,14 +135,16 @@ def 게시글조회():
     data1 = {}
     title = soup.select_one('._text').text.strip()
     info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+    print(title)
     date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
     star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
     nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
     content = soup.select_one('.desc._text').text.strip()
     image_url = soup.select_one('a.thumb._item img')["src"]
 
+    
     data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content, 'image_url': image_url}
-    print(data1)
+
 
     return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts)
 

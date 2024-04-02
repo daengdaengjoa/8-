@@ -160,10 +160,9 @@
                     </div>
                 </form>
                 <div class="pagination">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">다음</a>
+                    {% for page_num in range(1, total_pages + 1) %}
+                        <a href="?page={{ page_num }}" {% if page_num == current_page %}class="active"{% endif %}>{{ page_num }}</a>
+                    {% endfor %}
                 </div>
                 <p>&copy; 2024 게시글 조회 페이지</p>
             </div>
