@@ -12,9 +12,12 @@ from openai import OpenAI
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '1234'  # 이걸 설정을 해야지 로그인 기능을 만들 수 있습니다.. 암호키 같은 기능인가봅니다..
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config["SECRET_KEY"] = (
+    "1234"  # 이걸 설정을 해야지 로그인 기능을 만들 수 있습니다.. 암호키 같은 기능인가봅니다..
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    basedir, "database.db"
+)
 
 db = SQLAlchemy(app)
 
@@ -50,15 +53,15 @@ class Comment(db.Model):  # 댓글 정보 데이터
 
 @app.route("/")
 def 메인화면():
-    print(session.get('user_id'))
+    print(session.get("user_id"))
     # 로그인 세션정보가 없을 경우
-    if not session.get('user_id'):
+    if not session.get("user_id"):
         posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
         return render_template("메인화면.html", posts=posts)
 
     # 로그인 세션정보('user_id')가 있을 경우
     else:
-        user_id = session.get('user_id')
+        user_id = session.get("user_id")
         posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
         return render_template("메인화면.html", posts=posts, user_id=user_id)
 
@@ -70,12 +73,12 @@ def 로그인화면():
     if request.method == "POST" and request.form.get("name"):
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_UserInfo = UserInfo(
-            user_id=request.form['user_id'],
-            pw=request.form['pw'],
-            name=request.form['name'],
-            age=request.form['age'],
-            gender=request.form['gender'],
-            area=request.form['area'],  # 데이터 반영 필요
+            user_id=request.form["user_id"],
+            pw=request.form["pw"],
+            name=request.form["name"],
+            age=request.form["age"],
+            gender=request.form["gender"],
+            area=request.form["area"],  # 데이터 반영 필요
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_UserInfo)
@@ -86,14 +89,16 @@ def 로그인화면():
         return render_template("로그인 화면.html")
     # 로그인 기능
     elif request.method == "POST" and not request.form.get("name"):
-        user_id = request.form.get('user_id')
-        pw = request.form.get('pw')
+        user_id = request.form.get("user_id")
+        pw = request.form.get("pw")
         # 입력받은 값 데이터 베이스에서 조회
         try:
-            login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first() # 데이터 베이스에 아디와 비밀번호 맞으면 통과
+            login = UserInfo.query.filter_by(
+                user_id=user_id, pw=pw
+            ).first()  # 데이터 베이스에 아디와 비밀번호 맞으면 통과
             if login is not None:
                 session["user_id"] = login.user_id
-                return redirect(url_for('메인화면'))  # 로그인 성공시 메인화면으로 이동
+                return redirect(url_for("메인화면"))  # 로그인 성공시 메인화면으로 이동
         # 오류시 로그인 화면 다시 출력
         except:
             flash("입력값이 잘못 되었습니다.")
@@ -111,20 +116,20 @@ def 로그아웃():
 @app.route("/게시글작성", methods=["GET", "POST"])
 def 게시글작성():
     # 로그인이 되어 있지 않다면 로그인화면으로 이동
-    if not session.get('user_id'):
+    if not session.get("user_id"):
         flash("로그인이 필요한 기능입니다.")
         return render_template("로그인 화면.html")
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_Posting = Posting(
-            user_id=session.get('user_id'),
-            username=request.form['username'],
-            movie_title=request.form['movie_title'],
-            posting_title=request.form['posting_title'],
-            review=request.form['review'],
-            grade=request.form['rating'],
-            date=datetime.now()
+            user_id=session.get("user_id"),
+            username=request.form["username"],
+            movie_title=request.form["movie_title"],
+            posting_title=request.form["posting_title"],
+            review=request.form["review"],
+            grade=request.form["rating"],
+            date=datetime.now(),
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_Posting)
@@ -147,7 +152,7 @@ def AI추천():
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
 
-        client = OpenAI(api_key="")
+        client = OpenAI(api_key="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")
 
         query = request.form["ask"]
 
@@ -158,7 +163,7 @@ def AI추천():
                     "role": "system",
                     "content": "역할: 영화 평론가, 작업: 제목과 1점에서 10점사이의 추천도와 추천이유를 제공하여 사용자에게 영화를 추천하고,"
                     + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
-                    + "또한 영화제목은 한글과 영문 모두 출력합니다.",
+                    + "또한 같은영화를 추천하지 않으며 영화제목은 한글과 영문 모두 출력합니다.",
                 },
                 {"role": "user", "content": query},
             ],
@@ -169,7 +174,7 @@ def AI추천():
         function1 = [
             {
                 "name": "get_movie_title",
-                "description": "영화의 제목을 찾아서 알려줍니다.",
+                "description": "영화의영문 제목을 찾아서 알려줍니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -295,7 +300,11 @@ def 전체글조회():
         find = request.form.get("find")
         tag = request.form.get("tag")
         # Posting 테이블에서 tag=검색 조건에 해당하는 칼럼에서 find의 내용을 포함하는 값이 있다면 모두 가져온다.
-        posts = Posting.query.filter(getattr(Posting, tag).like(f"%{find}%")).order_by(desc(Posting.date)).all()
+        posts = (
+            Posting.query.filter(getattr(Posting, tag).like(f"%{find}%"))
+            .order_by(desc(Posting.date))
+            .all()
+        )
 
         POSTS_PER_PAGE = 30
         # 페이지 번호 가져오기
@@ -345,14 +354,14 @@ def 게시글조회():
 
     # POST시 댓글 저장한다.
     if request.method == "POST":
-        if not session.get('user_id'):
+        if not session.get("user_id"):
             flash("로그인이 필요한 기능입니다.")
             return render_template("로그인 화면.html")
         new_Comment = Comment(
             post_id=post_id,
-            user_id=session.get('user_id'),
-            detail=request.form['detail'],
-            date=datetime.now()
+            user_id=session.get("user_id"),
+            detail=request.form["detail"],
+            date=datetime.now(),
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_Comment)

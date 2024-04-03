@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인 페이지</title>
-    {#  알림창 팝업  #}
+    {# 알림창 팝업 #}
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script type="text/javascript">
-                alert("{{ messages[-1] }}");
-            </script>
-        {% endif %}
+    {% if messages %}
+    <script type="text/javascript">
+        alert("{{ messages[-1] }}");
+    </script>
+    {% endif %}
     {% endwith %}
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -78,8 +79,10 @@
 
         .edit-buttons {
             position: absolute;
-            top: 20px; /* 변경된 부분 */
-            right: 20px; /* 변경된 부분 */
+            top: 20px;
+            /* 변경된 부분 */
+            right: 20px;
+            /* 변경된 부분 */
         }
 
         .edit-buttons button {
@@ -170,6 +173,7 @@
             border: 1px solid rgba(223, 190, 106, 0);
             background-position: 99% 50%;
         }
+
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -278,12 +282,15 @@
                 right: -10%;
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -299,12 +306,15 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -321,12 +331,15 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -343,68 +356,70 @@
         }
     </style>
 </head>
+
 <body>
-<header>
+    <header>
         <div class="example-5">
-   <span class="heading-line--container">
-     <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
-        <h2>게시글 조회</h2>
-       <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
-    </span>
+            <span class="heading-line--container">
+                <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
+                <h2>게시글 조회</h2>
+                <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
+            </span>
         </div>
     </header>
-<div class="container">
-    <div class="post">
-        <h2>{{ posts.movie_title }}
-            {% if posts.user_id == login_id %}
+    <div class="container">
+        <div class="post">
+            <h2>{{ posts.movie_title }}
+                {% if posts.user_id == login_id %}
                 <div class="edit-buttons">
                     <button class="btn" type="submit">수정</button>
                     <button class="btn" type="submit">삭제</button>
                 </div>
-            {% endif %}
-        </h2>
-        <div class="card">
-            <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
-            <h2>{{ data.title }}</h2>
-            <p><strong>개요:</strong> {{ data.info }}</p>
-            <p><strong>개봉:</strong> {{ data.date }}</p>
-            <p><strong>평점:</strong> {{ data.star }}</p>
-            <p><strong>관객수:</strong> {{ data.nums }}</p>
-            <p><strong>줄거리:</strong> {{ data.content }}</p>
-        </div>
-        <p><strong>작성자:</strong> {{ posts.username }}</p>
-        <p><strong>제목:</strong> {{ posts.posting_title }}</p>
-        <p> {{ posts.review }}</p>
-    </div>
-    {% if comments %}
-        {% for comment in comments %}
-            <div class="comments">
-                <h3>{{ comment.user_id }}</h3>
-                <div class="comment">
-                    <p>{{ comment.detail }}</p>
-                    <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
-                    {% if comment.user_id == login_id %}
-                        <div class="comment-buttons">
-                            <button class="btn" type="submit">수정</button>
-                            <button class="btn" type="submit">삭제</button>
-                        </div>
-                    {% endif %}
-                </div>
+                {% endif %}
+            </h2>
+            <div class="card">
+                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+                <h2>{{ data.title }}</h2>
+                <p><strong>개요:</strong> {{ data.info }}</p>
+                <p><strong>개봉:</strong> {{ data.date }}</p>
+                <p><strong>평점:</strong> {{ data.star }}</p>
+                <p><strong>관객수:</strong> {{ data.nums }}</p>
+                <p><strong>줄거리:</strong> {{ data.content }}</p>
             </div>
+            <p><strong>작성자:</strong> {{ posts.username }}</p>
+            <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+            <p> {{ posts.review }}</p>
+        </div>
+        {% if comments %}
+        {% for comment in comments %}
+        <div class="comments">
+            <h3>{{ comment.user_id }}</h3>
+            <div class="comment">
+                <p>{{ comment.detail }}</p>
+                <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                {% if comment.user_id == login_id %}
+                <div class="comment-buttons">
+                    <button class="btn" type="submit">수정</button>
+                    <button class="btn" type="submit">삭제</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
         {% endfor %}
-    {% endif %}
-    <div class="comment-form">
-        <h3>댓글 작성</h3>
-        <form method="POST">
-            <label>
-                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
-            </label><br>
-            <button class="btn" type="submit">댓글 작성</button>
-        </form>
+        {% endif %}
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form method="POST">
+                <label>
+                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+                </label><br>
+                <button class="btn" type="submit">댓글 작성</button>
+            </form>
+        </div>
     </div>
-</div>
 
     <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
 
 </body>
+
 </html>
