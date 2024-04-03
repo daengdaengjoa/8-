@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Montez');
+        @import url(https://fonts.googleapis.com/css?family=Francois+One);
+        @import url('https://fonts.googleapis.com/css?family=Roboto:700');
 
         :root {
             --primary-color: #000000;
@@ -44,6 +47,7 @@
             text-align: center;
         }
 
+        {# ----------------------------- 헤더_글자_효과 ---------------------------#}
         header {
             background-color: var(--primary-color);
             color: var(--white);
@@ -110,7 +114,7 @@
             }
         }
 
-
+        {# ----------------------------- 네비게이션 효과 ---------------------------#}
         .navigation {
             width: 100%;
             border-bottom: 3px solid #ccd7d7;
@@ -226,6 +230,7 @@
             padding: 20px 0;
         }
 
+        {# ----------------------------- 풋터 ---------------------------#}
         footer {
             background-color: var(--primary-color);
             color: var(--white);
@@ -239,13 +244,6 @@
             padding: 50px 50px;
         }
 
-        .post {
-            background-color: var(--gray);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-
 
         .post h2 {
             margin-top: 0;
@@ -255,23 +253,158 @@
             margin-bottom: 10px;
         }
 
-        .wrapper {
-            position: absolute;
-            width: auto;
-            height: 150px;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            margin: auto;
-            text-align: center;
-        }
 
         .wrapper h1 {
             font-size: 100px;
             margin: 0;
             font-weight: normal;
         }
+
+        .box h3 {
+            text-align: center;
+            position: relative;
+            top: 80px;
+        }
+
+
+        {# ----------------------------- 게시글 표시 박스 ---------------------------#}
+        blockquote {
+            display: block;
+            background: #fff;
+            padding: 15px 45px 15px 45px;
+            margin: 40px 60px;
+            position: relative;
+            font-family: Georgia, serif;
+            font-size: 20px;
+            line-height: 1.2;
+            color: #666;
+            -moz-box-shadow: 2px 2px 15px #ccc;
+            -webkit-box-shadow: 2px 2px 15px #ccc;
+            box-shadow: 2px 2px 15px #ccc;
+            border-left-style: solid;
+            border-left-width: 15px;
+            border-right-style: solid;
+            border-right-width: 2px;
+        }
+
+        blockquote::before {
+
+            /*Font*/
+            font-family: Georgia, serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: #999;
+
+            /*Positioning*/
+            position: absolute;
+            left: 10px;
+            top: 5px;
+
+        }
+
+        blockquote::after {
+            /*Reset to make sure*/
+        }
+
+        blockquote a {
+            text-decoration: none;
+            background: #eee;
+            cursor: pointer;
+            padding: 0 3px;
+            color: #c76c0c;
+        }
+
+        blockquote a:hover {
+            color: #666;
+        }
+
+        blockquote em {
+            font-style: italic;
+        }
+
+        /*Default Color Palette*/
+        blockquote.default {
+            border-left-color: #656d77;
+            border-right-color: #434a53;
+        }
+
+        {# ----------------------------- 메인 소개 글 ---------------------------#}
+        #containers {
+            color: #999;
+            text-transform: uppercase;
+            font-size: 36px;
+            font-weight: bold;
+            padding-top: 20px;
+            width: 100%;
+            bottom: 45%;
+            display: block;
+        }
+
+        #flip {
+            height: 50px;
+            overflow: hidden;
+        }
+
+        #flip > div > div {
+            color: #fff;
+            padding: 0px 25px;
+            height: 45px;
+            margin-bottom: 45px;
+            display: inline-block;
+        }
+
+        #flip div:first-child {
+            animation: show 5s linear infinite;
+        }
+
+        #flip div div {
+            background: #42c58a;
+        }
+
+        #flip div:first-child div {
+            background: #4ec7f3;
+        }
+
+        #flip div:last-child div {
+            background: #DC143C;
+        }
+
+        @keyframes show {
+            0% {
+                margin-top: -270px;
+            }
+            5% {
+                margin-top: -180px;
+            }
+            33% {
+                margin-top: -180px;
+            }
+            38% {
+                margin-top: -90px;
+            }
+            66% {
+                margin-top: -90px;
+            }
+            71% {
+                margin-top: 0px;
+            }
+            99.99% {
+                margin-top: 0px;
+            }
+            100% {
+                margin-top: -270px;
+            }
+        }
+
+        {#p {#}
+        {#    position: fixed;#}
+        {#    width: 100%;#}
+        {#    bottom: 30px;#}
+        {#    font-size: 12px;#}
+        {#    color: #999;#}
+        {#    margin-top: 200px;#}
+        {
+        #}#}
     </style>
 </head>
 
@@ -289,26 +422,13 @@
     <nav class="navigation">
         <ul class="menu">
             <li class="menu__item">
-                <a href="#" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__first-word" data-hover="메인">
-            메인
-          </span>
-          <span class="menu__second-word" data-hover="화면">
-            화면
-          </span>
-        </span>
-                </a>
-            </li>
-
-            <li class="menu__item">
                 <a href="/전체글조회" class="menu__link">
         <span class="menu__title">
-          <span class="menu__first-word" data-hover="영화">
-            영화
+          <span class="menu__first-word" data-hover="게시글">
+            게시글
           </span>
-          <span class="menu__second-word" data-hover="리뷰">
-            리뷰
+          <span class="menu__second-word" data-hover="조회">
+            조회
           </span>
         </span>
                 </a>
@@ -317,24 +437,30 @@
             <li class="menu__item">
                 <a href="/게시글작성" class="menu__link">
         <span class="menu__title">
-          <span class="menu__first-word" data-hover="신규 리뷰">
-            신규 리뷰
+          <span class="menu__first-word" data-hover="신규">
+            신규
           </span>
-          <span class="menu__second-word" data-hover="작성">
+          <span class="menu__second-word" data-hover="게시글">
+            게시글
+          </span>
+            <span class="menu__first-word" data-hover="작성">
             작성
           </span>
         </span>
                 </a>
             </li>
 
-        <li class="menu__item">
+            <li class="menu__item">
                 <a href="/AI추천" class="menu__link">
         <span class="menu__title">
           <span class="menu__first-word" data-hover="AI">
             AI
           </span>
-          <span class="menu__second-word" data-hover="영화추천">
-            영화추천
+          <span class="menu__second-word" data-hover="영화">
+            영화
+          </span>
+            <span class="menu__first-word" data-hover="추천">
+            추천
           </span>
         </span>
                 </a>
@@ -370,9 +496,20 @@
             {% endif %}
         </ul>
     </nav>
-
-    <div class="content">
-        <p>영화 리뷰 게시판에 오신 것을 환영합니다! 최신 영화에 대한 리뷰를 읽거나 작성하세요.</p>
+    <div id=containers>
+        이 곳에서
+        <div id=flip>
+            <div>
+                <div>AI검색을</div>
+            </div>
+            <div>
+                <div>소통리뷰를</div>
+            </div>
+            <div>
+                <div>영화리뷰를</div>
+            </div>
+        </div>
+        즐겨주세요
     </div>
 </div>
 <div class="container">
@@ -380,13 +517,11 @@
         <h2>최신 작성글</h2>
         {% if posts %}
             {% for post in posts %}
-                <div class="post">
-                    <div class="post-box">
-                        <h2>{{ post.movie_title }}</h2>
-                        <p><strong>작성자:</strong> {{ post.username }}</p>
-                        <p><strong>내용:</strong> {{ post.review }}</p>
-                    </div>
-                </div>
+                <blockquote class="default">
+                    <h2><span class="Cdefault">{{ post.movie_title }}</span></h2>
+                    <p>작성자: {{ post.username }}</p>
+                    <p>내용: {{ post.review }}</p>
+                </blockquote>
             {% endfor %}
         {% endif %}
     </div>
