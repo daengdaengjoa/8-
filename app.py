@@ -80,27 +80,150 @@ def 게시글작성():
 @app.route("/AI추천", methods=["GET", "POST"])
 def AI추천():
     data_ai = "질문해주세요"
+    m1 = ""
+    m2 = ""
+    m1_plus = ""
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
 
-        client = OpenAI(api_key="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")
+        client = OpenAI(api_key="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")
 
         query = request.form["ask"]
 
-        response = client.chat.completions.create(
+        response0 = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
                 {
                     "role": "system",
-                    "content": "너는 영화를 추천해주는 AI야.",
+                    "content": "역할: 영화 평론가, 작업: 제목과 1점에서 10점사이의 추천도와 추천이유를 제공하여 사용자에게 영화를 추천하고,"
+                    + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
+                    + "또한 영화제목은 한글과 영문 모두 출력합니다.",
                 },
                 {"role": "user", "content": query},
             ],
         )
 
-        data_ai = response.choices[0].message.content
+        messages = [{"role": "user", "content": response0.choices[0].message.content}]
 
-    return render_template("AI추천.html", data_ai=data_ai)
+        function1 = [
+            {
+                "name": "get_movie_title",
+                "description": "영화의 제목을 찾아서 알려줍니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "movie_title": {
+                            "type": "string",
+                            "description": "영화이름 eg. 레옹, 대부, 인터스텔라",
+                        },
+                    },
+                    "required": ["movie_title"],
+                },
+            }
+        ]
+        function2 = [
+            {
+                "name": "get_movie_star",
+                "description": "영화의 점수를 찾아서 알려줍니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "movie_star": {
+                            "type": "string",
+                            "description": "영화점수 eg. 10/10, 9/10, 5/10, 6점",
+                        },
+                    },
+                    "required": ["movie_star"],
+                },
+            }
+        ]
+
+        response1 = client.chat.completions.create(
+            model="gpt-3.5-turbo-0613",
+            messages=messages,
+            functions=function1,
+            function_call="auto",
+        )
+
+        response2 = client.chat.completions.create(
+            model="gpt-3.5-turbo-0613",
+            messages=messages,
+            functions=function2,
+            function_call="auto",
+        )
+
+        response_message1 = response1.choices[0].message
+        response_message2 = response2.choices[0].message
+        data_ai = response0.choices[0].message.content
+
+        m1_0 = str(response_message1)
+        m2_0 = str(response_message2)
+
+        print(response0.choices[0].message.content)
+        print(response_message1)
+        print(response_message2)
+        try:
+            m1 = m1_0.split(":")[1].split('"')[1].strip()
+        except AttributeError:
+            m1 = ""
+        try:
+            m2 = m2_0.split(":")[1].split('"')[1].strip()
+        except AttributeError:
+            m2 = ""
+            
+        m1_plus = m1 + "영화"
+    
+    query = m1_plus
+    url = (
+        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+        + "%s" % query
+    )
+    response = requests.get(url)
+    html_text = response.text
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    data1 = {}
+    try:
+        title = soup.select_one("._text").text.strip()
+    except AttributeError:
+        title = "-"
+    try:
+        info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+    except AttributeError:
+        info = "-"
+    try:
+        date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+    except AttributeError:
+        date = "-"
+    try:
+        star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+    except AttributeError:
+        star = "-"
+    try:
+        nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+    except AttributeError:
+        nums = "-"
+    try:
+        content = soup.select_one(".desc._text").text.strip()
+    except AttributeError:
+        content = "-"
+    image_element = soup.select_one("a.thumb._item img")
+    if image_element:
+        image_url = image_element["src"]
+    else:
+        image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
+
+    data1 = {
+        "title": title,
+        "info": info,
+        "date": date,
+        "star": star,
+        "nums": nums,
+        "content": content,
+        "image_url": image_url,
+    }
+
+    return render_template("AI추천.html", data_ai=data_ai, m1=m1, m2=m2, data1=data1)
 
 
 @app.route("/전체글조회", methods=["POST", "GET"])
@@ -176,7 +299,7 @@ def 게시글조회():
     comments = Comment.query.filter_by(post_id=post_id).all()
 
     # query = input('검색할 영화를 입력하세요: ')
-    query = posts.movie_title
+    query = posts.movie_title + "영화"
     print(query)
     url = (
         "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
@@ -186,37 +309,46 @@ def 게시글조회():
     html_text = response.text
     soup = BeautifulSoup(response.text, "html.parser")
 
-    date = soup.select_one('.info_group dt:contains("개봉") + dd')
-    if date:
-
-        data1 = {}
+    data1 = {}
+    try:
         title = soup.select_one("._text").text.strip()
+    except AttributeError:
+        title = "-"
+    try:
         info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+    except AttributeError:
+        info = "-"
+    try:
         date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+    except AttributeError:
+        date = "-"
+    try:
         star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+    except AttributeError:
+        star = "-"
+    try:
         nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+    except AttributeError:
+        nums = "-"
+    try:
         content = soup.select_one(".desc._text").text.strip()
-        image_url = soup.select_one("a.thumb._item img")["src"]
-
-        data1 = {
-            "title": title,
-            "info": info,
-            "date": date,
-            "star": star,
-            "nums": nums,
-            "content": content,
-            "image_url": image_url,
-        }
+    except AttributeError:
+        content = "-"
+    image_element = soup.select_one("a.thumb._item img")
+    if image_element:
+        image_url = image_element["src"]
     else:
-        data1 = {
-            "title": "제목",
-            "info": "-",
-            "date": "-",
-            "star": "-",
-            "nums": "-",
-            "content": "-",
-            "image_url": "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA",
-        }
+        image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
+
+    data1 = {
+        "title": title,
+        "info": info,
+        "date": date,
+        "star": star,
+        "nums": nums,
+        "content": content,
+        "image_url": image_url,
+    }
 
     print(data1)
     return render_template(

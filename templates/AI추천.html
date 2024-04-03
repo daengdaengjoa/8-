@@ -24,6 +24,14 @@
             margin: auto;
             padding: 20px 0;
         }
+        .card {
+            width: AUTO;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
         form {
             background-color: #f4f4f4;
             padding: 20px;
@@ -75,11 +83,23 @@
         <h1>질문 작성</h1>
     </header>
     <div class="container">
-        <p><strong>답변:</strong> {{ data_ai }}</p>
+        <div class="card">
+            <img src="{{ data1.image_url }}" alt="파이썬에서 가져온 이미지">
+            <h2>{{ data1.title }}</h2>
+            <p><strong>개요:</strong> {{ data1.info }}</p>
+            <p><strong>개봉:</strong> {{ data1.date }}</p>
+            <p><strong>평점:</strong> {{ data1.star }}</p>
+            <p><strong>관객수:</strong> {{ data1.nums }}</p>
+            <p><strong>줄거리:</strong> {{ data1.content }}</p>
+        </div>
+        <div class="card">
+            <p><strong>AI추천도:</strong> {{ m2 }}</p>
+            <p><strong>답변:</strong> {{ data_ai }}</p>
+        </div>
         <form action="/AI추천" method="POST">
             <div>
                 <label>질문:</label>
-                <textarea name="ask" required></textarea>
+                <textarea name="ask" placeholder="구체적으로 적어주세요" required></textarea>
             </div>
             <button type="submit">작성 완료</button>
         </form>
