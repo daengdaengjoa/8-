@@ -7,6 +7,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 
+from openai import OpenAI
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -75,6 +77,32 @@ def 게시글작성():
     return render_template("게시글 작성.html")
 
 
+@app.route("/AI추천", methods=["GET", "POST"])
+def AI추천():
+    data_ai = "질문해주세요"
+    # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
+    if request.method == "POST":
+
+        client = OpenAI(api_key="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")
+
+        query = request.form["ask"]
+
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo-0125",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "너는 영화를 추천해주는 AI야.",
+                },
+                {"role": "user", "content": query},
+            ],
+        )
+
+        data_ai = response.choices[0].message.content
+
+    return render_template("AI추천.html", data_ai=data_ai)
+
+
 @app.route("/전체글조회", methods=["POST", "GET"])
 def 전체글조회():
     # POST 입력을 받고 왔으면 조건문 입장
@@ -85,26 +113,43 @@ def 전체글조회():
         # Posting 테이블에서 tag=검색 조건에 해당하는 칼럼에서 find의 내용을 포함하는 값이 있다면 모두 가져온다.
         posts = Posting.query.filter(getattr(Posting, tag).like(f"%{find}%")).all()
 
+        POSTS_PER_PAGE = 30
+        # 페이지 번호 가져오기
+        page = request.args.get("page", 1, type=int)
+        # 해당 페이지에 표시할 게시글 범위 계산
+        start_index = (page - 1) * POSTS_PER_PAGE
+        end_index = start_index + POSTS_PER_PAGE
+        # 현재 페이지에 해당하는 게시글만 추출
+        displayed_posts = posts[start_index:end_index]
+        # 전체 페이지 수 계산
+        total_pages = len(posts) // POSTS_PER_PAGE + (len(posts) % POSTS_PER_PAGE > 0)
+        return render_template(
+            "전체글 조회.html",
+            posts=displayed_posts,
+            total_pages=total_pages,
+            current_page=page,
+        )
+
     # 검색기능을 하지 않고 처음들어올 때에는 모든 게시글이 보일 수 있도록 한다.
     else:
         posts = Posting.query.all()
 
-    POSTS_PER_PAGE = 5
-    # 페이지 번호 가져오기
-    page = request.args.get("page", 1, type=int)
-    # 해당 페이지에 표시할 게시글 범위 계산
-    start_index = (page - 1) * POSTS_PER_PAGE
-    end_index = start_index + POSTS_PER_PAGE
-    # 현재 페이지에 해당하는 게시글만 추출
-    displayed_posts = posts[start_index:end_index]
-    # 전체 페이지 수 계산
-    total_pages = len(posts) // POSTS_PER_PAGE + (len(posts) % POSTS_PER_PAGE > 0)
-    return render_template(
-        "전체글 조회.html",
-        posts=displayed_posts,
-        total_pages=total_pages,
-        current_page=page,
-    )
+        POSTS_PER_PAGE = 5
+        # 페이지 번호 가져오기
+        page = request.args.get("page", 1, type=int)
+        # 해당 페이지에 표시할 게시글 범위 계산
+        start_index = (page - 1) * POSTS_PER_PAGE
+        end_index = start_index + POSTS_PER_PAGE
+        # 현재 페이지에 해당하는 게시글만 추출
+        displayed_posts = posts[start_index:end_index]
+        # 전체 페이지 수 계산
+        total_pages = len(posts) // POSTS_PER_PAGE + (len(posts) % POSTS_PER_PAGE > 0)
+        return render_template(
+            "전체글 조회.html",
+            posts=displayed_posts,
+            total_pages=total_pages,
+            current_page=page,
+        )
 
 
 @app.route("/게시글조회", methods=["POST", "GET"])
@@ -141,25 +186,37 @@ def 게시글조회():
     html_text = response.text
     soup = BeautifulSoup(response.text, "html.parser")
 
-    data1 = {}
-    title = soup.select_one("._text").text.strip()
-    info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+    date = soup.select_one('.info_group dt:contains("개봉") + dd')
+    if date:
 
-    date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
-    star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
-    nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
-    content = soup.select_one(".desc._text").text.strip()
-    image_url = soup.select_one("a.thumb._item img")["src"]
+        data1 = {}
+        title = soup.select_one("._text").text.strip()
+        info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+        date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+        star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+        nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+        content = soup.select_one(".desc._text").text.strip()
+        image_url = soup.select_one("a.thumb._item img")["src"]
 
-    data1 = {
-        "title": title,
-        "info": info,
-        "date": date,
-        "star": star,
-        "nums": nums,
-        "content": content,
-        "image_url": image_url,
-    }
+        data1 = {
+            "title": title,
+            "info": info,
+            "date": date,
+            "star": star,
+            "nums": nums,
+            "content": content,
+            "image_url": image_url,
+        }
+    else:
+        data1 = {
+            "title": "제목",
+            "info": "-",
+            "date": "-",
+            "star": "-",
+            "nums": "-",
+            "content": "-",
+            "image_url": "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA",
+        }
 
     print(data1)
     return render_template(
