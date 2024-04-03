@@ -295,7 +295,7 @@ def 전체글조회():
         find = request.form.get("find")
         tag = request.form.get("tag")
         # Posting 테이블에서 tag=검색 조건에 해당하는 칼럼에서 find의 내용을 포함하는 값이 있다면 모두 가져온다.
-        posts = Posting.query.filter(getattr(Posting, tag).like(f"%{find}%")).all()
+        posts = Posting.query.filter(getattr(Posting, tag).like(f"%{find}%")).order_by(desc(Posting.date)).all()
 
         POSTS_PER_PAGE = 30
         # 페이지 번호 가져오기
@@ -316,7 +316,7 @@ def 전체글조회():
 
     # 검색기능을 하지 않고 처음들어올 때에는 모든 게시글이 보일 수 있도록 한다.
     else:
-        posts = Posting.query.all()
+        posts = Posting.query.order_by(desc(Posting.date)).all()
 
         POSTS_PER_PAGE = 5
         # 페이지 번호 가져오기
