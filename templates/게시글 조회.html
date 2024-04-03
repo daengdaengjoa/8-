@@ -114,7 +114,7 @@
                     <form method="POST" action="/edit/{{ posts.id }}">
                         <button type="submit" class="update-btn">수정</button>
                     </form>               
-                    <form method="DELETE" action="/delete_post/{{ posts.id }}">
+                    <form method="POST" action="/delete_post/{{ posts.id }}">
                         <button type="submit" class="delete-btn">삭제</button>
                     </form>     
                 </div>
@@ -140,8 +140,12 @@
                         <p>{{ comment.detail }}</p>
                         <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                         <div class="comment-buttons">
-                            <button>수정</button>
-                            <button>삭제</button>
+                            <form method="POST" action="/edit_comment/{{ comment.id }}">
+                                <button type="submit" class="update-comment-btn">수정</button>
+                            </form>               
+                            <form method="POST" action="/delete_comment/{{ comment.id }}">
+                                <button type="submit" class="delete-comment-btn">삭제</button>
+                            </form>     
                         </div>
                     </div>
                 </div>

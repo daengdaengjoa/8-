@@ -170,6 +170,33 @@ def delete_post(post_id):
     return redirect(url_for('메인화면'))
 
 
+@app.route("/edit_comment/<int:post_id>", methods=['GET', 'POST'])
+def edit_comment(post_id):
+    comments = Comment.query.get_or_404(post_id)
+    return render_template('댓글 수정.html', comments=comments, post_id=post_id)
+
+
+@app.route("/update_comment/<int:post_id>", methods=['GET', 'POST'])
+def update_comment(post_id):
+    comment = Comment.query.get_or_404(post_id)
+    if request.method == 'POST':
+        comment.detail = request.form['detail']  # input이 detail뿐임
+        comment.date = datetime.now()
+
+        db.session.commit()
+        return redirect(url_for('게시글조회', comment_id=comment.id, post_id=comment.post_id))
+
+
+@app.route("/delete_comment/<int:post_id>", methods=['GET', 'POST'])
+def delete_comment(post_id):
+    comment = Comment.query.get_or_404(post_id)
+    print(comment)
+    if request.method == 'GET' or 'POST':
+        db.session.delete(comment)
+        db.session.commit()
+    return redirect(url_for('게시글조회', comment_id=comment.id, post_id=comment.post_id))
+
+
 with app.app_context():
     db.create_all()
 

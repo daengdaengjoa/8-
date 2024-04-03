@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+</head>
+<body>
+    <div class="comment-edit">
+        <h3>댓글 수정</h3>
+        <form action="/update_comment/{{ post_id }}" method="POST">
+            <label>
+                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 수정하세요...">{{ comments.detail }}</textarea>
+            </label><br>
+            <button type="submit">댓글 수정</button>
+        </form>
+    </div>
+</body>
+</html>
