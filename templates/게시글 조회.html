@@ -111,8 +111,12 @@
         <div class="post">
             <h2>{{ posts.movie_title }}
                 <div class="edit-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
+                    <form method="POST" action="/edit/{{ posts.id }}">
+                        <button type="submit" class="update-btn">수정</button>
+                    </form>               
+                    <form method="DELETE" action="/delete_post/{{ posts.id }}">
+                        <button type="submit" class="delete-btn">삭제</button>
+                    </form>     
                 </div>
             </h2>
             <div class="card">
@@ -155,7 +159,12 @@
     </div>
 
     <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+
+
+
+
     <!-- <button onclick="scrollToTop()" class="scroll-to-top">^</button>
+
 
     <script>
         window.onscroll = function() {scrollFunction()};

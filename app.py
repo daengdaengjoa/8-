@@ -3,7 +3,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import requests
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 
@@ -137,6 +137,37 @@ def 게시글조회():
     print(data1)
 
     return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts)
+
+
+@app.route("/update_post/<int:post_id>", methods=['GET', 'POST'])
+def update_post(post_id):
+    post = Posting.query.get_or_404(post_id)
+    if request.method == 'POST':
+        post.username = request.form['username']
+        post.movie_title = request.form['movie_title']
+        post.posting_title = request.form['posting_title']
+        post.review = request.form['review']
+        post.grade = request.form['grade']
+        post.date = datetime.now()
+
+        db.session.commit()
+        return redirect(url_for('게시글조회', post_id=post.id))
+
+
+@app.route("/edit/<int:post_id>", methods=['GET', 'POST'])
+def edit(post_id):
+    post = Posting.query.get_or_404(post_id)
+    print(post.posting_title)
+    return render_template('게시글 수정.html', post=post, post_id=post_id)
+
+
+@app.route("/delete_post/<int:post_id>", methods=['GET', 'POST'])
+def delete_post(post_id):
+    post = Posting.query.get_or_404(post_id)
+    if request.method == 'GET' or 'POST':
+        db.session.delete(post)
+        db.session.commit()
+    return redirect(url_for('메인화면'))
 
 
 with app.app_context():
