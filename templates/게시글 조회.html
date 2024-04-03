@@ -4,17 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글 상세 조회 페이지</title>
+    {#  알림창 팝업  #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
+
         .container {
             width: 80%;
             margin: auto;
             padding: 20px 0;
         }
+
         header {
             background-color: #333;
             color: #fff;
@@ -22,21 +32,25 @@
             text-align: center;
             margin-bottom: 20px;
         }
+
         .post {
             background-color: #f4f4f4;
             padding: 30px;
             margin-bottom: 20px;
             position: relative;
         }
+
         .post h2 {
             margin-top: 0;
         }
+
         .post p {
             margin-bottom: 10px;
         }
 
         .card {
-            width: 1410px;
+            {#수정 : 작은 창에서는 범위 이탈#}
+            width: auto;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -49,34 +63,43 @@
             top: 20px; /* 변경된 부분 */
             right: 20px; /* 변경된 부분 */
         }
+
         .edit-buttons button {
             margin-left: 10px;
             margin-right: 10px;
         }
+
         .comments {
             margin-top: 20px;
         }
+
         .comment {
             background-color: #ddd;
             padding: 10px;
             margin-bottom: 10px;
         }
+
         .comment p {
             margin: 0;
         }
+
         .comment-buttons {
             margin-top: 10px;
         }
+
         .comment-buttons button {
             margin-right: 10px;
         }
+
         .comment-form {
             margin-top: 20px;
         }
+
         .comment-form textarea {
             width: 100%;
             margin-bottom: 10px;
         }
+
         .comment-form button {
             background-color: #333;
             color: #fff;
@@ -104,74 +127,78 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>글 상세 조회 페이지</h1>
-    </header>
-    <div class="container">
-        <div class="post">
-            <h2>{{ posts.movie_title }}
+<header>
+    <h1>글 상세 조회 페이지</h1>
+</header>
+<div class="container">
+    <div class="post">
+        <h2>{{ posts.movie_title }}
+            {% if posts.user_id == login_id %}
                 <div class="edit-buttons">
                     <button>수정</button>
                     <button>삭제</button>
                 </div>
-            </h2>
-            <div class="card">
-                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
-                <h2>{{ data.title }}</h2>
-                <p><strong>개요:</strong> {{ data.info }}</p>
-                <p><strong>개봉:</strong> {{ data.date }}</p>
-                <p><strong>평점:</strong> {{ data.star }}</p>
-                <p><strong>관객수:</strong> {{ data.nums }}</p>
-                <p><strong>줄거리:</strong> {{ data.content }}</p>
-            </div>
-            <p><strong>작성자:</strong> {{ posts.username }}</p>
-            <p><strong>제목:</strong> {{ posts.posting_title }}</p>
-            <p> {{ posts.review }}</p>
+            {% endif %}
+        </h2>
+        <div class="card">
+            <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+            <h2>{{ data.title }}</h2>
+            <p><strong>개요:</strong> {{ data.info }}</p>
+            <p><strong>개봉:</strong> {{ data.date }}</p>
+            <p><strong>평점:</strong> {{ data.star }}</p>
+            <p><strong>관객수:</strong> {{ data.nums }}</p>
+            <p><strong>줄거리:</strong> {{ data.content }}</p>
         </div>
-        {% if comments %}
-            {% for comment in comments %}
-                <div class="comments">
-                    <h3>{{ comment.user_id }}</h3>
-                    <div class="comment">
-                        <p>{{ comment.detail }}</p>
-                        <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+        <p><strong>작성자:</strong> {{ posts.username }}</p>
+        <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+        <p> {{ posts.review }}</p>
+    </div>
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="comments">
+                <h3>{{ comment.user_id }}</h3>
+                <div class="comment">
+                    <p>{{ comment.detail }}</p>
+                    <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                    {% if comment.user_id == login_id %}
                         <div class="comment-buttons">
                             <button>수정</button>
                             <button>삭제</button>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
-            {% endfor %}
-        {% endif %}
-        <div class="comment-form">
-            <h3>댓글 작성</h3>
-            <form method="POST">
-                <label>
-                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
-                </label><br>
-                <button type="submit">댓글 작성</button>
-            </form>
-        </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="comment-form">
+        <h3>댓글 작성</h3>
+        <form method="POST">
+            <label>
+                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+            </label><br>
+            <button type="submit">댓글 작성</button>
+        </form>
     </div>
+</div>
 
-    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
-    <!-- <button onclick="scrollToTop()" class="scroll-to-top">^</button>
+<a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+<!-- <button onclick="scrollToTop()" class="scroll-to-top">^</button>
 
-    <script>
-        window.onscroll = function() {scrollFunction()};
+<script>
+    window.onscroll = function() {scrollFunction()};
 
-        function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                document.querySelector(".scroll-to-top").style.display = "block";
-            } else {
-                document.querySelector(".scroll-to-top").style.display = "none";
-            }
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.querySelector(".scroll-to-top").style.display = "block";
+        } else {
+            document.querySelector(".scroll-to-top").style.display = "none";
         }
+    }
 
-        function scrollToTop() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        }
-    </script> -->
+    function scrollToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script> -->
 </body>
 </html>

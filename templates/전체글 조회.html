@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 조회 페이지</title>
+    {#  알림창 팝업  #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -88,6 +96,7 @@
             width: 40%;
             box-sizing: border-box;
         }
+
         .search-select {
             padding: 10px;
             border: 1px solid #ccc;
@@ -123,52 +132,53 @@
 </head>
 
 <body>
-    <div class="container">
+<div class="container">
 
-        <header>
-            <h1>게시글 조회 페이지</h1>
-        </header>
-        <div class="content">
-            {% for post in posts %}
-                <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
-                    <div class="review">
-                        <h2>{{ post.movie_title }}</h2>
-                        <p><strong>작성자:</strong> {{ post.username }}</p>
-                        <p><strong>평점:</strong> {{ post.grade }}/5.0</p>
-                        <p><strong>리뷰 내용:</strong> {{ post.review }}</p>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-        <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
-        <footer>
-            <div class="container">
-                <form method="POST">
-                    <div class="search-container">
-                        <label>
-                            <select class="search-select" name="tag">
-                                <option value="posting_title">제목</option>
-                                <option value="username">작성자</option>
-                                <option value="review">내용</option>
-                                <option value="movie_title">영화 이름</option>
-                            </select>
-                        </label>
-                        <label>
-                            <input type="text" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
-                        </label>
-                        <button type="submit" class="search-button">검색</button>
-                    </div>
-                </form>
-                <div class="pagination">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">다음</a>
+    <header>
+        <h1>게시글 조회 페이지</h1>
+    </header>
+    <div class="content">
+        {% for post in posts %}
+            <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
+                <div class="review">
+                    <h2>{{ post.movie_title }}</h2>
+                    <p><strong>글 제목:</strong> {{ post.posting_title }}</p>
+                    <p><strong>작성자:</strong> {{ post.username }}</p>
+                    <p><strong>평점:</strong> {{ post.grade }}/5.0</p>
+                    <p><strong>리뷰 내용:</strong> {{ post.review }}</p>
                 </div>
-                <p>&copy; 2024 게시글 조회 페이지</p>
-            </div>
-        </footer>
+            </a>
+        {% endfor %}
     </div>
+    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+    <footer>
+        <div class="container">
+            <form method="POST">
+                <div class="search-container">
+                    <label>
+                        <select class="search-select" name="tag">
+                            <option value="movie_title">영화 이름</option>
+                            <option value="posting_title">글 제목</option>
+                            <option value="username">작성자</option>
+                            <option value="review">내용</option>
+                        </select>
+                    </label>
+                    <label>
+                        <input type="text" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
+                    </label>
+                    <button type="submit" class="search-button">검색</button>
+                </div>
+            </form>
+            <div class="pagination">
+                <a href="/전체글조회" class="active">1</a>
+                <a href="/전체글조회">2</a>
+                <a href="/전체글조회">3</a>
+                <a href="/전체글조회">다음</a>
+            </div>
+            <p>&copy; 2024 게시글 조회 페이지</p>
+        </div>
+    </footer>
+</div>
 </body>
 
 </html>

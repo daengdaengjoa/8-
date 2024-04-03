@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>영화 리뷰 게시판</title>
+    {#  알림창 팝업  #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,43 +100,47 @@
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <h1>영화 리뷰 게시판</h1>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="#">홈</a></li>
+<div class="container">
+    <header>
+        <h1>영화 리뷰 게시판</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">홈</a></li>
+            {% if user_id %}
+                <li><a href="/로그아웃">로그아웃</a></li>
+            {% else %}
                 <li><a href="/로그인화면">로그인</a></li>
-                <li><a href="/전체글조회">영화 리뷰</a></li>
-                <li><a href="/게시글작성">신규 리뷰 작성</a></li>
-            </ul>
-        </nav>
-        <div class="content">
-            <p>영화 리뷰 게시판에 오신 것을 환영합니다! 최신 영화에 대한 리뷰를 읽거나 작성하세요.</p>
-        </div>
-    </div>
-    <div class="container">
-        <div class="postcontainer">
-            <h2>최신 작성글</h2>
-            {% if posts %}
-                {% for post in posts %}
-                    <div class="post">
-                        <div class="post-box">
-                            <h2>{{ post.movie_title }}</h2>
-                            <p><strong>작성자:</strong> {{ post.username }}</p>
-                            <p><strong>내용:</strong> {{ post.review }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
             {% endif %}
-        </div>
+            <li><a href="/전체글조회">영화 리뷰</a></li>
+            <li><a href="/게시글작성">신규 리뷰 작성</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <p>영화 리뷰 게시판에 오신 것을 환영합니다! 최신 영화에 대한 리뷰를 읽거나 작성하세요.</p>
     </div>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 영화 리뷰 게시판</p>
-        </div>
-    </footer>
+</div>
+<div class="container">
+    <div class="postcontainer">
+        <h2>최신 작성글</h2>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    <div class="post-box">
+                        <h2>{{ post.movie_title }}</h2>
+                        <p><strong>작성자:</strong> {{ post.username }}</p>
+                        <p><strong>내용:</strong> {{ post.review }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <p>&copy; 2024 영화 리뷰 게시판</p>
+    </div>
+</footer>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
@@ -10,7 +10,7 @@ from datetime import datetime
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '1234'
+app.config['SECRET_KEY'] = '1234'  # 이걸 설정을 해야지 로그인 기능을 만들 수 있습니다.. 암호키 같은 기능인가봅니다..
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     'sqlite:///' + os.path.join(basedir, 'database.db')
 
@@ -49,21 +49,22 @@ class Comment(db.Model):  # 댓글 정보 데이터
 @app.route("/")
 def 메인화면():
     print(session.get('user_id'))
-    # 로그인 세션정보('userid')가 있을 경우
+    # 로그인 세션정보가 없을 경우
     if not session.get('user_id'):
         posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
         return render_template("메인화면.html", posts=posts)
 
-    # 로그인 세션정보가 없을 경우
+    # 로그인 세션정보('user_id')가 있을 경우
     else:
-        userid = session.get('user_id')
+        user_id = session.get('user_id')
         posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
-        return render_template("메인화면.html", posts=posts, userid=userid)
+        return render_template("메인화면.html", posts=posts, user_id=user_id)
 
 
 @app.route("/로그인화면", methods=["GET", "POST"])
 def 로그인화면():
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
+    # 회원가입 기능!
     if request.method == "POST" and request.form.get("name"):
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_UserInfo = UserInfo(
@@ -79,44 +80,48 @@ def 로그인화면():
 
         # 변경 사항 커밋
         db.session.commit()
-
+        flash("회원 등록 되었습니다.")
+        return render_template("로그인 화면.html")
+    # 로그인 기능
     elif request.method == "POST" and not request.form.get("name"):
         user_id = request.form.get('user_id')
         pw = request.form.get('pw')
-        print(user_id)
-        # try:
-        login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first()
-        print(login)
-        print(login.user_id)
-        if login is not None:
-            session["user_id"] = login.user_id
-            return redirect(url_for('메인화면'))
-        # except:
-        #     return render_template("로그인 화면.html")
+        # 입력받은 값 데이터 베이스에서 조회
+        try:
+            login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first() # 데이터 베이스에 아디와 비밀번호 맞으면 통과
+            if login is not None:
+                session["user_id"] = login.user_id
+                return redirect(url_for('메인화면'))  # 로그인 성공시 메인화면으로 이동
+        # 오류시 로그인 화면 다시 출력
+        except:
+            flash("입력값이 잘못 되었습니다.")
+            return render_template("로그인 화면.html")
     # 데이터 값 저장 만하고 보여줄 필요는 없으니 리턴 값 없음
     return render_template("로그인 화면.html")
 
 
 @app.route("/로그아웃", methods=["GET"])
-def logout():
-    session.clear()
+def 로그아웃():
+    session.clear()  # 세션 값 비워줌으로 로그아웃 처리
     return redirect("/")
 
 
 @app.route("/게시글작성", methods=["GET", "POST"])
 def 게시글작성():
+    # 로그인이 되어 있지 않다면 로그인화면으로 이동
     if not session.get('user_id'):
+        flash("로그인이 필요한 기능입니다.")
         return render_template("로그인 화면.html")
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_Posting = Posting(
-            user_id=session.get('userid'),
+            user_id=session.get('user_id'),
             username=request.form['username'],
             movie_title=request.form['movie_title'],
             posting_title=request.form['posting_title'],
             review=request.form['review'],
-            grade='3',  # 데이터 반영 필요
+            grade=request.form['rating'],
             date=datetime.now()
         )
         # 데이터베이스 세션에 추가
@@ -124,6 +129,9 @@ def 게시글작성():
 
         # 변경 사항 커밋
         db.session.commit()
+        flash("게시글이 등록 되었습니다.")
+        return redirect("/")
+
     # 데이터 값 저장 만하고 보여줄 필요는 없으니 리턴 값 없음
     return render_template("게시글 작성.html")
 
@@ -154,11 +162,12 @@ def 게시글조회():
 
     # POST시 댓글 저장한다.
     if request.method == "POST":
-        if not session.get('userid'):
+        if not session.get('user_id'):
+            flash("로그인이 필요한 기능입니다.")
             return render_template("로그인 화면.html")
         new_Comment = Comment(
             post_id=post_id,
-            user_id=session.get('userid'),
+            user_id=session.get('user_id'),
             detail=request.form['detail'],
             date=datetime.now()
         )
@@ -172,11 +181,15 @@ def 게시글조회():
 
     # query = input('검색할 영화를 입력하세요: ')
     query = posts.movie_title
-    print(query)
+
     url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + '%s' % query
+    # print(url) # https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=아이언맨3
     response = requests.get(url)
+    # print(response) # <Response [200]>
     html_text = response.text
+    # print(html_text) # <!doctype html> <html lang="ko"><head> <meta charset="utf-8"> <meta name="referrer" content="always">  <meta name="format-detection" content="telephone=no,address=no,email=no"> <meta property="og:title" content="아이언맨3 : 네이버 통합검색"/> <meta property="og:image" content="https://ssl.pstatic.net/sstatic/search/common/og_v3.png"> <meta property="og:description" content="'아이언맨3'의 네이버 통합검색 결과입니다."> <meta name="description" lang="ko" content="'아이언맨3'의 네이버 통합검색 결과입니다."> <title>아이언맨3 : 네이버 통합검색</title> <link rel="shortcut icon" href="https://ssl.pstatic.net/sstatic/search/favicon/favicon_191118_pc.ico">
     soup = BeautifulSoup(response.text, 'html.parser')
+    # print(soup)  #<html lang="ko"><head> <meta charset="utf-8"/> <meta content="always" name="referrer"/> <meta content="telephone=no,address=no,email=no" name="format-detection"/> <meta content="아이언맨3 : 네이버 통합검색" property="og:title"> <meta content="https://ssl.pstatic.net/sstatic/search/common/og_v3.png" property="og:image"/> <meta content="'아이언맨3'의 네이버 통합검색 결과입니다." property="og:description"/> <meta content="'아이언맨3'의 네이버 통합검색 결과입니다." lang="ko" name="description"/> <title>아이언맨3 : 네이버 통합검색</title> <link href="https://ssl.pstatic.net/sstatic/search/favicon/favicon_191118_pc.ico" rel="shortcut icon"/> <link href="https://ssl.pstatic.net/sstatic/search/opensearch-description.https.xml" rel="search" title="Naver" type="application/opensearchdescription+xml"><script> if (top.frames.length!=0 || window!=top) window.open(location, "_top"); </script><link href="https://ssl.pstatic.net/sstatic/search/pc/css/search1_240314.css" rel="stylesheet" type="text/css"/> <link href="https://ssl.pstatic.net/sstatic/search/pc/css/search2_240314
 
     data1 = {}
     title = soup.select_one('._text').text.strip()
@@ -187,11 +200,12 @@ def 게시글조회():
     content = soup.select_one('.desc._text').text.strip()
     image_url = soup.select_one('a.thumb._item img')["src"]
 
+    print(f"{title=} \n {info=} \n {date=} \n {star=} \n {nums=} \n {content=} \n {image_url=}")
+
     data1 = {'title': title, 'info': info, 'date': date, 'star': star, 'nums': nums, 'content': content,
              'image_url': image_url}
-    print(data1)
 
-    return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts)
+    return render_template("게시글 조회.html", data=data1, comments=comments, posts=posts, login_id=session.get('user_id'))
 
 
 if __name__ == "__main__":

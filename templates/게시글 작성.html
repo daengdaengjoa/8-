@@ -4,12 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성 페이지</title>
+    {#  알림창 팝업  #}
+    {%with messages = get_flashed_messages()%}
+        {%if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
+
         header {
             background-color: #333;
             color: #fff;
@@ -19,20 +28,24 @@
             box-sizing: border-box;
             text-align: center;
         }
+
         .container {
             width: 80%;
             margin: auto;
             padding: 20px 0;
         }
+
         form {
             background-color: #f4f4f4;
             padding: 20px;
             border-radius: 5px;
         }
+
         form label {
             display: block;
             margin-bottom: 5px;
         }
+
         form input[type="text"],
         form textarea {
             width: 100%;
@@ -42,9 +55,11 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         form textarea {
             height: 200px;
         }
+
         form button {
             background-color: #333;
             color: #fff;
@@ -53,6 +68,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -68,34 +84,220 @@
             right: 20px;
             cursor: pointer;
         }
+
+        .wrap {
+            height: auto;
+            min-height: auto;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            gap: 32px;
+            margin: 10px 0px;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: 600;
+        }
+
+        .rating {
+            float: none;
+            width: 200px;
+            display: flex;
+        }
+
+        .rating__input {
+            display: none;
+        }
+
+        .rating__label {
+            width: 20px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .rating__label .star-icon {
+            width: 20px;
+            height: 30px;
+            display: block;
+            position: relative;
+            left: 0;
+            background-image: url("https://velog.velcdn.com/images/jellykelly/post/9957327f-f358-4c25-9989-5bb3dd5755d6/image.svg");
+            background-repeat: no-repeat;
+            background-size: 40px;
+        }
+
+        .rating__label .star-icon.filled {
+            background-image: url("https://velog.velcdn.com/images/jellykelly/post/10caf033-b0ef-4d58-804b-6e33395e4ea5/image.svg");
+        }
+
+        .rating__label--full .star-icon {
+            background-position: right;
+        }
+
+        .rating__label--half .star-icon {
+            background-position: left;
+        }
+
+        .rating.readonly .star-icon {
+            opacity: 0.7;
+            cursor: default;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>글 작성</h1>
-    </header>
-    <div class="container">
-        <form action="/게시글작성" method="POST">
-            <div>
-                <label for="author">작성자:</label>
-                <input type="text" id="author" name="username" required>
+<header>
+    <h1>글 작성</h1>
+</header>
+<div class="container">
+    <form action="/게시글작성" method="POST">
+        <div>
+            <label for="author">작성자:</label>
+            <input type="text" id="author" name="username" required>
+        </div>
+        <div>
+            <label for="movie">영화 이름:</label>
+            <input type="text" id="movie" name="movie_title" required>
+        </div>
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="posting_title" required>
+        </div>
+        <div class="wrap">
+            <label for="title">별점:</label>
+            <div class="rating">
+                <label class="rating__label rating__label--half" for="starhalf">
+                    <input type="radio" id="starhalf" class="rating__input" name="rating" value="0.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star1">
+                    <input type="radio" id="star1" class="rating__input" name="rating" value="1">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star1half">
+                    <input type="radio" id="star1half" class="rating__input" name="rating" value="1.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star2">
+                    <input type="radio" id="star2" class="rating__input" name="rating" value="2">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star2half">
+                    <input type="radio" id="star2half" class="rating__input" name="rating" value="2.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star3">
+                    <input type="radio" id="star3" class="rating__input" name="rating" value="3">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star3half">
+                    <input type="radio" id="star3half" class="rating__input" name="rating" value="3.5" checked>
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star4">
+                    <input type="radio" id="star4" class="rating__input" name="rating" value="4">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star4half">
+                    <input type="radio" id="star4half" class="rating__input" name="rating" value="4.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star5">
+                    <input type="radio" id="star5" class="rating__input" name="rating" value="5">
+                    <span class="star-icon"></span>
+                </label>
             </div>
-            <div>
-                <label for="movie">영화 이름:</label>
-                <input type="text" id="movie" name="movie_title" required>
-            </div>
-            <div>
-                <label for="title">제목:</label>
-                <input type="text" id="title" name="posting_title" required>
-            </div>
-            <div>
-                <label for="content">내용:</label>
-                <textarea id="content" name="review" required></textarea>
-            </div>
-            <button type="submit">작성 완료</button>
-        </form>
-    </div>
-    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <textarea id="content" name="review" required></textarea>
+        </div>
+        <button type="submit">작성 완료</button>
+    </form>
+</div>
+<a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
 
 </body>
 </html>
+
+<script>
+    const rateWrap = document.querySelectorAll('.rating'),
+        label = document.querySelectorAll('.rating .rating__label'),
+        input = document.querySelectorAll('.rating .rating__input'),
+        labelLength = label.length,
+        opacityHover = '0.5';
+
+    let stars = document.querySelectorAll('.rating .star-icon');
+
+    checkedRate();
+
+    rateWrap.forEach(wrap => {
+        wrap.addEventListener('mouseenter', () => {
+            stars = wrap.querySelectorAll('.star-icon');
+
+            stars.forEach((starIcon, idx) => {
+                starIcon.addEventListener('mouseenter', () => {
+                    initStars();
+                    filledRate(idx, labelLength);
+
+                    for (let i = 0; i < stars.length; i++) {
+                        if (stars[i].classList.contains('filled')) {
+                            stars[i].style.opacity = opacityHover;
+                        }
+                    }
+                });
+
+                starIcon.addEventListener('mouseleave', () => {
+                    starIcon.style.opacity = '1';
+                    checkedRate();
+                });
+
+                wrap.addEventListener('mouseleave', () => {
+                    starIcon.style.opacity = '1';
+                });
+            });
+        });
+    });
+
+    function filledRate(index, length) {
+        if (index <= length) {
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('filled');
+            }
+        }
+    }
+
+    function checkedRate() {
+        let checkedRadio = document.querySelectorAll('.rating input[type="radio"]:checked');
+
+
+        initStars();
+        checkedRadio.forEach(radio => {
+            let previousSiblings = prevAll(radio);
+
+            for (let i = 0; i < previousSiblings.length; i++) {
+                previousSiblings[i].querySelector('.star-icon').classList.add('filled');
+            }
+
+            radio.nextElementSibling.classList.add('filled');
+
+            function prevAll() {
+                let radioSiblings = [],
+                    prevSibling = radio.parentElement.previousElementSibling;
+
+                while (prevSibling) {
+                    radioSiblings.push(prevSibling);
+                    prevSibling = prevSibling.previousElementSibling;
+                }
+                return radioSiblings;
+            }
+        });
+    }
+
+    function initStars() {
+        for (let i = 0; i < stars.length; i++) {
+            stars[i].classList.remove('filled');
+        }
+    }
+</script>
