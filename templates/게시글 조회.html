@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글 상세 조회 페이지</title>
+    <title>메인 페이지</title>
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -12,7 +12,32 @@
             </script>
         {% endif %}
     {% endwith %}
+    <link rel="stylesheet" href="styles.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #757575;
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #f4f4f4;
+            --gray-2: #757575;
+
+            --facebook-color: #4267B2;
+            --google-color: #DB4437;
+            --twitter-color: #1DA1F2;
+            --insta-color: #E1306C;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -26,15 +51,15 @@
         }
 
         header {
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             padding: 10px 0;
             text-align: center;
             margin-bottom: 20px;
         }
 
         .post {
-            background-color: #f4f4f4;
+            background-color: var(--gray);
             padding: 30px;
             margin-bottom: 20px;
             position: relative;
@@ -49,8 +74,7 @@
         }
 
         .card {
-            {#수정 : 작은 창에서는 범위 이탈#}
-            width: auto;
+        {#수정 : 작은 창에서는 범위 이탈#} width: auto;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -112,8 +136,8 @@
         .scroll-to-top {
             width: 50px;
             height: 50px;
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             border-radius: 50%;
             font-size: 15px;
@@ -124,19 +148,50 @@
             right: 20px;
             cursor: pointer;
         }
+
+        .btn {
+            display: inline-block;
+            background: transparent;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgb(255 255 255 / 80%);
+            border-radius: 5px;
+            padding: 5px 5px;
+            transition: all 0.7s ease-out;
+            background: linear-gradient(270deg, rgba(223, 190, 106, 0.8), rgba(146, 111, 52, 0.8), rgb(0 0 0), rgb(0 0 0));
+            background-position: 1% 50%;
+            background-size: 300% 300%;
+            text-decoration: none;
+            margin: 0.1rem;
+            border: none;
+            border: 1px solid rgba(223, 190, 106, 0.3);
+        }
+
+
+        .btn:hover {
+            color: #fff;
+            border: 1px solid rgba(223, 190, 106, 0);
+            background-position: 99% 50%;
+        }
+
     </style>
 </head>
 <body>
 <header>
-    <h1>글 상세 조회 페이지</h1>
+    <h1>
+        영화의 전당
+    </h1>
 </header>
 <div class="container">
     <div class="post">
         <h2>{{ posts.movie_title }}
             {% if posts.user_id == login_id %}
                 <div class="edit-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
+                    <button class="btn" type="submit">수정</button>
+                    <button class="btn" type="submit">삭제</button>
                 </div>
             {% endif %}
         </h2>
@@ -162,8 +217,8 @@
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                     {% if comment.user_id == login_id %}
                         <div class="comment-buttons">
-                            <button>수정</button>
-                            <button>삭제</button>
+                            <button class="btn" type="submit">수정</button>
+                            <button class="btn" type="submit">삭제</button>
                         </div>
                     {% endif %}
                 </div>
@@ -176,7 +231,7 @@
             <label>
                 <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
             </label><br>
-            <button type="submit">댓글 작성</button>
+            <button class="btn" type="submit">댓글 작성</button>
         </form>
     </div>
 </div>

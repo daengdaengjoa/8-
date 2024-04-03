@@ -5,14 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성 페이지</title>
     {#  알림창 팝업  #}
-    {%with messages = get_flashed_messages()%}
-        {%if messages %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
             <script type="text/javascript">
                 alert("{{ messages[-1] }}");
             </script>
         {% endif %}
     {% endwith %}
+    <link rel="stylesheet" href="styles.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #757575;
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #f4f4f4;
+            --gray-2: #757575;
+
+            --facebook-color: #4267B2;
+            --google-color: #DB4437;
+            --twitter-color: #1DA1F2;
+            --insta-color: #E1306C;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -20,8 +45,8 @@
         }
 
         header {
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             padding: 10px 0;
             overflow: auto;
             width: 100%;
@@ -72,8 +97,8 @@
         .scroll-to-top {
             width: 50px;
             height: 50px;
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             border-radius: 50%;
             font-size: 15px;
@@ -93,7 +118,7 @@
             align-items: center;
             flex-direction: row;
             gap: 32px;
-            margin: 10px 0px;
+            margin: 10px 0;
         }
 
         h1 {
@@ -144,6 +169,35 @@
             opacity: 0.7;
             cursor: default;
         }
+
+        .btn {
+            display: inline-block;
+            background: transparent;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 0.625rem;
+            letter-spacing: 0.3em;
+            color: rgb(255 255 255 / 80%);
+            border-radius: 0;
+            padding: 10px 20px 10px;
+            transition: all 0.7s ease-out;
+            background: linear-gradient(270deg, rgba(223, 190, 106, 0.8), rgba(146, 111, 52, 0.8), rgb(0 0 0), rgb(0 0 0));
+            background-position: 1% 50%;
+            background-size: 300% 300%;
+            text-decoration: none;
+            margin: 0.625rem;
+            border: none;
+            border: 1px solid rgba(223, 190, 106, 0.3);
+        }
+
+
+        .btn:hover {
+            color: #fff;
+            border: 1px solid rgba(223, 190, 106, 0);
+            background-position: 99% 50%;
+        }
+
     </style>
 </head>
 <body>
@@ -213,7 +267,7 @@
             <label for="content">내용:</label>
             <textarea id="content" name="review" required></textarea>
         </div>
-        <button type="submit">작성 완료</button>
+        <button class="btn" type="submit">작성 완료</button>
     </form>
 </div>
 <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>

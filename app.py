@@ -183,13 +183,9 @@ def 게시글조회():
     query = posts.movie_title
 
     url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + '%s' % query
-    # print(url) # https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=아이언맨3
     response = requests.get(url)
-    # print(response) # <Response [200]>
     html_text = response.text
-    # print(html_text) # <!doctype html> <html lang="ko"><head> <meta charset="utf-8"> <meta name="referrer" content="always">  <meta name="format-detection" content="telephone=no,address=no,email=no"> <meta property="og:title" content="아이언맨3 : 네이버 통합검색"/> <meta property="og:image" content="https://ssl.pstatic.net/sstatic/search/common/og_v3.png"> <meta property="og:description" content="'아이언맨3'의 네이버 통합검색 결과입니다."> <meta name="description" lang="ko" content="'아이언맨3'의 네이버 통합검색 결과입니다."> <title>아이언맨3 : 네이버 통합검색</title> <link rel="shortcut icon" href="https://ssl.pstatic.net/sstatic/search/favicon/favicon_191118_pc.ico">
     soup = BeautifulSoup(response.text, 'html.parser')
-    # print(soup)  #<html lang="ko"><head> <meta charset="utf-8"/> <meta content="always" name="referrer"/> <meta content="telephone=no,address=no,email=no" name="format-detection"/> <meta content="아이언맨3 : 네이버 통합검색" property="og:title"> <meta content="https://ssl.pstatic.net/sstatic/search/common/og_v3.png" property="og:image"/> <meta content="'아이언맨3'의 네이버 통합검색 결과입니다." property="og:description"/> <meta content="'아이언맨3'의 네이버 통합검색 결과입니다." lang="ko" name="description"/> <title>아이언맨3 : 네이버 통합검색</title> <link href="https://ssl.pstatic.net/sstatic/search/favicon/favicon_191118_pc.ico" rel="shortcut icon"/> <link href="https://ssl.pstatic.net/sstatic/search/opensearch-description.https.xml" rel="search" title="Naver" type="application/opensearchdescription+xml"><script> if (top.frames.length!=0 || window!=top) window.open(location, "_top"); </script><link href="https://ssl.pstatic.net/sstatic/search/pc/css/search1_240314.css" rel="stylesheet" type="text/css"/> <link href="https://ssl.pstatic.net/sstatic/search/pc/css/search2_240314
 
     data1 = {}
     title = soup.select_one('._text').text.strip()
