@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 영화추천 페이지</title>
+    {#  알림창 팝업  #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #757575;
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #f4f4f4;
+            --gray-2: #757575;
+
+            --facebook-color: #4267B2;
+            --google-color: #DB4437;
+            --twitter-color: #1DA1F2;
+            --insta-color: #E1306C;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 0;
+            overflow: auto;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px 0;
+        }
+
+        .card {
+            width: AUTO;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form textarea {
+            height: 200px;
+        }
+
+
+        .scroll-to-top {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            font-size: 15px;
+            text-align: center;
+            line-height: 50px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-block;
+            background: transparent;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgb(255 255 255 / 80%);
+            border-radius: 5px;
+            padding: 5px 5px;
+            transition: all 0.7s ease-out;
+            background: linear-gradient(270deg, rgba(223, 190, 106, 0.8), rgba(146, 111, 52, 0.8), rgb(0 0 0), rgb(0 0 0));
+            background-position: 1% 50%;
+            background-size: 300% 300%;
+            text-decoration: none;
+            margin: 0.1rem;
+            border: none;
+            border: 1px solid rgba(223, 190, 106, 0.3);
+        }
+
+
+        .btn:hover {
+            color: #fff;
+            border: 1px solid rgba(223, 190, 106, 0);
+            background-position: 99% 50%;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>질문 작성</h1>
+</header>
+<div class="container">
+    <div class="card">
+        <img src="{{ data1.image_url }}" alt="파이썬에서 가져온 이미지">
+        <h2>{{ data1.title }}</h2>
+        <p><strong>개요:</strong> {{ data1.info }}</p>
+        <p><strong>개봉:</strong> {{ data1.date }}</p>
+        <p><strong>평점:</strong> {{ data1.star }}</p>
+        <p><strong>관객수:</strong> {{ data1.nums }}</p>
+        <p><strong>줄거리:</strong> {{ data1.content }}</p>
+    </div>
+    <div class="card">
+        <p><strong>AI추천도:</strong> {{ m2 }}</p>
+        <p><strong>답변:</strong> {{ data_ai }}</p>
+    </div>
+    <form action="/AI추천" method="POST">
+        <div>
+            <label>질문:</label>
+            <textarea name="ask" placeholder="구체적으로 적어주세요" required></textarea>
+        </div>
+        <button class="btn" type="submit">작성 완료</button>
+    </form>
+</div>
+<a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+
+</body>
+</html>
