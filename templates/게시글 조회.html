@@ -155,7 +155,8 @@
             cursor: pointer;
         }
 
-        /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
+        /*
+        {# ----------------------------- 네비게이션 효과 ---------------------------#}  */
 
         .navigation {
             width: 100%;
@@ -272,8 +273,9 @@
             padding: 20px 0;
         }
 
-        /* {# ----------------------------- 반짝이 버튼 ---------------------------#} */
-        .btn {
+        /*
+        {# ----------------------------- 반짝이 버튼 ---------------------------#}  */
+        button {
             display: inline-block;
             background: transparent;
             text-transform: uppercase;
@@ -295,13 +297,14 @@
         }
 
 
-        .btn:hover {
+        button:hover {
             color: #fff;
             border: 1px solid rgba(223, 190, 106, 0);
             background-position: 99% 50%;
         }
 
-        /*{# ----------------------------- 헤더 반짝이 ---------------------------#}      */
+        /*
+        {# ----------------------------- 헤더 반짝이 ---------------------------#}       */
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -567,10 +570,7 @@
     </span>
             </a>
         </li>
-
-
-
-        {% if user_id %}
+        {% if login %}
             <li class="menu__item">
                 <a href="/로그아웃" class="menu__link">
     <span class="menu__title">
@@ -606,7 +606,7 @@
             <span class="post-info">좋아요: {{ posts.likes }}</span>
             <span class="post-info">
             {% if posts.user_id == login_id or "admin_team8" == login_id %}
-                <div class="edit-buttons">
+                <div class="edit-buttons" style="display: flex; justify-content: flex-start">
                     <form method="POST" action="/edit/{{ posts.id }}">
                         <button type="submit" class="btn-btn">수정</button>
                     </form>
@@ -657,14 +657,14 @@
                     <p>{{ comment.detail }}</p>
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                     {% if comment.user_id == login_id or "admin_team8" == login_id %}
-                    <div class="comment-buttons">
-                        <button type="submit" class="update-comment-btn{{ loop.index }}"
-                                id="update-comment-btn{{ loop.index }}">수정
-                        </button>
-                        <form method="POST" action="/delete_comment/{{ comment.id }}">
-                            <button type="submit" class="delete-comment-btn">삭제</button>
-                        </form>
-                    </div>
+                        <div class="comment-buttons" style="display: flex; justify-content: flex-start">
+                            <button type="submit" class="update-comment-btn{{ loop.index }}"
+                                    id="update-comment-btn{{ loop.index }}">수정
+                            </button>
+                            <form method="POST" action="/delete_comment/{{ comment.id }}">
+                                <button type="submit" class="delete-comment-btn">삭제</button>
+                            </form>
+                        </div>
                     {% endif %}
                 </div>
             </div>

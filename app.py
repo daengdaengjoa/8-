@@ -181,9 +181,9 @@ def 로그인화면():
         # 오류시 로그인 화면 다시 출력
         except:
             flash("입력값이 잘못 되었습니다.")
-            return render_template("로그인 화면.html")
+            return render_template("로그인 화면.html", login=session.get('user_id'))
     # 데이터 값 저장 만하고 보여줄 필요는 없으니 리턴 값 없음
-    return render_template("로그인 화면.html")
+    return render_template("로그인 화면.html", login=session.get('user_id'))
 
 
 @app.route("/로그아웃", methods=["GET"])
@@ -197,7 +197,7 @@ def 게시글작성():
     # 로그인이 되어 있지 않다면 로그인화면으로 이동
     if not session.get("user_id"):
         flash("로그인이 필요한 기능입니다.")
-        return render_template("로그인 화면.html")
+        return render_template("로그인 화면.html",login=session.get('user_id'))
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
         user_id = session.get("user_id")
@@ -225,7 +225,7 @@ def 게시글작성():
         return redirect("/")
 
     # 데이터 값 저장 만하고 보여줄 필요는 없으니 리턴 값 없음
-    return render_template("게시글 작성.html")
+    return render_template("게시글 작성.html", login=session.get('user_id'))
 
 
 @app.route("/AI추천", methods=["GET", "POST"])
@@ -371,7 +371,7 @@ def AI추천():
         "image_url": image_url,
     }
 
-    return render_template("AI추천.html", data_ai=data_ai, m1=m1, m2=m2, data1=data1)
+    return render_template("AI추천.html", data_ai=data_ai, m1=m1, m2=m2, data1=data1, login=session.get('user_id'))
 
 
 @app.route("/전체글조회", methods=["POST", "GET"])
@@ -403,6 +403,7 @@ def 전체글조회():
             posts=displayed_posts,
             total_pages=total_pages,
             current_page=page,
+            login=session.get('user_id'),
         )
 
     # 검색기능을 하지 않고 처음들어올 때에는 모든 게시글이 보일 수 있도록 한다.
@@ -424,6 +425,7 @@ def 전체글조회():
             posts=displayed_posts,
             total_pages=total_pages,
             current_page=page,
+            login=session.get('user_id'),
         )
 
 
@@ -450,7 +452,7 @@ def 게시글조회():
     if request.method == "POST":
         if not session.get("user_id"):
             flash("로그인이 필요한 기능입니다.")
-            return render_template("로그인 화면.html")
+            return render_template("로그인 화면.html", login=session.get('user_id'))
         if request.form.get("detail"):
             new_Comment = Comment(
                 post_id=post_id,
@@ -494,7 +496,7 @@ def 게시글조회():
     data1 = Crawling.query.filter_by(title_user=title).first()
 
     return render_template(
-        "게시글 조회.html", data=data1, comments=comments, posts=posts, login_id=session.get('user_id'), button=post_id in session.get('liked_posts', []))
+        "게시글 조회.html", data=data1, comments=comments, posts=posts, login_id=session.get('user_id'), button=post_id in session.get('liked_posts', []), login=session.get('user_id'))
 
 
 @app.route("/update_post/<int:post_id>", methods=['GET', 'POST'])
@@ -522,7 +524,7 @@ def update_post(post_id):
 @app.route("/edit/<int:post_id>", methods=['GET', 'POST'])
 def edit(post_id):
     post = Posting.query.get_or_404(post_id)
-    return render_template('게시글 수정.html', post=post, post_id=post_id)
+    return render_template('게시글 수정.html', post=post, post_id=post_id, login=session.get('user_id'))
 
 
 @app.route("/delete_post/<int:post_id>", methods=['GET', 'POST'])
