@@ -97,8 +97,16 @@
 
 ## ✒️ API
 ###  API-1
-- **API 상세설명**: 
-- **API 명세서**: 
-###  API-2
-- **API 상세설명**: 
-- **API 명세서**: 
+엔드포인트	메서드	요청 바디	응답
+/signup	POST	user_id, pw, name, age, gender, area	200 OK, 400 Bad Request, 409 Conflict
+/login	POST	user_id, pw	200 OK, 400 Bad Request, 401 Unauthorized
+/logout	GET	-	200 OK
+/write_post	POST	user_id, movie_title, posting_title, review, rating	200 OK, 400 Bad Request, 401 Unauthorized
+/get_post/<post_id>	GET	-	200 OK, 404 Not Found
+/update_post/<post_id>	POST	movie_title, posting_title, review, rating	200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found
+/delete_post/<post_id>	GET	-	200 OK, 401 Unauthorized, 404 Not Found
+/write_comment/<post_id>	POST	detail	200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found
+/get_comments/<post_id>	GET	-	200 OK, 404 Not Found
+/update_comment/<comment_id>	POST	detail	200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found
+/delete_comment/<comment_id>	GET	-	200 OK, 401 Unauthorized, 404 Not Found
+
