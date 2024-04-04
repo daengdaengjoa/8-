@@ -98,8 +98,8 @@
 ## ✒️ API
 ###  API-1
 엔드포인트	메서드	요청 바디	응답
--/signup	POST	user_id, pw, name, age, gender, area	200 OK, 400 Bad Request, 409 Conflict  
--/login	POST	user_id, pw	200 OK, 400 Bad Request, 401 Unauthorized
+   - signup	POST	user_id, pw, name, age, gender, area	200 OK, 400 Bad Request, 409 Conflict  
+   - /login	POST	user_id, pw	200 OK, 400 Bad Request, 401 Unauthorized
 -/logout	GET	-	200 OK
 -/write_post	POST	user_id, movie_title, posting_title, review, rating	200 OK, 400 Bad Request, 401 Unauthorized
 -/get_post/<post_id>	GET	-	200 OK, 404 Not Found
