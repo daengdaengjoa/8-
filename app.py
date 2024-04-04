@@ -232,7 +232,7 @@ def AI추천():
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
 
-        client = OpenAI(api_key="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")
+        client = OpenAI(api_key="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")
 
         query = request.form["ask"]
 
@@ -310,11 +310,11 @@ def AI추천():
         print(response_message2)
         try:
             m1 = m1_0.split(":")[1].split('"')[1].strip()
-        except AttributeError:
+        except IndexError:
             m1 = ""
         try:
             m2 = m2_0.split(":")[1].split('"')[1].strip()
-        except AttributeError:
+        except IndexError:
             m2 = ""
 
         m1_plus = m1 + "영화"
