@@ -46,7 +46,8 @@
 <br>
 
 ## 📝 Project Architecture
-![프로젝트 아키텍쳐]()
+![image](https://github.com/daengdaengjoa/Team-8/assets/157565164/bca5d394-33ee-431e-a238-b698764cac9b)
+
 
 <br>
 
