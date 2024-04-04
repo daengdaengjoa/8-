@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script type="text/javascript">
-                alert("{{ messages[-1] }}");
-            </script>
-        {% endif %}
+    {% if messages %}
+    <script type="text/javascript">
+        alert("{{ messages[-1] }}");
+    </script>
+    {% endif %}
     {% endwith %}
 
     <style>
@@ -34,6 +34,7 @@
             margin: auto;
             text-align: center;
         }
+
         /* {# ----------------------------- 헤더_글자_효과 ---------------------------#} */
 
         header {
@@ -58,15 +59,15 @@
             font-size: 80px;
             color: #FFF;
             text-shadow: 0 1px 0 #CCC,
-            0 2px 0 #CCC,
-            0 3px 0 #CCC,
-            0 4px 0 #CCC,
-            0 5px 0 #CCC,
-            0 6px 0 transparent,
-            0 7px 0 transparent,
-            0 8px 0 transparent,
-            0 9px 0 transparent,
-            0 10px 10px rgba(0, 0, 0, .4);
+                0 2px 0 #CCC,
+                0 3px 0 #CCC,
+                0 4px 0 #CCC,
+                0 5px 0 #CCC,
+                0 6px 0 transparent,
+                0 7px 0 transparent,
+                0 8px 0 transparent,
+                0 9px 0 transparent,
+                0 10px 10px rgba(0, 0, 0, .4);
         }
 
         h1 span:nth-child(2) {
@@ -90,17 +91,18 @@
             100% {
                 top: -20px;
                 text-shadow: 0 1px 0 #ffffff,
-                0 2px 0 #CCC,
-                0 3px 0 #CCC,
-                0 4px 0 #CCC,
-                0 5px 0 #CCC,
-                0 6px 0 #CCC,
-                0 7px 0 #CCC,
-                0 8px 0 #CCC,
-                0 9px 0 #CCC,
-                0 50px 25px rgba(0, 0, 0, .2);
+                    0 2px 0 #CCC,
+                    0 3px 0 #CCC,
+                    0 4px 0 #CCC,
+                    0 5px 0 #CCC,
+                    0 6px 0 #CCC,
+                    0 7px 0 #CCC,
+                    0 8px 0 #CCC,
+                    0 9px 0 #CCC,
+                    0 50px 25px rgba(0, 0, 0, .2);
             }
         }
+
         /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
 
         .navigation {
@@ -163,11 +165,13 @@
             border-right: 2px dotted #ccd7d7;
         }
 
-        .menu__link:hover .menu__first-word, .menu__link:focus .menu__first-word {
+        .menu__link:hover .menu__first-word,
+        .menu__link:focus .menu__first-word {
             transform: translate3d(0, -105%, 0);
         }
 
-        .menu__link:hover .menu__second-word, .menu__link:focus .menu__second-word {
+        .menu__link:hover .menu__second-word,
+        .menu__link:focus .menu__second-word {
             transform: translate3d(0, 105%, 0);
         }
 
@@ -218,6 +222,7 @@
             flex: 1;
             padding: 20px 0;
         }
+
         /* {# ----------------------------- 풋터 ---------------------------#} */
 
         footer {
@@ -320,6 +325,7 @@
             border-left-color: #656d77;
             border-right-color: #434a53;
         }
+
         /* {# ----------------------------- 메인 소개 글 ---------------------------#} */
 
         #containers {
@@ -328,6 +334,7 @@
             font-size: 36px;
             font-weight: bold;
             padding-top: 20px;
+            padding-bottom: 20px;
             width: 100%;
             bottom: 45%;
             display: block;
@@ -338,7 +345,7 @@
             overflow: hidden;
         }
 
-        #flip > div > div {
+        #flip>div>div {
             color: #fff;
             padding: 0 25px;
             height: 45px;
@@ -366,164 +373,245 @@
             0% {
                 margin-top: -270px;
             }
+
             5% {
                 margin-top: -180px;
             }
+
             33% {
                 margin-top: -180px;
             }
+
             38% {
                 margin-top: -90px;
             }
+
             66% {
                 margin-top: -90px;
             }
+
             71% {
                 margin-top: 0;
             }
+
             99.99% {
                 margin-top: 0;
             }
+
             100% {
                 margin-top: -270px;
             }
         }
 
+        .post-group {
+            display: flex;
+            /* 이미지와 포스트를 가로로 나란히 정렬하기 위해 flexbox 사용 */
+            /* 내용이 넘칠 경우 자동으로 다음 줄로 넘어가도록 설정 */
+            gap: 20px;
+            /* 이미지와 포스트 사이의 간격 설정 */
+        }
+
+        .post-wrapper {
+            max-width: 250px;
+            max-height: 400px;
+            /* 최대 높이 설정 */
+            overflow: auto;
+            /* 아래쪽 마진 추가 */
+            text-align: left;
+        }
+
+        .post-box {
+
+            background-color: var(--gray);
+            border: 1px solid #ccc;
+            /* 박스에 테두리 추가 */
+            border-radius: 5px;
+            /* 박스의 모서리를 둥글게 만듦 */
+            padding: 10px;
+            /* 내부 여백 설정 */
+            margin-bottom: 20px;
+            /* 아래쪽 마진 추가 */
+            transition: all 0.3s ease;
+        }
+
+        .post-box:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* 호버할 때 그림자 효과 추가 */
+            cursor: pointer;
+            /* 호버할 때 커서 모양 변경 */
+            transform: scale(1.05);
+        }
+
+        .postcontainer {
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /* 수평 가운데 정렬 */
+        }
+
+        .post-wrapper img {
+            border-radius: 5px;
+            width: 200px;
+            /* 이미지의 너비를 200px로 고정 */
+            height: 300px
+        }
+
+        .Cdefault {
+            color: #333;
+            /* 디폴트 색상 */
+            font-weight: bold;
+            /* 굵은 글꼴 */
+        }
+
+        .Ddefault {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
 <body>
-<div class="container">
-    <header>
-        <h1>
-            <span>영</span>
-            <span>화</span>
-            <span>의</span>
-            <span>전</span>
-            <span>당</span>
-        </h1>
-    </header>
-    <nav class="navigation">
-        <ul class="menu">
-            <li class="menu__item">
-                <a href="/" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__first-word" data-hover="홈화면">
-            홈화면
-          </span>
-        </span>
-                </a>
-            </li>
-            <li class="menu__item">
-                <a href="/전체글조회" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__first-word" data-hover="게시글">
-            게시글
-          </span>
-          <span class="menu__second-word" data-hover="조회">
-            조회
-          </span>
-        </span>
-                </a>
-            </li>
-
-            <li class="menu__item">
-                <a href="/게시글작성" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__first-word" data-hover="신규">
-            신규
-          </span>
-          <span class="menu__second-word" data-hover="게시글">
-            게시글
-          </span>
-            <span class="menu__first-word" data-hover="작성">
-            작성
-          </span>
-        </span>
-                </a>
-            </li>
-
-            <li class="menu__item">
-                <a href="/AI추천" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__first-word" data-hover="AI">
-            AI
-          </span>
-          <span class="menu__second-word" data-hover="영화">
-            영화
-          </span>
-            <span class="menu__first-word" data-hover="추천">
-            추천
-          </span>
-        </span>
-                </a>
-            </li>
-
-
-
-            {% if login %}
+    <div class="container">
+        <header>
+            <h1>
+                <span>영</span>
+                <span>화</span>
+                <span>의</span>
+                <span>전</span>
+                <span>당</span>
+            </h1>
+        </header>
+        <nav class="navigation">
+            <ul class="menu">
                 <li class="menu__item">
-                    <a href="/로그아웃" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__first-word" data-hover="로그">
-            로그
-          </span>
-          <span class="menu__second-word" data-hover="아웃">
-            아웃
-          </span>
-        </span>
+                    <a href="/" class="menu__link">
+                        <span class="menu__title">
+                            <span class="menu__first-word" data-hover="홈화면">
+                                홈화면
+                            </span>
+                        </span>
+                    </a>
+                </li>
+                <li class="menu__item">
+                    <a href="/전체글조회" class="menu__link">
+                        <span class="menu__title">
+                            <span class="menu__first-word" data-hover="게시글">
+                                게시글
+                            </span>
+                            <span class="menu__second-word" data-hover="조회">
+                                조회
+                            </span>
+                        </span>
                     </a>
                 </li>
 
-            {% else %}
+                <li class="menu__item">
+                    <a href="/게시글작성" class="menu__link">
+                        <span class="menu__title">
+                            <span class="menu__first-word" data-hover="신규">
+                                신규
+                            </span>
+                            <span class="menu__second-word" data-hover="게시글">
+                                게시글
+                            </span>
+                            <span class="menu__first-word" data-hover="작성">
+                                작성
+                            </span>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="menu__item">
+                    <a href="/AI추천" class="menu__link">
+                        <span class="menu__title">
+                            <span class="menu__first-word" data-hover="AI">
+                                AI
+                            </span>
+                            <span class="menu__second-word" data-hover="영화">
+                                영화
+                            </span>
+                            <span class="menu__first-word" data-hover="추천">
+                                추천
+                            </span>
+                        </span>
+                    </a>
+                </li>
+
+
+
+                {% if login %}
+                <li class="menu__item">
+                    <a href="/로그아웃" class="menu__link">
+                        <span class="menu__title">
+                            <span class="menu__first-word" data-hover="로그">
+                                로그
+                            </span>
+                            <span class="menu__second-word" data-hover="아웃">
+                                아웃
+                            </span>
+                        </span>
+                    </a>
+                </li>
+
+                {% else %}
 
                 <li class="menu__item">
                     <a href="/로그인화면" class="menu__link">
-        <span class="menu__title">
-          <span class="menu__second-word" data-hover="로그인">
-            로그인
-          </span>
-        </span>
+                        <span class="menu__title">
+                            <span class="menu__second-word" data-hover="로그인">
+                                로그인
+                            </span>
+                        </span>
                     </a>
                 </li>
-            {% endif %}
-        </ul>       
-    </nav>
-    <div id=containers>
-        이 곳에서
-        <div id=flip>
-            <div>
-                <div>AI검색을</div>
+                {% endif %}
+            </ul>
+        </nav>
+        <div id=containers>
+            이 곳에서
+            <div id=flip>
+                <div>
+                    <div>AI검색을</div>
+                </div>
+                <div>
+                    <div>소통리뷰를</div>
+                </div>
+                <div>
+                    <div>영화리뷰를</div>
+                </div>
             </div>
-            <div>
-                <div>소통리뷰를</div>
-            </div>
-            <div>
-                <div>영화리뷰를</div>
-            </div>
+            즐겨주세요
         </div>
-        즐겨주세요
     </div>
-</div>
-<div class="container">
-    <div class="postcontainer">
-        <h2>최신 작성글</h2>
-        {% if posts %}
-            {% for post in posts %}
-                <blockquote class="default">
-                    <h2><span class="Cdefault">{{ post.movie_title }}</span></h2>
-                    <p>작성자: {{ post.username }}</p>
-                    <p>내용: {{ post.review }}</p>
-                </blockquote>
-            {% endfor %}
-        {% endif %}
-    </div>
-</div>
-<footer>
     <div class="container">
-        <p>&copy; 2024 영화 리뷰 게시판</p>
+        <h2>최신 작성글</h2>
+        <div class="postcontainer">
+            {% for i in range(0, image_urls|length, 5) %}
+            <div class="post-group">
+                {% for i in range(0, image_urls|length) %}
+                <a href="/게시글조회?post_id={{ post1[i].id }}" style="text-decoration: none; color: inherit;">
+                <div class="post-box">
+                    <div class="post-wrapper">
+                        <img src="{{ image_urls[i] }}" alt="파이썬에서 가져온 이미지">
+                        {% if post1 %}
+                        <h2><span class="Cdefault">{{ post1[i].movie_title }}</span></h2>
+                        <p>작성자: {{ post1[i].username }}</p>
+                        <p>내용: {{ post1[i].review_short }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
-</footer>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 영화 리뷰 게시판</p>
+        </div>
+    </footer>
 </body>
 
 </html>
