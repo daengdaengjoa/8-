@@ -9,11 +9,15 @@ from datetime import datetime
 
 from openai import OpenAI
 
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '1234'  # 이걸 설정을 해야지 로그인 기능을 만들 수 있습니다.. 암호키 같은 기능인가봅니다..
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config["SECRET_KEY"] = (
+    "1234"  # 이걸 설정을 해야지 로그인 기능을 만들 수 있습니다.. 암호키 같은 기능인가봅니다..
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    basedir, "database.db"
+)
 
 db = SQLAlchemy(app)
 
@@ -47,6 +51,19 @@ class Comment(db.Model):  # 댓글 정보 데이터
     date = db.Column(db.DateTime, nullable=False)
 
 
+class Crawling(db.Model):  # 크롤링 정보 데이터
+    id = db.Column(db.Integer, primary_key=True)
+    title_user = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    info = db.Column(db.String, nullable=False)
+    date = db.Column(db.String, nullable=False)
+    star = db.Column(db.String, nullable=False)
+    nums = db.Column(db.String, nullable=False)
+    content = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
+    title_user = db.Column(db.String, nullable=False)
+
+
 # 서버가 열리면 로그인되어 있던 모든 기록이 초기화 시킬 수 있도록 하는 기능
 @app.before_request
 def clear_session():
@@ -76,12 +93,12 @@ def 로그인화면():
     if request.method == "POST" and request.form.get("name"):
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_UserInfo = UserInfo(
-            user_id=request.form['user_id'],
-            pw=request.form['pw'],
-            name=request.form['name'],
-            age=request.form['age'],
-            gender=request.form['gender'],
-            area=request.form['area'],  # 데이터 반영 필요
+            user_id=request.form["user_id"],
+            pw=request.form["pw"],
+            name=request.form["name"],
+            age=request.form["age"],
+            gender=request.form["gender"],
+            area=request.form["area"],  # 데이터 반영 필요
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_UserInfo)
@@ -92,14 +109,16 @@ def 로그인화면():
         return render_template("로그인 화면.html")
     # 로그인 기능
     elif request.method == "POST" and not request.form.get("name"):
-        user_id = request.form.get('user_id')
-        pw = request.form.get('pw')
+        user_id = request.form.get("user_id")
+        pw = request.form.get("pw")
         # 입력받은 값 데이터 베이스에서 조회
         try:
-            login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first()  # 데이터 베이스에 아디와 비밀번호 맞으면 통과
+            login = UserInfo.query.filter_by(
+                user_id=user_id, pw=pw
+            ).first()  # 데이터 베이스에 아디와 비밀번호 맞으면 통과
             if login is not None:
                 session["user_id"] = login.user_id
-                return redirect(url_for('메인화면'))  # 로그인 성공시 메인화면으로 이동
+                return redirect(url_for("메인화면"))  # 로그인 성공시 메인화면으로 이동
         # 오류시 로그인 화면 다시 출력
         except:
             flash("입력값이 잘못 되었습니다.")
@@ -117,22 +136,79 @@ def 로그아웃():
 @app.route("/게시글작성", methods=["GET", "POST"])
 def 게시글작성():
     # 로그인이 되어 있지 않다면 로그인화면으로 이동
-    if not session.get('user_id'):
+    if not session.get("user_id"):
         flash("로그인이 필요한 기능입니다.")
         return render_template("로그인 화면.html")
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_Posting = Posting(
-            user_id=session.get('user_id'),
-            username=request.form['username'],
-            movie_title=request.form['movie_title'],
-            posting_title=request.form['posting_title'],
-            review=request.form['review'],
-            grade=request.form['rating'],
-            date=datetime.now()
+            user_id=session.get("user_id"),
+            username=request.form["username"],
+            movie_title=request.form["movie_title"],
+            posting_title=request.form["posting_title"],
+            review=request.form["review"],
+            grade=request.form["rating"],
+            date=datetime.now(),
         )
-        # 데이터베이스 세션에 추가
+
+        query = request.form["movie_title"] + "영화"
+        print(query)
+        url = (
+            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+            + "%s" % query
+        )
+        response = requests.get(url)
+        html_text = response.text
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        data1 = {}
+        try:
+            title = soup.select_one("._text").text.strip()
+        except AttributeError:
+            title = "-"
+        try:
+            info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+        except AttributeError:
+            info = "-"
+        try:
+            date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+        except AttributeError:
+            date = "-"
+        try:
+            star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+        except AttributeError:
+            star = "-"
+        try:
+            nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+        except AttributeError:
+            nums = "-"
+        try:
+            content = soup.select_one(".desc._text").text.strip()
+        except AttributeError:
+            content = "-"
+        image_element = soup.select_one("a.thumb._item img")
+        if image_element:
+            image_url = image_element["src"]
+        else:
+            image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
+
+        existing_entry = Crawling.query.filter_by(title=title).first()
+        if existing_entry:
+            print("이미존제하는영화")
+        else:
+            new_Crawling = Crawling(
+                title=title,
+                info=info,
+                date=date,
+                star=star,
+                nums=nums,
+                content=content,
+                image_url=image_url,
+                title_user=request.form["movie_title"]
+            )
+            db.session.add(new_Crawling)
+
         db.session.add(new_Posting)
 
         # 변경 사항 커밋
@@ -153,7 +229,7 @@ def AI추천():
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
 
-        client = OpenAI(api_key="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")
+        client = OpenAI(api_key="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")
 
         query = request.form["ask"]
 
@@ -163,8 +239,8 @@ def AI추천():
                 {
                     "role": "system",
                     "content": "역할: 영화 평론가, 작업: 제목과 1점에서 10점사이의 추천도와 추천이유를 제공하여 사용자에게 영화를 추천하고,"
-                               + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
-                               + "또한 영화제목은 한글과 영문 모두 출력합니다.",
+                    + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
+                    + "또한 같은영화를 추천하지 않으며 영화제목은 한글과 영문 모두 출력합니다.",
                 },
                 {"role": "user", "content": query},
             ],
@@ -175,7 +251,7 @@ def AI추천():
         function1 = [
             {
                 "name": "get_movie_title",
-                "description": "영화의 제목을 찾아서 알려줍니다.",
+                "description": "영화의영문 제목을 찾아서 알려줍니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -242,8 +318,8 @@ def AI추천():
 
     query = m1_plus
     url = (
-            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-            + "%s" % query
+        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+        + "%s" % query
     )
     response = requests.get(url)
     html_text = response.text
@@ -301,7 +377,11 @@ def 전체글조회():
         find = request.form.get("find")
         tag = request.form.get("tag")
         # Posting 테이블에서 tag=검색 조건에 해당하는 칼럼에서 find의 내용을 포함하는 값이 있다면 모두 가져온다.
-        posts = Posting.query.filter(getattr(Posting, tag).like(f"%{find}%")).order_by(desc(Posting.date)).all()
+        posts = (
+            Posting.query.filter(getattr(Posting, tag).like(f"%{find}%"))
+            .order_by(desc(Posting.date))
+            .all()
+        )
 
         POSTS_PER_PAGE = 30
         # 페이지 번호 가져오기
@@ -351,14 +431,14 @@ def 게시글조회():
 
     # POST시 댓글 저장한다.
     if request.method == "POST":
-        if not session.get('user_id'):
+        if not session.get("user_id"):
             flash("로그인이 필요한 기능입니다.")
             return render_template("로그인 화면.html")
         new_Comment = Comment(
             post_id=post_id,
-            user_id=session.get('user_id'),
-            detail=request.form['detail'],
-            date=datetime.now()
+            user_id=session.get("user_id"),
+            detail=request.form["detail"],
+            date=datetime.now(),
         )
         # 데이터베이스 세션에 추가
         db.session.add(new_Comment)
@@ -368,47 +448,9 @@ def 게시글조회():
     # 게시글 내용 표시
     comments = Comment.query.filter_by(post_id=post_id).all()
 
-    # query = input('검색할 영화를 입력하세요: ')
-    query = posts.movie_title + "영화"
-    print(query)
-    url = (
-            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-            + "%s" % query
-    )
-    response = requests.get(url)
-    html_text = response.text
-    soup = BeautifulSoup(response.text, "html.parser")
+    title = posts.movie_title
 
-    data1 = {}
-    try:
-        title = soup.select_one("._text").text.strip()
-    except AttributeError:
-        title = "-"
-    try:
-        info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
-    except AttributeError:
-        info = "-"
-    try:
-        date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
-    except AttributeError:
-        date = "-"
-    try:
-        star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
-    except AttributeError:
-        star = "-"
-    try:
-        nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
-    except AttributeError:
-        nums = "-"
-    try:
-        content = soup.select_one(".desc._text").text.strip()
-    except AttributeError:
-        content = "-"
-    image_element = soup.select_one("a.thumb._item img")
-    if image_element:
-        image_url = image_element["src"]
-    else:
-        image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
+    data1 = Crawling.query.filter_by(title_user=title).first()
 
     data1 = {
         "title": title,

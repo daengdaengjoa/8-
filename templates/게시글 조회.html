@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,11 @@
 
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script type="text/javascript">
-                alert("{{ messages[-1] }}");
-            </script>
-        {% endif %}
+    {% if messages %}
+    <script type="text/javascript">
+        alert("{{ messages[-1] }}");
+    </script>
+    {% endif %}
     {% endwith %}
 
     <style>
@@ -57,7 +58,7 @@
         }
 
         .card {
-        {#수정 : 작은 창에서는 범위 이탈#} width: auto;
+            width: auto;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -67,8 +68,10 @@
 
         .edit-buttons {
             position: absolute;
-            top: 20px; /* 변경된 부분 */
-            right: 20px; /* 변경된 부분 */
+            top: 20px;
+            /* 변경된 부분 */
+            right: 20px;
+            /* 변경된 부분 */
         }
 
         .edit-buttons button {
@@ -271,12 +274,15 @@
                 right: -10%;
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -292,12 +298,15 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -314,12 +323,15 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -336,6 +348,7 @@
         }
     </style>
 </head>
+
 <body>
 <header>
     <div class="example-5">
@@ -354,22 +367,22 @@
                     <button class="btn" type="submit">수정</button>
                     <button class="btn" type="submit">삭제</button>
                 </div>
-            {% endif %}
-        </h2>
-        <div class="card">
-            <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
-            <h2>{{ data.title }}</h2>
-            <p><strong>개요:</strong> {{ data.info }}</p>
-            <p><strong>개봉:</strong> {{ data.date }}</p>
-            <p><strong>평점:</strong> {{ data.star }}</p>
-            <p><strong>관객수:</strong> {{ data.nums }}</p>
-            <p><strong>줄거리:</strong> {{ data.content }}</p>
+                {% endif %}
+            </h2>
+            <div class="card">
+                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+                <h2>{{ data.title }}</h2>
+                <p><strong>개요:</strong> {{ data.info }}</p>
+                <p><strong>개봉:</strong> {{ data.date }}</p>
+                <p><strong>평점:</strong> {{ data.star }}</p>
+                <p><strong>관객수:</strong> {{ data.nums }}</p>
+                <p><strong>줄거리:</strong> {{ data.content }}</p>
+            </div>
+            <p><strong>작성자:</strong> {{ posts.username }}</p>
+            <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+            <p> {{ posts.review }}</p>
         </div>
-        <p><strong>작성자:</strong> {{ posts.username }}</p>
-        <p><strong>제목:</strong> {{ posts.posting_title }}</p>
-        <p> {{ posts.review }}</p>
-    </div>
-    {% if comments %}
+        {% if comments %}
         {% for comment in comments %}
             <div class="comments">
                 <h3>{{ comment.user_id }}</h3>
@@ -385,19 +398,20 @@
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
-    <div class="comment-form">
-        <h3>댓글 작성</h3>
-        <form method="POST">
-            <label>
-                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
-            </label><br>
-            <button class="btn" type="submit">댓글 작성</button>
-        </form>
+        {% endif %}
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form method="POST">
+                <label>
+                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+                </label><br>
+                <button class="btn" type="submit">댓글 작성</button>
+            </form>
+        </div>
     </div>
-</div>
 
 <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
 
 </body>
+
 </html>

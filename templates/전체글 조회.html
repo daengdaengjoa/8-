@@ -9,11 +9,11 @@
 
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script type="text/javascript">
-                alert("{{ messages[-1] }}");
-            </script>
-        {% endif %}
+    {% if messages %}
+    <script type="text/javascript">
+        alert("{{ messages[-1] }}");
+    </script>
+    {% endif %}
     {% endwith %}
 
     <style>
@@ -363,12 +363,15 @@
                 right: -10%;
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -384,12 +387,15 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -406,12 +412,15 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
+
             25% {
                 opacity: 1;
             }
+
             50% {
                 width: 90px;
             }
+
             100% {
                 width: 0px;
                 right: 100%;
@@ -426,24 +435,23 @@
             -webkit-transform: scale(-1, 1);
             transform: scale(-1, 1);
         }
-
     </style>
 </head>
 
 <body>
-<div class="container">
+    <div class="container">
 
-    <header>
-        <div class="example-5">
-   <span class="heading-line--container">
-     <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
-        <h2>전체 게시글 조회</h2>
-       <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
-    </span>
-        </div>
-    </header>
-    <div class="content">
-        {% for post in posts %}
+        <header>
+            <div class="example-5">
+                <span class="heading-line--container">
+                    <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
+                    <h2>전체 게시글 조회</h2>
+                    <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
+                </span>
+            </div>
+        </header>
+        <div class="content">
+            {% for post in posts %}
             <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
                 <blockquote class="default">
                     <h2><span class="Cdefault">{{ post.posting_title }}</span></h2>
@@ -453,37 +461,37 @@
                     <p>리뷰 내용: {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                 </blockquote>
             </a>
-        {% endfor %}
-    </div>
-    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
-    <footer>
-        <div class="container">
-            <form method="POST">
-                <div class="search-container">
-                    <label>
-                        <select class="search-select" name="tag">
-                            <option value="movie_title">영화 이름</option>
-                            <option value="posting_title">글 제목</option>
-                            <option value="username">작성자</option>
-                            <option value="review">내용</option>
-                        </select>
-                    </label>
-                    <label>
-                        <input type="text" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
-                    </label>
-                    <button type="submit" class="btn">검색</button>
-                </div>
-            </form>
-            <div class="pagination">
-                {% for page_num in range(1, total_pages + 1) %}
-                    <a href="?page={{ page_num }}"
-                       {% if page_num == current_page %}class="active"{% endif %}>{{ page_num }}</a>
-                {% endfor %}
-            </div>
-            <p>&copy; 2024 게시글 조회 페이지</p>
+            {% endfor %}
         </div>
-    </footer>
-</div>
+        <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+        <footer>
+            <div class="container">
+                <form method="POST">
+                    <div class="search-container">
+                        <label>
+                            <select class="search-select" name="tag">
+                                <option value="movie_title">영화 이름</option>
+                                <option value="posting_title">글 제목</option>
+                                <option value="username">작성자</option>
+                                <option value="review">내용</option>
+                            </select>
+                        </label>
+                        <label>
+                            <input type="text" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
+                        </label>
+                        <button type="submit" class="btn">검색</button>
+                    </div>
+                </form>
+                <div class="pagination">
+                    {% for page_num in range(1, total_pages + 1) %}
+                    <a href="?page={{ page_num }}" {% if page_num==current_page %}class="active" {% endif %}>{{ page_num
+                        }}</a>
+                    {% endfor %}
+                </div>
+                <p>&copy; 2024 게시글 조회 페이지</p>
+            </div>
+        </footer>
+    </div>
 </body>
 
 </html>

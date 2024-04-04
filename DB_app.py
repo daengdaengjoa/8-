@@ -36,6 +36,17 @@ class Comment(db.Model):
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
+    
+class Crawling(db.Model):  # 크롤링 정보 데이터
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    info = db.Column(db.String, nullable=False)
+    date = db.Column(db.String, nullable=False)
+    star = db.Column(db.String, nullable=False)
+    nums = db.Column(db.String, nullable=False)
+    content = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
+    title_user = db.Column(db.String, nullable=False)
 
 
 with app.app_context():
