@@ -70,8 +70,8 @@
       
 ## ✒️ API
 ###  API-1
-- **API 상세설명**: 네이버 영화 검색을 이용하여 영화 정보를 검색하는 API입니다.
-- **API 명세서**: [네이버 영화 API]([https://developers.naver.com/docs/search/movie/](https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%EC%98%81%ED%99%94))
+- **API 상세설명**: 
+- **API 명세서**: 
 ###  API-2
-- **API 상세설명**: 오픈AI API를 이용하여 자연어 처리 및 기계 학습을 활용한 정보 추출 및 분석을 수행하는 API입니다.
-- **API 명세서**: [오픈AI API](https://openai.com/api)
+- **API 상세설명**: 
+- **API 명세서**: 
