@@ -88,32 +88,19 @@
 <br> 
 
 ## ✒️ API
-###  API-1
-엔드포인트	메서드	요청 바디	응답
-   - signup	POST	user_id, pw, name, age, gender, area	200 OK, 400 Bad Request, 409 Conflict  
-   - login	POST	user_id, pw	200 OK, 400 Bad Request, 401 Unauthorized
-   - logout	GET	-	200 OK
-   - write_post	POST	user_id, movie_title, posting_title, review, rating	200 OK, 400 Bad Request, 401 Unauthorized
-   - get_post/<post_id>	GET	-	200 OK, 404 Not Found
-   - update_post/<post_id>	POST	movie_title, posting_title, review, rating	200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found
-   - delete_post/<post_id>	GET	-	200 OK, 401 Unauthorized, 404 Not Found
-   - write_comment/<post_id>	POST	detail	200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found
--/get_comments/<post_id>	GET	-	200 OK, 404 Not Found
--/update_comment/<comment_id>	POST	detail	200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found
--/delete_comment/<comment_id>	GET	-	200 OK, 401 Unauthorized, 404 Not Found
+| 엔드포인트               | 메서드 | 요청 본문 데이터             | 응답 코드                             |
+|------------------------|--------|------------------------------|--------------------------------------|
+| /signup                | POST   | user_id, pw, name, age, gender, area | 200 OK, 400 Bad Request, 409 Conflict |
+| /login                 | POST   | user_id, pw                  | 200 OK, 400 Bad Request, 401 Unauthorized |
+| /logout                | GET    | -                            | 200 OK                               |
+| /write_post            | POST   | user_id, movie_title, posting_title, review, rating | 200 OK, 400 Bad Request, 401 Unauthorized |
+| /get_post/<post_id>   | GET    | -                            | 200 OK, 404 Not Found                |
+| /update_post/<post_id>| POST   | movie_title, posting_title, review, rating | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+| /delete_post/<post_id>| GET    | -                            | 200 OK, 401 Unauthorized, 404 Not Found |
+| /write_comment/<post_id> | POST | detail                       | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+| /get_comments/<post_id>| GET    | -                            | 200 OK, 404 Not Found                |
+| /update_comment/<comment_id> | POST | detail                   | 200 OK, 400 Bad Request, 401 Unauthorized, 404 Not Found |
+| /delete_comment/<comment_id>| GET | -                          | 200 OK, 401 Unauthorized, 404 Not Found |
 
-| 엔드포인트 | 메서드 | 설명 |
-|------------|--------|------|
-| `/로그인화면` | GET, POST | 로그인 및 회원가입을 위한 화면 표시 및 처리 |
-| `/메인화면` | GET | 메인 화면 표시 및 최신 게시글 표시 |
-| `/게시글작성` | GET, POST | 게시글 작성을 위한 화면 표시 및 처리 |
-| `/AI추천` | GET, POST | 사용자 질문에 기반하여 AI가 영화를 추천하고 해당 영화에 대한 정보 제공 |
-| `/전체글조회` | GET, POST | 전체 게시글 조회 및 검색을 위한 화면 표시 |
-| `/게시글조회` | GET, POST | 특정 게시글 조회 및 댓글 작성 및 좋아요 기능 처리 |
-| `/update_post/<int:post_id>` | GET, POST | 게시글 수정 화면 표시 및 게시글 수정 처리 |
-| `/edit/<int:post_id>` | GET, POST | 게시글 수정을 위한 화면 표시 |
-| `/delete_post/<int:post_id>` | GET, POST | 게시글 삭제 처리 |
-| `/update_comment/<int:post_id>` | GET, POST | 댓글 수정 처리 |
-| `/delete_comment/<int:post_id>` | GET, POST | 댓글 삭제 처리 |
 
 
