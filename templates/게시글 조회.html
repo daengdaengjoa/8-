@@ -154,7 +154,7 @@
         }
 
         {# ----------------------------- 반짝이 버튼 ---------------------------#}
-        .btn {
+        button {
             display: inline-block;
             background: transparent;
             text-transform: uppercase;
@@ -176,18 +176,14 @@
         }
 
 
-        .btn:hover {
+        button:hover {
             color: #fff;
             border: 1px solid rgba(223, 190, 106, 0);
             background-position: 99% 50%;
         }
 
-        /*
 
-
-
-
-        {# ----------------------------- 헤더 반짝이 ---------------------------#}      */
+        /* {# ----------------------------- 헤더 반짝이 ---------------------------#}  */
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -393,12 +389,12 @@
             <span class="post-info">좋아요: {{ posts.likes }}</span>
             <span class="post-info">
             {% if posts.user_id == login_id or "admin_team8" == login_id %}
-                <div class="edit-buttons">
+                <div class="edit-buttons" style="display: flex; justify-content: space-between">
                     <form method="POST" action="/edit/{{ posts.id }}">
-                        <button type="submit" class="btn-btn">수정</button>
+                        <button type="submit" class="btn">수정</button>
                     </form>
                     <form method="POST" action="/delete_post/{{ posts.id }}">
-                        <button type="submit" class="btn-btn">삭제</button>
+                        <button type="submit" class="btn">삭제</button>
                     </form>
                 </div>
             {% endif %}
@@ -444,7 +440,7 @@
                     <p>{{ comment.detail }}</p>
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                     {% if comment.user_id == login_id or "admin_team8" == login_id %}
-                    <div class="comment-buttons">
+                    <div class="comment-buttons" style="display: flex; justify-content: flex-start">
                         <button type="submit" class="update-comment-btn{{ loop.index }}"
                                 id="update-comment-btn{{ loop.index }}">수정
                         </button>

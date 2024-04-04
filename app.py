@@ -65,6 +65,69 @@ class Crawling(db.Model):  # 크롤링 정보 데이터
     title_user = db.Column(db.String, nullable=False)
 
 
+def connect_db(movie_title):
+    print(movie_title)
+    query = movie_title + "영화"
+    url = (
+            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+            + "%s" % query
+    )
+    response = requests.get(url)
+    html_text = response.text
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    data1 = {}
+    try:
+        title = soup.select_one("._text").text.strip()
+    except AttributeError:
+        title = "-"
+    try:
+        info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+    except AttributeError:
+        info = "-"
+    try:
+        date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+    except AttributeError:
+        date = "-"
+    try:
+        star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+    except AttributeError:
+        star = "-"
+    try:
+        nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+    except AttributeError:
+        nums = "-"
+    try:
+        content = soup.select_one(".desc._text").text.strip()
+    except AttributeError:
+        content = "-"
+    image_element = soup.select_one("a.thumb._item img")
+    if image_element:
+        image_url = image_element["src"]
+    else:
+        image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
+
+    existing_entry = Crawling.query.filter_by(title=title).first()
+    if existing_entry:
+        print("이미존제하는영화")
+    else:
+        new_Crawling = Crawling(
+            title=title,
+            info=info,
+            date=date,
+            star=star,
+            nums=nums,
+            content=content,
+            image_url=image_url,
+            title_user=movie_title
+        )
+        db.session.add(new_Crawling)
+
+        db.session.commit()
+
+
+
+
 # 서버가 열리면 로그인되어 있던 모든 기록이 초기화 시킬 수 있도록 하는 기능
 @app.before_request
 def clear_session():
@@ -142,10 +205,13 @@ def 게시글작성():
         return render_template("로그인 화면.html")
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
+        user_id = session.get("user_id")
+        user_info = UserInfo.query.filter_by(user_id=user_id).first()
+        print(user_info.name)
         # Posting테이블의 칼럼에 맞추어 변수의 값 입력
         new_Posting = Posting(
-            user_id=session.get("user_id"),
-            username=request.form["username"],
+            user_id=user_id,
+            username=user_info.name,
             movie_title=request.form["movie_title"],
             posting_title=request.form["posting_title"],
             review=request.form["review"],
@@ -154,63 +220,7 @@ def 게시글작성():
             views=0,
             likes=0,
         )
-
-        query = request.form["movie_title"] + "영화"
-        print(query)
-        url = (
-                "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-                + "%s" % query
-        )
-        response = requests.get(url)
-        html_text = response.text
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        data1 = {}
-        try:
-            title = soup.select_one("._text").text.strip()
-        except AttributeError:
-            title = "-"
-        try:
-            info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
-        except AttributeError:
-            info = "-"
-        try:
-            date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
-        except AttributeError:
-            date = "-"
-        try:
-            star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
-        except AttributeError:
-            star = "-"
-        try:
-            nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
-        except AttributeError:
-            nums = "-"
-        try:
-            content = soup.select_one(".desc._text").text.strip()
-        except AttributeError:
-            content = "-"
-        image_element = soup.select_one("a.thumb._item img")
-        if image_element:
-            image_url = image_element["src"]
-        else:
-            image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
-
-        existing_entry = Crawling.query.filter_by(title=title).first()
-        if existing_entry:
-            print("이미존제하는영화")
-        else:
-            new_Crawling = Crawling(
-                title=title,
-                info=info,
-                date=date,
-                star=star,
-                nums=nums,
-                content=content,
-                image_url=image_url,
-                title_user=request.form["movie_title"]
-            )
-            db.session.add(new_Crawling)
+        connect_db(request.form["movie_title"])
 
         db.session.add(new_Posting)
 
@@ -305,9 +315,6 @@ def AI추천():
         m1_0 = str(response_message1)
         m2_0 = str(response_message2)
 
-        print(response0.choices[0].message.content)
-        print(response_message1)
-        print(response_message2)
         try:
             m1 = m1_0.split(":")[1].split('"')[1].strip()
         except IndexError:
@@ -491,7 +498,6 @@ def 게시글조회():
 
     data1 = Crawling.query.filter_by(title_user=title).first()
 
-    print(data1)
     return render_template(
         "게시글 조회.html", data=data1, comments=comments, posts=posts, login_id=session.get('user_id'), button=post_id in session.get('liked_posts', []))
 
@@ -499,8 +505,11 @@ def 게시글조회():
 @app.route("/update_post/<int:post_id>", methods=['GET', 'POST'])
 def update_post(post_id):
     post = Posting.query.get_or_404(post_id)
+    user_id = session.get("user_id")
+    user_info = UserInfo.query.filter_by(user_id=user_id).first()
+    print(user_info.name)
     if request.method == 'POST':
-        post.username = request.form['username']
+        post.username = user_info.name
         post.movie_title = request.form['movie_title']
         post.posting_title = request.form['posting_title']
         post.review = request.form['review']
@@ -508,13 +517,16 @@ def update_post(post_id):
         post.date = datetime.now()
 
         db.session.commit()
+
+        connect_db(request.form['movie_title'])
+
+        flash("게시글이 수정 되었습니다.")
         return redirect(url_for('게시글조회', post_id=post.id))
 
 
 @app.route("/edit/<int:post_id>", methods=['GET', 'POST'])
 def edit(post_id):
     post = Posting.query.get_or_404(post_id)
-    print(post.posting_title)
     return render_template('게시글 수정.html', post=post, post_id=post_id)
 
 
@@ -524,6 +536,7 @@ def delete_post(post_id):
     if request.method == 'GET' or 'POST':
         db.session.delete(post)
         db.session.commit()
+        flash("게시글이 삭제 되었습니다.")
     return redirect(url_for('메인화면'))
 
 
@@ -541,16 +554,14 @@ def update_comment(post_id):
 @app.route("/delete_comment/<int:post_id>", methods=['GET', 'POST'])
 def delete_comment(post_id):
     comment = Comment.query.get_or_404(post_id)
-    print(comment)
     if request.method == 'GET' or 'POST':
         db.session.delete(comment)
         db.session.commit()
     return redirect(url_for('게시글조회', comment_id=comment.id, post_id=comment.post_id))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
 
 with app.app_context():
     db.create_all()
-
-
