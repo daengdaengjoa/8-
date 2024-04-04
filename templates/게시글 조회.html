@@ -14,7 +14,7 @@
             </script>
         {% endif %}
     {% endwith %}
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
@@ -118,7 +118,23 @@
             cursor: pointer;
         }
 
-        {# ----------------------------- 홈 플로팅 버튼 ---------------------------#}
+        .comment-edit {
+            margin-top: 20px;
+        }
+        .comment-edit textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .comment-edit button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -374,8 +390,12 @@
             <span class="post-info">
             {% if posts.user_id == login_id or "admin_team8" == login_id %}
                 <div class="edit-buttons">
-                    <button class="btn" type="submit">수정</button>
-                    <button class="btn" type="submit">삭제</button>
+                    <form method="POST" action="/edit/{{ posts.id }}">
+                        <button type="submit" class="btn-btn">수정</button>
+                    </form>
+                    <form method="POST" action="/delete_post/{{ posts.id }}">
+                        <button type="submit" class="btn-btn">삭제</button>
+                    </form>
                 </div>
             {% endif %}
             </span>
@@ -403,35 +423,64 @@
         {% endif %}
 
     </div>
-    {% if comments %}
+    <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form method="POST">
+                <label>
+                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+                </label><br>
+                <button type="submit">댓글 작성</button>
+            </form>
+        </div>{% if comments %}
         {% for comment in comments %}
-            <div class="comments">
+            <div class="comments{{ loop.index }}">
                 <h3>{{ comment.user_id }}</h3>
                 <div class="comment">
                     <p>{{ comment.detail }}</p>
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                     {% if comment.user_id == login_id or "admin_team8" == login_id %}
                         <div class="comment-buttons">
-                            <button class="btn" type="submit">수정</button>
-                            <button class="btn" type="submit">삭제</button>
+                            <button type="submit" class="update-comment-btn{{ loop.index }}" id="update-comment-btn{{ loop.index }}">수정</button>
+                            <form method="POST" action="/delete_comment/{{ comment.id }}">
+                                <button type="submit" class="delete-comment-btn">삭제</button>
+                            </form>
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-    <div class="comment-form">
-        <h3>댓글 작성</h3>
-        <form method="POST">
-            <label>
-                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
-            </label><br>
-            <button class="btn" type="submit">댓글 작성</button>
-        </form>
-    </div>
-</div>
+                <div class="comment-edit{{ loop.index }}" id="comment-edit-box{{ loop.index }}">
+                    <h3>댓글 수정</h3>
+                    <form action="/update_comment/{{ comment.id }}" method="POST">
+                        <label>
+                            <textarea name="detail" rows="4" cols="50" placeholder="댓글을 수정하세요...">{{ comment.detail }}</textarea>
+                        </label><br>
+                        <button type="submit">댓글 수정</button>
+                    </form>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        console.log('처음에는 토글 닫혀있게');
+                        // 처음에는 토글 닫혀있게
+                        $(".comment-edit{{ loop.index }}").hide();
 
-<a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+                        $(".update-comment-btn{{ loop.index }}").click(function () {
+                        console.log('처음에는 토글 열리게');
+                            $("#comment-edit-box{{ loop.index }}").toggle();
+                        });
+                    });
+                </script>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
+    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+
+
+    <!-- <button onclick="scrollToTop()" class="scroll-to-top">^</button>
+
+
+    <script>
+        window.onscroll = function() {scrollFunction()};
 
 </body>
 
