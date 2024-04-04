@@ -49,8 +49,11 @@
             padding: 20px 0;
         }
 
-        /*
-        {# ----------------------------- 게시판 버튼 ---------------------------#}  */
+        blockquote.default:hover {
+            transform: scale(1.1);
+            box-shadow: 10px 10px 10px var(--gray-2);
+        }
+        /* {# ----------------------------- 게시판 버튼 ---------------------------#} */
 
         blockquote {
             display: block;
@@ -121,9 +124,7 @@
             position: relative;
             top: 80px;
         }
-
-        /*
-        {# ----------------------------- 리뷰 ---------------------------#}  */
+        /* {# ----------------------------- 리뷰 ---------------------------#} */
 
 
         .review h2 {
@@ -133,9 +134,7 @@
         .review p {
             margin-bottom: 10px;
         }
-
-        /*
-        {# ----------------------------- 풋터 ---------------------------#}  */
+        /* {# ----------------------------- 풋터 ---------------------------#} */
 
         footer {
             background-color: #333;
@@ -154,8 +153,7 @@
             width: 100%;
             text-align: center;
         } */
-        /*
-        {# ----------------------------- 페이지 네이션 ---------------------------#}  */
+        /* {# ----------------------------- 페이지 네이션 ---------------------------#} */
 
         .pagination {
             display: inline-block;
@@ -201,54 +199,50 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+        /* {# ----------------------------- 플로팅 홈버튼 ---------------------------#}
 
-        /*
-        {# ----------------------------- 플로팅 홈버튼 ---------------------------#}
-
-
-                .scroll-to-top {
-                    width: 50px;
-                    height: 50px;
-                    background-color: var(--primary-color);
-                    color: var(--white);
-                    border: none;
-                    border-radius: 50%;
-                    font-size: 15px;
-                    text-align: center;
-                    line-height: 50px;
-                    position: fixed;
-                    bottom: 20px;
-                    right: 20px;
-                    cursor: pointer;
-                }
+        .scroll-to-top {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            font-size: 15px;
+            text-align: center;
+            line-height: 50px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
 
 
-                @-webkit-keyframes mask {
-                    to {
-                        transform: translateX(170px);
-                    }
-                }
+        @-webkit-keyframes mask {
+            to {
+                transform: translateX(170px);
+            }
+        }
 
-                @keyframes mask {
-                    to {
-                        transform: translateX(170px);
-                    }
-                }
+        @keyframes mask {
+            to {
+                transform: translateX(170px);
+            }
+        }
 
-                @-webkit-keyframes text {
-                    to {
-                        transform: translateX(-170px);
-                    }
-                }
+        @-webkit-keyframes text {
+            to {
+                transform: translateX(-170px);
+            }
+        }
 
-                @keyframes text {
-                    to {
-                        transform: translateX(-170px);
-                    }
-                } */
+        @keyframes text {
+            to {
+                transform: translateX(-170px);
+            }
+        } */
 
-        /*
-        {# ----------------------------- 네비게이션 효과 ---------------------------#}  */
+        /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
 
         .navigation {
             width: 100%;
@@ -365,8 +359,7 @@
             padding: 20px 0;
         }
 
-        /*
-        {# ----------------------------- 버튼_반짝이_효과 ---------------------------#}  */
+        /* {# ----------------------------- 버튼_반짝이_효과 ---------------------------#} */
 
         .btn {
             padding: 10px 20px;
@@ -408,9 +401,7 @@
             height: 2px;
             background: #999;
         }
-
-        /*
-        {# ----------------------------- 헤더_글자_효과 ---------------------------#}  */
+        /* {# ----------------------------- 헤더_글자_효과 ---------------------------#} */
 
         .example-5 .heading-line--container {
             padding: 0 2em;
@@ -598,32 +589,29 @@
 </head>
 
 <body>
-<div class="container">
-    <header>
-        <div class="example-5">
+    <div class="container">
+        <header>
+            <div class="example-5">
                 <span class="heading-line--container">
                     <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
                     <h2>전체 게시글 조회</h2>
                     <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
                 </span>
-        </div>
-    </header>
-    <nav class="navigation">
-        <ul class="menu">
-            <li class="menu__item">
-                <a href="/" class="menu__link">
+            </div>
+        </header>
+        <nav class="navigation">
+            <ul class="menu">
+                <li class="menu__item">
+                    <a href="/" class="menu__link">
             <span class="menu__title">
-              <span class="menu__first-word" data-hover="홈">
-        홈
-      </span>
-        <span class="menu__second-word" data-hover="화면">
-        화면
-      </span>
+              <span class="menu__first-word" data-hover="홈화면">
+                홈화면
+              </span>
             </span>
-                </a>
-            </li>
-            <li class="menu__item">
-                <a href="/전체글조회" class="menu__link">
+                    </a>
+                </li>
+                <li class="menu__item">
+                    <a href="/전체글조회" class="menu__link">
             <span class="menu__title">
               <span class="menu__first-word" data-hover="게시글">
                 게시글
@@ -632,11 +620,11 @@
                 조회
               </span>
             </span>
-                </a>
-            </li>
-
-            <li class="menu__item">
-                <a href="/게시글작성" class="menu__link">
+                    </a>
+                </li>
+    
+                <li class="menu__item">
+                    <a href="/게시글작성" class="menu__link">
             <span class="menu__title">
               <span class="menu__first-word" data-hover="신규">
                 신규
@@ -646,14 +634,13 @@
               </span>
                 <span class="menu__first-word" data-hover="작성">
                 작성
-                작성
               </span>
             </span>
-                </a>
-            </li>
-
-            <li class="menu__item">
-                <a href="/AI추천" class="menu__link">
+                    </a>
+                </li>
+    
+                <li class="menu__item">
+                    <a href="/AI추천" class="menu__link">
             <span class="menu__title">
               <span class="menu__first-word" data-hover="AI">
                 AI
@@ -665,14 +652,14 @@
                 추천
               </span>
             </span>
-                </a>
-            </li>
-
-
-
-            {% if login %}
-                <li class="menu__item">
-                    <a href="/로그아웃" class="menu__link">
+                    </a>
+                </li>
+    
+    
+    
+                {% if login %}
+                    <li class="menu__item">
+                        <a href="/로그아웃" class="menu__link">
             <span class="menu__title">
               <span class="menu__first-word" data-hover="로그">
                 로그
@@ -681,13 +668,13 @@
                 아웃
               </span>
             </span>
-                    </a>
-                </li>
-
-            {% else %}
-
-                <li class="menu__item">
-                    <a href="/로그인화면" class="menu__link">
+                        </a>
+                    </li>
+    
+                {% else %}
+    
+                    <li class="menu__item">
+                        <a href="/로그인화면" class="menu__link">
             <span class="menu__title">
               <span class="menu__second-word" data-hover="로그인">
                 로그인
@@ -700,7 +687,7 @@
     </nav>
     <div class="content">
         {% for post in posts %}
-            <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
+            <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit; ">
                 <blockquote class="default">
                     <h2><span class="Cdefault">{{ post.posting_title }}</span></h2>
                     <p>영화 제목: {{ post.movie_title }}</p>
