@@ -124,85 +124,41 @@
 
 <body>
     <div class="container">
+
         <header>
             <h1>게시글 조회 페이지</h1>
         </header>
         <div class="content">
-            <a href="/게시글조회" style="text-decoration: none; color: inherit;">
-                <div class="review">
-                    <h2>영화 제목 1</h2>
-                    <p><strong>작성자:</strong> 작성자 1</p>
-                    <p><strong>평점:</strong> 5/5</p>
-                    <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-                </div>
-            </a>
-            <div class="review">
-                <h2>영화 제목 2</h2>
-                <p><strong>작성자:</strong> 작성자 2</p>
-                <p><strong>평점:</strong> 4/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 3</h2>
-                <p><strong>작성자:</strong> 작성자 3</p>
-                <p><strong>평점:</strong> 3/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 4</h2>
-                <p><strong>작성자:</strong> 작성자 4</p>
-                <p><strong>평점:</strong> 2/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 5</h2>
-                <p><strong>작성자:</strong> 작성자 5</p>
-                <p><strong>평점:</strong> 4/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 6</h2>
-                <p><strong>작성자:</strong> 작성자 6</p>
-                <p><strong>평점:</strong> 5/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 7</h2>
-                <p><strong>작성자:</strong> 작성자 7</p>
-                <p><strong>평점:</strong> 3/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 8</h2>
-                <p><strong>작성자:</strong> 작성자 8</p>
-                <p><strong>평점:</strong> 4/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 9</h2>
-                <p><strong>작성자:</strong> 작성자 9</p>
-                <p><strong>평점:</strong> 2/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
-            <div class="review">
-                <h2>영화 제목 10</h2>
-                <p><strong>작성자:</strong> 작성자 10</p>
-                <p><strong>평점:</strong> 5/5</p>
-                <p><strong>리뷰 내용:</strong> 리뷰 내용이 여기에 들어갑니다.</p>
-            </div>
+            {% for post in posts %}
+                <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
+                    <div class="review">
+                        <h2>{{ post.movie_title }}</h2>
+                        <p><strong>작성자:</strong> {{ post.username }}</p>
+                        <p><strong>평점:</strong> {{ post.grade }}/5.0</p>
+                        <p><strong>리뷰 내용:</strong> {{ post.review }}</p>
+                    </div>
+                </a>
+            {% endfor %}
         </div>
         <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
         <footer>
             <div class="container">
-                <div class="search-container">
-                    <select class="search-select">
-                        <option value="제목">제목</option>
-                        <option value="작성자">작성자</option>
-                        <option value="내용">내용</option>
-                    </select>
-                    <input type="text" class="search-box" placeholder="검색어를 입력하세요...">
-                    <button class="search-button">검색</button>
-                </div>
+                <form method="POST">
+                    <div class="search-container">
+                        <label>
+                            <select class="search-select" name="tag">
+                                <option value="posting_title">제목</option>
+                                <option value="username">작성자</option>
+                                <option value="review">내용</option>
+                                <option value="movie_title">영화 이름</option>
+                            </select>
+                        </label>
+                        <label>
+                            <input type="text" name="find" class="search-box" placeholder="검색어를 입력하세요..." required>
+                        </label>
+                        <button type="submit" class="search-button">검색</button>
+                    </div>
+                </form>
                 <div class="pagination">
                     <a href="#" class="active">1</a>
                     <a href="#">2</a>

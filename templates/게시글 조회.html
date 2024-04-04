@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글 상세 조회 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,7 +25,7 @@
         }
         .post {
             background-color: #f4f4f4;
-            padding: 20px;
+            padding: 30px;
             margin-bottom: 20px;
             position: relative;
         }
@@ -34,6 +35,16 @@
         .post p {
             margin-bottom: 10px;
         }
+
+        .card {
+            width: 1410px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         .edit-buttons {
             position: absolute;
             top: 20px; /* 변경된 부분 */
@@ -76,6 +87,23 @@
             cursor: pointer;
         }
 
+        .comment-edit {
+            margin-top: 20px;
+        }
+        .comment-edit textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .comment-edit button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -99,62 +127,84 @@
     </header>
     <div class="container">
         <div class="post">
-            <h2>영화 제목 1
+            <h2>{{ posts.movie_title }}
                 <div class="edit-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
+                    <form method="POST" action="/edit/{{ posts.id }}">
+                        <button type="submit" class="update-btn">수정</button>
+                    </form>               
+                    <form method="POST" action="/delete_post/{{ posts.id }}">
+                        <button type="submit" class="delete-btn">삭제</button>
+                    </form>     
                 </div>
             </h2>
-            <p><strong>작성자:</strong> 작성자 1</p>
-            <p><strong>내용:</strong> 이 영화는 정말 좋았습니다. 강추합니다!</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
-            <p>내용</p>
+            <div class="card">
+                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+                <h2>{{ data.title }}</h2>
+                <p><strong>개요:</strong> {{ data.info }}</p>
+                <p><strong>개봉:</strong> {{ data.date }}</p>
+                <p><strong>평점:</strong> {{ data.star }}</p>
+                <p><strong>관객수:</strong> {{ data.nums }}</p>
+                <p><strong>줄거리:</strong> {{ data.content }}</p>
+            </div>
+            <p><strong>작성자:</strong> {{ posts.username }}</p>
+            <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+            <p> {{ posts.review }}</p>
         </div>
-        
-        <div class="comments">
-            <h3>댓글</h3>
-            <div class="comment">
-                <p>댓글 내용이 여기에 들어갑니다.</p>
-                <div class="comment-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
-                </div>
-            </div>
-            <div class="comment">
-                <p>댓글 내용이 여기에 들어갑니다.</p>
-                <div class="comment-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
-                </div>
-            </div>
-            <div class="comment">
-                <p>댓글 내용이 여기에 들어갑니다.</p>
-                <div class="comment-buttons">
-                    <button>수정</button>
-                    <button>삭제</button>
-                </div>
-            </div>
-        </div>
-        
         <div class="comment-form">
             <h3>댓글 작성</h3>
-            <form>
-                <textarea name="comment" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea><br>
+            <form method="POST">
+                <label>
+                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+                </label><br>
                 <button type="submit">댓글 작성</button>
             </form>
         </div>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comments{{ loop.index }}">
+                    <h3>{{ comment.user_id }}</h3>
+                    <div class="comment">
+                        <p>{{ comment.detail }}</p>
+                        <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                        <div class="comment-buttons">
+                            <button type="submit" class="update-comment-btn{{ loop.index }}" id="update-comment-btn{{ loop.index }}">수정</button>             
+                            <form method="POST" action="/delete_comment/{{ comment.id }}">
+                                <button type="submit" class="delete-comment-btn">삭제</button>
+                            </form>     
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-edit{{ loop.index }}" id="comment-edit-box{{ loop.index }}">
+                    <h3>댓글 수정</h3>
+                    <form action="/update_comment/{{ comment.id }}" method="POST">
+                        <label>
+                            <textarea name="detail" rows="4" cols="50" placeholder="댓글을 수정하세요...">{{ comment.detail }}</textarea>
+                        </label><br>
+                        <button type="submit">댓글 수정</button>
+                    </form>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        console.log('처음에는 토글 닫혀있게');
+                        // 처음에는 토글 닫혀있게
+                        $(".comment-edit{{ loop.index }}").hide();
+                
+                        $(".update-comment-btn{{ loop.index }}").click(function () {
+                        console.log('처음에는 토글 열리게');
+                            $("#comment-edit-box{{ loop.index }}").toggle();
+                        });
+                    });
+                </script>
+            {% endfor %}
+        {% endif %}
     </div>
 
+
     <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+
+
     <!-- <button onclick="scrollToTop()" class="scroll-to-top">^</button>
+
 
     <script>
         window.onscroll = function() {scrollFunction()};
