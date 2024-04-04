@@ -14,7 +14,7 @@
 - **김도연** : 
 - **김준수** : 
 - **박현준** : 
-- **박소영** : 
+- **박소영** : Database table 제작, 게시물 수정 및 삭제, 댓글 수정 및 삭제
 - **박해원** : 
 
 - 예시
@@ -46,11 +46,11 @@
 
 ## 📌 Key Features
 
-### 1. Recipe Discovery
+### 1. 게시물 CRUD
    - Users can explore a vast collection of recipes from various sources, including popular cooking websites and user-contributed content.
    - Advanced search functionality allows users to find recipes based on ingredients, cuisine, dietary preferences, and more.
 
-### 2. Personal Recipe Box
+### 2. 댓글 CRUD
    - Users can save their favorite recipes to their personal recipe box for easy access.
    - Custom recipe collections enable users to organize recipes into categories like "Weeknight Dinners" or "Healthy Snacks".
 
