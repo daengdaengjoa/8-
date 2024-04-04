@@ -136,18 +136,13 @@ def clear_session():
         app.config['_got_first_request'] = True
 
 
+
+
 @app.route("/")
 def 메인화면():
     # 로그인 세션정보가 없을 경우
-    if not session.get('user_id'):
-        posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
-        return render_template("메인화면.html", posts=posts)
-
-    # 로그인 세션정보('user_id')가 있을 경우
-    else:
-        user_id = session.get('user_id')
-        posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
-        return render_template("메인화면.html", posts=posts, user_id=user_id)
+    posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
+    return render_template("메인화면.html", posts=posts, login=session.get('user_id'))
 
 
 @app.route("/로그인화면", methods=["GET", "POST"])
