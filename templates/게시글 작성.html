@@ -4,35 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
         header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 50px 0;
             overflow: auto;
             width: 100%;
             box-sizing: border-box;
             text-align: center;
         }
+
+
         .container {
             width: 80%;
             margin: auto;
-            padding: 20px 0;
         }
+
         form {
             background-color: #f4f4f4;
             padding: 20px;
             border-radius: 5px;
         }
+
         form label {
             display: block;
             margin-bottom: 5px;
         }
+
         form input[type="text"],
         form textarea {
             width: 100%;
@@ -42,9 +60,11 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         form textarea {
             height: 200px;
         }
+
         form button {
             background-color: #333;
             color: #fff;
@@ -53,11 +73,13 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* {# ----------------------------- 홈 플로팅 버튼 ---------------------------#}
         .scroll-to-top {
             width: 50px;
             height: 50px;
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             border-radius: 50%;
             font-size: 15px;
@@ -68,34 +90,642 @@
             right: 20px;
             cursor: pointer;
         }
+
+        .wrap {
+            height: auto;
+            min-height: auto;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            gap: 32px;
+            margin: 10px 0;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: 600;
+        }
+
+        .rating {
+            float: none;
+            width: 200px;
+            display: flex;
+        }
+
+        .rating__input {
+            display: none;
+        }
+
+        .rating__label {
+            width: 20px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .rating__label .star-icon {
+            width: 20px;
+            height: 30px;
+            display: block;
+            position: relative;
+            left: 0;
+            background-image: url("https://velog.velcdn.com/images/jellykelly/post/9957327f-f358-4c25-9989-5bb3dd5755d6/image.svg");
+            background-repeat: no-repeat;
+            background-size: 40px;
+        }
+
+        .rating__label--full .star-icon {
+            background-position: right;
+        }
+
+        .rating__label--half .star-icon {
+            background-position: left;
+        }
+
+        .rating.readonly .star-icon {
+            opacity: 0.7;
+            cursor: default;
+        } */
+
+        /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
+
+        .navigation {
+            width: 100%;
+            border-bottom: 3px solid #ccd7d7;
+            font-family: "Pathway Gothic One", sans-serif;
+            font-size: 22px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding-left: 0;
+        }
+
+        .menu__item {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        @media screen and (max-width: 480px) {
+            .menu__item:nth-child(n+3) {
+                display: none;
+            }
+
+            .menu__item:nth-child(2) .menu__link {
+                border-right: 0;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu__item:nth-child(n+4) {
+                display: none;
+            }
+
+            .menu__item:nth-child(3) .menu__link {
+                border-right: 0;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            .menu__item:nth-child(n+5) {
+                display: none;
+            }
+
+            .menu__item:nth-child(4) .menu__link {
+                border-right: 0;
+            }
+        }
+
+        .menu__item:last-child .menu__link {
+            border-right: 0;
+        }
+
+        .menu__link {
+            display: block;
+            padding: 6px 30px 3px;
+            border-right: 2px dotted #ccd7d7;
+        }
+
+        .menu__link:hover .menu__first-word, .menu__link:focus .menu__first-word {
+            transform: translate3d(0, -105%, 0);
+        }
+
+        .menu__link:hover .menu__second-word, .menu__link:focus .menu__second-word {
+            transform: translate3d(0, 105%, 0);
+        }
+
+        @media screen and (min-width: 768px) {
+            .menu__link {
+                padding: 6px 40px 3px;
+            }
+        }
+
+        .menu__title {
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .menu__first-word,
+        .menu__second-word {
+            display: inline-block;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .menu__first-word::before,
+        .menu__second-word::before {
+            position: absolute;
+            content: attr(data-hover);
+        }
+
+        .menu__first-word {
+            color: var(--primary-color);
+        }
+
+        .menu__first-word::before {
+            top: 105%;
+            color: var(--gray-2);
+        }
+
+        .menu__second-word {
+            color: var(--gray-2);
+        }
+
+        .menu__second-word::before {
+            bottom: 105%;
+            color: var(--primary-color);
+        }
+
+        .content {
+            padding: 20px 0;
+        }
+
+        /*{# ----------------------------- 반짝이 버튼 ---------------------------#}*/
+        .btn {
+            display: inline-block;
+            background: transparent;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 0.625rem;
+            letter-spacing: 0.3em;
+            color: rgb(255 255 255 / 80%);
+            border-radius: 0;
+            padding: 10px 20px 10px;
+            transition: all 0.7s ease-out;
+            background: linear-gradient(270deg, rgba(223, 190, 106, 0.8), rgba(146, 111, 52, 0.8), rgb(0 0 0), rgb(0 0 0));
+            background-position: 1% 50%;
+            background-size: 300% 300%;
+            text-decoration: none;
+            margin: 0.625rem;
+            border: none;
+            border: 1px solid rgba(223, 190, 106, 0.3);
+        }
+
+
+        .btn:hover {
+            color: #fff;
+            border: 1px solid rgba(223, 190, 106, 0);
+            background-position: 99% 50%;
+        }
+        /*{# ----------------------------- 헤더 ---------------------------#}*/
+        .example-5 .heading-line--container .heading-line--left,
+        .example-5 .heading-line--container .heading-line--right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            width: 250px;
+            height: 2px;
+            background: #999;
+        }
+
+        .example-5 .heading-line--container {
+            padding: 0 2em;
+            width: auto;
+            float: none;
+            position: relative;
+            display: inline-block;
+            top: 0;
+            bottom: 0;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .example-5 .heading-line--container .heading-line--left {
+            right: 100%;
+        }
+
+        .example-5 .heading-line--container .heading-line--right {
+            left: 100%;
+        }
+
+        .example-5 .heading-line--container .heading-line--left:before,
+        .example-5 .heading-line--container .heading-line--right:before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .example-5 {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .example-5 .heading-line--container {
+            padding: 0 1em;
+        }
+
+        .example-5 .heading-line--container .heading-line--left,
+        .example-5 .heading-line--container .heading-line--right {
+            width: 150px;
+            background: transparent;
+        }
+
+        .example-5 .heading-line--container .heading-line--left:before,
+        .example-5 .heading-line--container .heading-line--right:before {
+            content: "";
+            height: 1.5em;
+            width: 1.5em;
+            background: #39373b;
+            z-index: 1;
+            border-width: 1px;
+            border-color: #85808b;
+            border-style: solid;
+            right: 100%;
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .example-5 .animate {
+            background: yellow;
+            width: 100px;
+            height: 2px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            -moz-animation: beepbeep 3s ease-in;
+            -webkit-animation: beepbeep 3s ease-in;
+            animation: beepbeep 3s ease-in;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+            border: 1px dotted #524F56;
+        }
+
+        .example-5 .animate:before {
+            content: "";
+            width: 100%;
+            height: 3px;
+            background: #F00;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            right: 0;
+            -webkit-filter: blur(5px);
+        }
+
+        @-moz-keyframes beepbeep {
+            0% {
+                width: 0;
+                opacity: 0;
+                right: -10%;
+                filter: hue-rotate(0deg);
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                width: 90px;
+            }
+            100% {
+                width: 0;
+                right: 100%;
+                filter: hue-rotate(600deg);
+            }
+        }
+
+        @-webkit-keyframes beepbeep {
+            0% {
+                width: 0;
+                opacity: 0;
+                right: -10%;
+                -webkit-filter: hue-rotate(0deg);
+                filter: hue-rotate(0deg);
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                width: 90px;
+            }
+            100% {
+                width: 0;
+                right: 100%;
+                -webkit-filter: hue-rotate(600deg);
+                filter: hue-rotate(600deg);
+            }
+        }
+
+        @keyframes beepbeep {
+            0% {
+                width: 0;
+                opacity: 0;
+                right: -10%;
+                -webkit-filter: hue-rotate(0deg);
+                filter: hue-rotate(0deg);
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                width: 90px;
+            }
+            100% {
+                width: 0;
+                right: 100%;
+                -webkit-filter: hue-rotate(600deg);
+                filter: hue-rotate(600deg);
+            }
+        }
+
+        .example-5 .heading-line--container .heading-line--right {
+            -moz-transform: scale(-1, 1);
+            -ms-transform: scale(-1, 1);
+            -webkit-transform: scale(-1, 1);
+            transform: scale(-1, 1);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            overflow: auto;
+            box-sizing: border-box;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>글 작성</h1>
-    </header>
+<header>
+    <div class="example-5">
+   <span class="heading-line--container">
+     <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
+        <h2>게시글 작성</h2>
+       <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
+    </span>
+        </div>
+</header>
+<nav class="navigation">
+    <ul class="menu">
+        <li class="menu__item">
+            <a href="/" class="menu__link">
+    <span class="menu__title">
+      <span class="menu__first-word" data-hover="홈화면">
+        홈화면
+      </span>
+    </span>
+            </a>
+        </li>
+        <li class="menu__item">
+            <a href="/전체글조회" class="menu__link">
+    <span class="menu__title">
+      <span class="menu__first-word" data-hover="게시글">
+        게시글
+      </span>
+      <span class="menu__second-word" data-hover="조회">
+        조회
+      </span>
+    </span>
+            </a>
+        </li>
+
+        <li class="menu__item">
+            <a href="/게시글작성" class="menu__link">
+    <span class="menu__title">
+      <span class="menu__first-word" data-hover="신규">
+        신규
+      </span>
+      <span class="menu__second-word" data-hover="게시글">
+        게시글
+      </span>
+        <span class="menu__first-word" data-hover="작성">
+        작성
+      </span>
+    </span>
+            </a>
+        </li>
+
+        <li class="menu__item">
+            <a href="/AI추천" class="menu__link">
+    <span class="menu__title">
+      <span class="menu__first-word" data-hover="AI">
+        AI
+      </span>
+      <span class="menu__second-word" data-hover="영화">
+        영화
+      </span>
+        <span class="menu__first-word" data-hover="추천">
+        추천
+      </span>
+    </span>
+            </a>
+        </li>
+
+
+
+        {% if user_id %}
+            <li class="menu__item">
+                <a href="/로그아웃" class="menu__link">
+    <span class="menu__title">
+      <span class="menu__first-word" data-hover="로그">
+        로그
+      </span>
+      <span class="menu__second-word" data-hover="아웃">
+        아웃
+      </span>
+    </span>
+                </a>
+            </li>
+
+        {% else %}
+
+            <li class="menu__item">
+                <a href="/로그인화면" class="menu__link">
+    <span class="menu__title">
+      <span class="menu__second-word" data-hover="로그인">
+        로그인
+      </span>
+    </span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>       
+</nav>
+<div class="container">
+    <form action="/게시글작성" method="POST">
+        <div>
+            <label for="author">작성자:</label>
+            <input type="text" id="author" name="username" required>
+        </div>
+        <div>
+            <label for="movie">영화 이름:</label>
+            <input type="text" id="movie" name="movie_title" required>
+        </div>
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="posting_title" required>
+        </div>
+        <div class="wrap">
+            <label for="title">별점:</label>
+            <div class="rating">
+                <label class="rating__label rating__label--half" for="starhalf">
+                    <input type="radio" id="starhalf" class="rating__input" name="rating" value="0.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star1">
+                    <input type="radio" id="star1" class="rating__input" name="rating" value="1">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star1half">
+                    <input type="radio" id="star1half" class="rating__input" name="rating" value="1.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star2">
+                    <input type="radio" id="star2" class="rating__input" name="rating" value="2">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star2half">
+                    <input type="radio" id="star2half" class="rating__input" name="rating" value="2.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star3">
+                    <input type="radio" id="star3" class="rating__input" name="rating" value="3">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star3half">
+                    <input type="radio" id="star3half" class="rating__input" name="rating" value="3.5" checked>
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star4">
+                    <input type="radio" id="star4" class="rating__input" name="rating" value="4">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--half" for="star4half">
+                    <input type="radio" id="star4half" class="rating__input" name="rating" value="4.5">
+                    <span class="star-icon"></span>
+                </label>
+                <label class="rating__label rating__label--full" for="star5">
+                    <input type="radio" id="star5" class="rating__input" name="rating" value="5">
+                    <span class="star-icon"></span>
+                </label>
+            </div>
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <textarea id="content" name="review" required></textarea>
+        </div>
+        <button class="btn" type="submit">작성 완료</button>
+    </form>
+</div>
+<footer>
     <div class="container">
-        <form action="/submit" method="POST">
-            <div>
-                <label for="author">작성자:</label>
-                <input type="text" id="author" name="author" required>
-            </div>
-            <div>
-                <label for="movie">영화 이름:</label>
-                <input type="text" id="movie" name="movie" required>
-            </div>
-            <div>
-                <label for="title">제목:</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div>
-                <label for="content">내용:</label>
-                <textarea id="content" name="content" required></textarea>
-            </div>
-            <button type="submit">작성 완료</button>
-        </form>
+        <p>&copy; 2024 영화 리뷰 게시판</p>
     </div>
-    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+</footer>
 
 </body>
 </html>
+
+<script>
+    const rateWrap = document.querySelectorAll('.rating'),
+        label = document.querySelectorAll('.rating .rating__label'),
+        input = document.querySelectorAll('.rating .rating__input'),
+        labelLength = label.length,
+        opacityHover = '0.5';
+
+    let stars = document.querySelectorAll('.rating .star-icon');
+
+    checkedRate();
+
+    rateWrap.forEach(wrap => {
+        wrap.addEventListener('mouseenter', () => {
+            stars = wrap.querySelectorAll('.star-icon');
+
+            stars.forEach((starIcon, idx) => {
+                starIcon.addEventListener('mouseenter', () => {
+                    initStars();
+                    filledRate(idx, labelLength);
+
+                    for (let i = 0; i < stars.length; i++) {
+                        if (stars[i].classList.contains('filled')) {
+                            stars[i].style.opacity = opacityHover;
+                        }
+                    }
+                });
+
+                starIcon.addEventListener('mouseleave', () => {
+                    starIcon.style.opacity = '1';
+                    checkedRate();
+                });
+
+                wrap.addEventListener('mouseleave', () => {
+                    starIcon.style.opacity = '1';
+                });
+            });
+        });
+    });
+
+    function filledRate(index, length) {
+        if (index <= length) {
+            for (let i = 0; i <= index; i++) {
+                stars[i].classList.add('filled');
+            }
+        }
+    }
+
+    function checkedRate() {
+        let checkedRadio = document.querySelectorAll('.rating input[type="radio"]:checked');
+
+
+        initStars();
+        checkedRadio.forEach(radio => {
+            let previousSiblings = prevAll(radio);
+
+            for (let i = 0; i < previousSiblings.length; i++) {
+                previousSiblings[i].querySelector('.star-icon').classList.add('filled');
+            }
+
+            radio.nextElementSibling.classList.add('filled');
+
+            function prevAll() {
+                let radioSiblings = [],
+                    prevSibling = radio.parentElement.previousElementSibling;
+
+                while (prevSibling) {
+                    radioSiblings.push(prevSibling);
+                    prevSibling = prevSibling.previousElementSibling;
+                }
+                return radioSiblings;
+            }
+        });
+    }
+
+    function initStars() {
+        for (let i = 0; i < stars.length; i++) {
+            stars[i].classList.remove('filled');
+        }
+    }
+</script>

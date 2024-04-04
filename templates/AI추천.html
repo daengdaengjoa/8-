@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메인 페이지</title>
+    <title>AI 영화추천 페이지</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     {% with messages = get_flashed_messages() %}
@@ -14,9 +13,12 @@
             </script>
         {% endif %}
     {% endwith %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Montez');
+        @import url(https://fonts.googleapis.com/css?family=Francois+One);
+        @import url('https://fonts.googleapis.com/css?family=Roboto:700');
 
 
         * {
@@ -26,11 +28,9 @@
             box-sizing: border-box;
         }
 
-
         .container {
             width: 80%;
             margin: auto;
-            padding: 20px 0;
         }
 
         header {
@@ -43,23 +43,8 @@
             text-align: center;
         }
 
-        .post {
-            background-color: var(--gray);
-            padding: 30px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .post h2 {
-            margin-top: 0;
-        }
-
-        .post p {
-            margin-bottom: 10px;
-        }
-
         .card {
-            width: auto;
+            width: AUTO;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
@@ -67,92 +52,29 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .edit-buttons {
-            position: absolute;
-            top: 20px;
-            /* 변경된 부분 */
-            right: 20px;
-            /* 변경된 부분 */
+        form {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
         }
 
-        .edit-buttons button {
-            margin-left: 10px;
-            margin-right: 10px;
+        form label {
+            display: block;
+            margin-bottom: 5px;
         }
 
-        .comments {
-            margin-top: 20px;
-        }
-
-        .comment {
-            background-color: #ddd;
+        form input[type="text"],
+        form textarea {
+            width: 100%;
             padding: 10px;
             margin-bottom: 10px;
-        }
-
-        .comment p {
-            margin: 0;
-        }
-
-        .comment-buttons {
-            margin-top: 10px;
-        }
-
-        .comment-buttons button {
-            margin-right: 10px;
-        }
-
-        .comment-form {
-            margin-top: 20px;
-        }
-
-        .comment-form textarea {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .comment-form button {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            cursor: pointer;
+            box-sizing: border-box;
         }
 
-        .comment-edit {
-            margin-top: 20px;
-        }
-
-        .comment-edit textarea {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .comment-edit button {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-
-        .scroll-to-top {
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary-color);
-            color: var(--white);
-            border: none;
-            border-radius: 50%;
-            font-size: 15px;
-            text-align: center;
-            line-height: 50px;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            cursor: pointer;
+        form textarea {
+            height: 200px;
         }
 
         /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
@@ -272,7 +194,7 @@
             padding: 20px 0;
         }
 
-        /* {# ----------------------------- 반짝이 버튼 ---------------------------#} */
+        /*{# ----------------------------- 반짝이 버튼 ---------------------------#}*/
         .btn {
             display: inline-block;
             background: transparent;
@@ -301,7 +223,7 @@
             background-position: 99% 50%;
         }
 
-        /*{# ----------------------------- 헤더 반짝이 ---------------------------#}      */
+        /*{# ----------------------------- 헤더 표시 ---------------------------#}*/
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -410,15 +332,12 @@
                 right: -10%;
                 filter: hue-rotate(0deg);
             }
-
             25% {
                 opacity: 1;
             }
-
             50% {
                 width: 90px;
             }
-
             100% {
                 width: 0;
                 right: 100%;
@@ -434,15 +353,12 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
-
             25% {
                 opacity: 1;
             }
-
             50% {
                 width: 90px;
             }
-
             100% {
                 width: 0;
                 right: 100%;
@@ -459,15 +375,12 @@
                 -webkit-filter: hue-rotate(0deg);
                 filter: hue-rotate(0deg);
             }
-
             25% {
                 opacity: 1;
             }
-
             50% {
                 width: 90px;
             }
-
             100% {
                 width: 0;
                 right: 100%;
@@ -495,19 +408,14 @@
             text-align: center;
             margin-top: 10px;
         }
-
-        .post-info {
-            margin-right: 8rem;
-        }
     </style>
 </head>
-
 <body>
 <header>
     <div class="example-5">
    <span class="heading-line--container">
      <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
-        <h2>게시글 조회</h2>
+        <h2>AI 질문 작성</h2>
        <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
     </span>
     </div>
@@ -517,7 +425,7 @@
         <li class="menu__item">
             <a href="/" class="menu__link">
     <span class="menu__title">
-      <span class="menu__first-word" data-hover="홈화면">
+      <span class="menu__first-word" data-hover="게시글">
         홈화면
       </span>
     </span>
@@ -599,114 +507,34 @@
     </ul>       
 </nav>
 <div class="container">
-    <div class="post">
-        <h2>
-            <span class="post-info">{{ posts.movie_title }}</span>
-            <span class="post-info">조회수: {{ posts.views }}</span>
-            <span class="post-info">좋아요: {{ posts.likes }}</span>
-            <span class="post-info">
-            {% if posts.user_id == login_id or "admin_team8" == login_id %}
-                <div class="edit-buttons">
-                    <form method="POST" action="/edit/{{ posts.id }}">
-                        <button type="submit" class="btn-btn">수정</button>
-                    </form>
-                    <form method="POST" action="/delete_post/{{ posts.id }}">
-                        <button type="submit" class="btn-btn">삭제</button>
-                    </form>
-                </div>
-            {% endif %}
-            </span>
-        </h2>
-        <div class="card">
-            <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
-            <h2>{{ data.title }}</h2>
-            <p><strong>개요:</strong> {{ data.info }}</p>
-            <p><strong>개봉:</strong> {{ data.date }}</p>
-            <p><strong>평점:</strong> {{ data.star }}</p>
-            <p><strong>관객수:</strong> {{ data.nums }}</p>
-            <p><strong>줄거리:</strong> {{ data.content }}</p>
-        </div>
-        <p><strong>작성자:</strong> {{ posts.username }}</p>
-        <p><strong>제목:</strong> {{ posts.posting_title }}</p>
-        <p> {{ posts.review }}</p>
-        {% if button %}
-            <form method="POST">
-                <button class="btn" type="submit" name="like" value="1">안 좋아요</button>
-            </form>
-        {% else %}
-            <form method="POST">
-                <button class="btn" type="submit" name="like" value="1">좋아요</button>
-            </form>
-        {% endif %}
-
+    <div class="card">
+        <img src="{{ data1.image_url }}" alt="파이썬에서 가져온 이미지">
+        <h2>{{ data1.title }}</h2>
+        <p><strong>개요:</strong> {{ data1.info }}</p>
+        <p><strong>개봉:</strong> {{ data1.date }}</p>
+        <p><strong>평점:</strong> {{ data1.star }}</p>
+        <p><strong>관객수:</strong> {{ data1.nums }}</p>
+        <p><strong>줄거리:</strong> {{ data1.content }}</p>
     </div>
-    <div class="comment-form">
-        <h3>댓글 작성</h3>
-        <form method="POST">
+    <div class="card">
+        <p><strong>AI추천도:</strong> {{ m2 }}</p>
+        <p><strong>답변:</strong> {{ data_ai }}</p>
+    </div>
+    <form action="/AI추천" method="POST">
+        <div>
+            <label>질문:</label>
             <label>
-                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
-            </label><br>
-            <button type="submit">댓글 작성</button>
-        </form>
-    </div>
-    {% if comments %}
-        {% for comment in comments %}
-            <div class="comments{{ loop.index }}">
-                <h3>{{ comment.user_id }}</h3>
-                <div class="comment">
-                    <p>{{ comment.detail }}</p>
-                    <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
-                    {% if comment.user_id == login_id or "admin_team8" == login_id %}
-                    <div class="comment-buttons">
-                        <button type="submit" class="update-comment-btn{{ loop.index }}"
-                                id="update-comment-btn{{ loop.index }}">수정
-                        </button>
-                        <form method="POST" action="/delete_comment/{{ comment.id }}">
-                            <button type="submit" class="delete-comment-btn">삭제</button>
-                        </form>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="comment-edit{{ loop.index }}" id="comment-edit-box{{ loop.index }}">
-                <h3>댓글 수정</h3>
-                <form action="/update_comment/{{ comment.id }}" method="POST">
-                    <label>
-                        <textarea name="detail" rows="4" cols="50"
-                                  placeholder="댓글을 수정하세요...">{{ comment.detail }}</textarea>
-                    </label><br>
-                    <button type="submit">댓글 수정</button>
-                </form>
-            </div>
-            <script>
-                $(document).ready(function () {
-                    console.log('처음에는 토글 닫혀있게');
-                    // 처음에는 토글 닫혀있게
-                    $(".comment-edit{{ loop.index }}").hide();
-
-                    $(".update-comment-btn{{ loop.index }}").click(function () {
-                        console.log('처음에는 토글 열리게');
-                        $("#comment-edit-box{{ loop.index }}").toggle();
-                    });
-                });
-            </script>
-        {% endfor %}
-    {% endif %}
+                <textarea name="ask" placeholder="구체적으로 적어주세요" required></textarea>
+            </label>
+        </div>
+        <button class="btn" type="submit">작성 완료</button>
+    </form>
 </div>
 <footer>
     <div class="container">
         <p>&copy; 2024 영화 리뷰 게시판</p>
     </div>
 </footer>
-</body>
-</html>
-
-<!-- <button onclick="scrollToTop()" class="scroll-to-top">^</button>
-
-
-<script>
-    window.onscroll = function() {scrollFunction()};
 
 </body>
-
 </html>

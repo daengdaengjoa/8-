@@ -5,11 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>영화 리뷰 게시판</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Montez');
+        @import url(https://fonts.googleapis.com/css?family=Francois+One);
+        @import url('https://fonts.googleapis.com/css?family=Roboto:700');
+
+
+        * {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         .container {
@@ -17,10 +34,11 @@
             margin: auto;
             text-align: center;
         }
+        /* {# ----------------------------- 헤더_글자_효과 ---------------------------#} */
 
         header {
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             padding: 50px 0;
             overflow: auto;
             width: 100%;
@@ -28,56 +46,195 @@
         }
 
         h1 {
-            margin: 0;
+            height: 100px;
         }
 
-        nav {
-            background-color: #f4f4f4;
-            padding: 10px 0;
+        h1 span {
+            position: relative;
+            top: 20px;
+            display: inline-block;
+            animation: bounce .3s ease infinite alternate;
+            font-family: 'Titan One', cursive;
+            font-size: 80px;
+            color: #FFF;
+            text-shadow: 0 1px 0 #CCC,
+            0 2px 0 #CCC,
+            0 3px 0 #CCC,
+            0 4px 0 #CCC,
+            0 5px 0 #CCC,
+            0 6px 0 transparent,
+            0 7px 0 transparent,
+            0 8px 0 transparent,
+            0 9px 0 transparent,
+            0 10px 10px rgba(0, 0, 0, .4);
         }
 
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        h1 span:nth-child(2) {
+            animation-delay: .1s;
         }
 
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
+        h1 span:nth-child(3) {
+            animation-delay: .2s;
         }
 
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
+        h1 span:nth-child(4) {
+            animation-delay: .3s;
         }
 
-        nav ul li a:hover {
-            color: #666;
+        h1 span:nth-child(5) {
+            animation-delay: .4s;
         }
+
+
+        @keyframes bounce {
+            100% {
+                top: -20px;
+                text-shadow: 0 1px 0 #ffffff,
+                0 2px 0 #CCC,
+                0 3px 0 #CCC,
+                0 4px 0 #CCC,
+                0 5px 0 #CCC,
+                0 6px 0 #CCC,
+                0 7px 0 #CCC,
+                0 8px 0 #CCC,
+                0 9px 0 #CCC,
+                0 50px 25px rgba(0, 0, 0, .2);
+            }
+        }
+        /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
+
+        .navigation {
+            width: 100%;
+            border-bottom: 3px solid #ccd7d7;
+            font-family: "Pathway Gothic One", sans-serif;
+            font-size: 22px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            max-width: 1150px;
+            margin: 0 auto;
+            padding-left: 0;
+        }
+
+        .menu__item {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        @media screen and (max-width: 480px) {
+            .menu__item:nth-child(n+3) {
+                display: none;
+            }
+
+            .menu__item:nth-child(2) .menu__link {
+                border-right: 0;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu__item:nth-child(n+4) {
+                display: none;
+            }
+
+            .menu__item:nth-child(3) .menu__link {
+                border-right: 0;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            .menu__item:nth-child(n+5) {
+                display: none;
+            }
+
+            .menu__item:nth-child(4) .menu__link {
+                border-right: 0;
+            }
+        }
+
+        .menu__item:last-child .menu__link {
+            border-right: 0;
+        }
+
+        .menu__link {
+            display: block;
+            padding: 6px 30px 3px;
+            border-right: 2px dotted #ccd7d7;
+        }
+
+        .menu__link:hover .menu__first-word, .menu__link:focus .menu__first-word {
+            transform: translate3d(0, -105%, 0);
+        }
+
+        .menu__link:hover .menu__second-word, .menu__link:focus .menu__second-word {
+            transform: translate3d(0, 105%, 0);
+        }
+
+        @media screen and (min-width: 768px) {
+            .menu__link {
+                padding: 6px 40px 3px;
+            }
+        }
+
+        .menu__title {
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .menu__first-word,
+        .menu__second-word {
+            display: inline-block;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .menu__first-word::before,
+        .menu__second-word::before {
+            position: absolute;
+            content: attr(data-hover);
+        }
+
+        .menu__first-word {
+            color: var(--primary-color);
+        }
+
+        .menu__first-word::before {
+            top: 105%;
+            color: var(--gray-2);
+        }
+
+        .menu__second-word {
+            color: var(--gray-2);
+        }
+
+        .menu__second-word::before {
+            bottom: 105%;
+            color: var(--primary-color);
+        }
+
 
         .content {
+            flex: 1;
             padding: 20px 0;
         }
+        /* {# ----------------------------- 풋터 ---------------------------#} */
 
         footer {
-            background-color: #333;
-            color: #fff;
+            background-color: var(--primary-color);
+            color: var(--white);
             padding: 10px 0;
-            position: fixed;
+            position: relative;
             bottom: 0;
             width: 100%;
+            overflow: auto;
+            box-sizing: border-box;
+            text-align: center;
+            margin-top: 10px;
         }
 
         .postcontainer {
-            padding: 0 50px;
-        }
-
-        .post {
-            background-color: #f4f4f4;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            padding: 50px 50px;
         }
 
 
@@ -88,57 +245,285 @@
         .post p {
             margin-bottom: 10px;
         }
+
+
+        .wrapper h1 {
+            font-size: 100px;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .box h3 {
+            text-align: center;
+            position: relative;
+            top: 80px;
+        }
+
+        /* {# ----------------------------- 게시글 표시 박스 ---------------------------#} */
+
+        blockquote {
+            display: block;
+            background: #fff;
+            padding: 15px 45px 15px 45px;
+            margin: 40px 60px;
+            position: relative;
+            font-family: Georgia, serif;
+            font-size: 20px;
+            line-height: 1.2;
+            color: #666;
+            -moz-box-shadow: 2px 2px 15px #ccc;
+            -webkit-box-shadow: 2px 2px 15px #ccc;
+            box-shadow: 2px 2px 15px #ccc;
+            border-left-style: solid;
+            border-left-width: 15px;
+            border-right-style: solid;
+            border-right-width: 2px;
+        }
+
+        blockquote::before {
+
+            /*Font*/
+            font-family: Georgia, serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: #999;
+
+            /*Positioning*/
+            position: absolute;
+            left: 10px;
+            top: 5px;
+
+        }
+
+        blockquote::after {
+            /*Reset to make sure*/
+        }
+
+        blockquote a {
+            text-decoration: none;
+            background: #eee;
+            cursor: pointer;
+            padding: 0 3px;
+            color: #c76c0c;
+        }
+
+        blockquote a:hover {
+            color: #666;
+        }
+
+        blockquote em {
+            font-style: italic;
+        }
+
+        /*Default Color Palette*/
+        blockquote.default {
+            border-left-color: #656d77;
+            border-right-color: #434a53;
+        }
+        /* {# ----------------------------- 메인 소개 글 ---------------------------#} */
+
+        #containers {
+            color: #999;
+            text-transform: uppercase;
+            font-size: 36px;
+            font-weight: bold;
+            padding-top: 20px;
+            width: 100%;
+            bottom: 45%;
+            display: block;
+        }
+
+        #flip {
+            height: 50px;
+            overflow: hidden;
+        }
+
+        #flip > div > div {
+            color: #fff;
+            padding: 0 25px;
+            height: 45px;
+            margin-bottom: 45px;
+            display: inline-block;
+        }
+
+        #flip div:first-child {
+            animation: show 5s linear infinite;
+        }
+
+        #flip div div {
+            background: #42c58a;
+        }
+
+        #flip div:first-child div {
+            background: #4ec7f3;
+        }
+
+        #flip div:last-child div {
+            background: #DC143C;
+        }
+
+        @keyframes show {
+            0% {
+                margin-top: -270px;
+            }
+            5% {
+                margin-top: -180px;
+            }
+            33% {
+                margin-top: -180px;
+            }
+            38% {
+                margin-top: -90px;
+            }
+            66% {
+                margin-top: -90px;
+            }
+            71% {
+                margin-top: 0;
+            }
+            99.99% {
+                margin-top: 0;
+            }
+            100% {
+                margin-top: -270px;
+            }
+        }
+
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <h1>영화 리뷰 게시판</h1>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="#">홈</a></li>
-                <li><a href="/전체글조회">영화 리뷰</a></li>
-                <li><a href="/게시글작성">신규 리뷰 작성</a></li>
-            </ul>
-        </nav>
-        <div class="content">
-            <p>영화 리뷰 게시판에 오신 것을 환영합니다! 최신 영화에 대한 리뷰를 읽거나 작성하세요.</p>
+<div class="container">
+    <header>
+        <h1>
+            <span>영</span>
+            <span>화</span>
+            <span>의</span>
+            <span>전</span>
+            <span>당</span>
+        </h1>
+    </header>
+    <nav class="navigation">
+        <ul class="menu">
+            <li class="menu__item">
+                <a href="/" class="menu__link">
+        <span class="menu__title">
+          <span class="menu__first-word" data-hover="홈화면">
+            홈화면
+          </span>
+        </span>
+                </a>
+            </li>
+            <li class="menu__item">
+                <a href="/전체글조회" class="menu__link">
+        <span class="menu__title">
+          <span class="menu__first-word" data-hover="게시글">
+            게시글
+          </span>
+          <span class="menu__second-word" data-hover="조회">
+            조회
+          </span>
+        </span>
+                </a>
+            </li>
+
+            <li class="menu__item">
+                <a href="/게시글작성" class="menu__link">
+        <span class="menu__title">
+          <span class="menu__first-word" data-hover="신규">
+            신규
+          </span>
+          <span class="menu__second-word" data-hover="게시글">
+            게시글
+          </span>
+            <span class="menu__first-word" data-hover="작성">
+            작성
+          </span>
+        </span>
+                </a>
+            </li>
+
+            <li class="menu__item">
+                <a href="/AI추천" class="menu__link">
+        <span class="menu__title">
+          <span class="menu__first-word" data-hover="AI">
+            AI
+          </span>
+          <span class="menu__second-word" data-hover="영화">
+            영화
+          </span>
+            <span class="menu__first-word" data-hover="추천">
+            추천
+          </span>
+        </span>
+                </a>
+            </li>
+
+
+
+            {% if user_id %}
+                <li class="menu__item">
+                    <a href="/로그아웃" class="menu__link">
+        <span class="menu__title">
+          <span class="menu__first-word" data-hover="로그">
+            로그
+          </span>
+          <span class="menu__second-word" data-hover="아웃">
+            아웃
+          </span>
+        </span>
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li class="menu__item">
+                    <a href="/로그인화면" class="menu__link">
+        <span class="menu__title">
+          <span class="menu__second-word" data-hover="로그인">
+            로그인
+          </span>
+        </span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>       
+    </nav>
+    <div id=containers>
+        이 곳에서
+        <div id=flip>
+            <div>
+                <div>AI검색을</div>
+            </div>
+            <div>
+                <div>소통리뷰를</div>
+            </div>
+            <div>
+                <div>영화리뷰를</div>
+            </div>
         </div>
+        즐겨주세요
     </div>
-    <div class="container">
-        <div class="postcontainer">
-            <h2>최신 작성글</h2>
-            <!-- 박스로 구분되는 최신 작성글 3개 -->
-            <div class="post">
-                <div class="post-box">
-                    <h2>영화 제목 1</h2>
-                    <p><strong>작성자:</strong> 작성자 1</p>
-                    <p><strong>내용:</strong> 이 영화는 정말 좋았습니다. 강추합니다!</p>
-                </div>
-            </div>
-            <div class="post">
-                <div class="post-box">
-                    <h2>영화 제목 2</h2>
-                    <p><strong>작성자:</strong> 작성자 2</p>
-                    <p><strong>내용:</strong> 또 다른 영화에 대한 리뷰 내용입니다.</p>
-                </div>
-            </div>
-            <div class="post">
-                <div class="post-box">
-                    <h2>영화 제목 3</h2>
-                    <p><strong>작성자:</strong> 작성자 3</p>
-                    <p><strong>내용:</strong> 세 번째 영화에 대한 리뷰 내용입니다.</p>
-                </div>
-            </div>
-        </div>
+</div>
+<div class="container">
+    <div class="postcontainer">
+        <h2>최신 작성글</h2>
+        {% if posts %}
+            {% for post in posts %}
+                <blockquote class="default">
+                    <h2><span class="Cdefault">{{ post.movie_title }}</span></h2>
+                    <p>작성자: {{ post.username }}</p>
+                    <p>내용: {{ post.review }}</p>
+                </blockquote>
+            {% endfor %}
+        {% endif %}
     </div>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 영화 리뷰 게시판</p>
-        </div>
-    </footer>
+</div>
+<footer>
+    <div class="container">
+        <p>&copy; 2024 영화 리뷰 게시판</p>
+    </div>
+</footer>
 </body>
 
 </html>
