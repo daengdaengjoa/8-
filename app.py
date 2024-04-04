@@ -9,7 +9,6 @@ from datetime import datetime
 
 from openai import OpenAI
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '1234'  # 이걸 설정을 해야지 로그인 기능을 만들 수 있습니다.. 암호키 같은 기능인가봅니다..
@@ -42,15 +41,22 @@ class Posting(db.Model):  # 게시글 정보 데이터
 
 class Comment(db.Model):  # 댓글 정보 데이터
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.String, nullable=False)  # 이거 나중에 추가 되어야 함
+    post_id = db.Column(db.String, nullable=False)
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
 
 
+# 서버가 열리면 로그인되어 있던 모든 기록이 초기화 시킬 수 있도록 하는 기능
+@app.before_request
+def clear_session():
+    if not app.config.get('_got_first_request', None):
+        session.clear()  # 서버가 시작될 때 세션을 초기화합니다.
+        app.config['_got_first_request'] = True
+
+
 @app.route("/")
 def 메인화면():
-    print(session.get('user_id'))
     # 로그인 세션정보가 없을 경우
     if not session.get('user_id'):
         posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
@@ -90,7 +96,7 @@ def 로그인화면():
         pw = request.form.get('pw')
         # 입력받은 값 데이터 베이스에서 조회
         try:
-            login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first() # 데이터 베이스에 아디와 비밀번호 맞으면 통과
+            login = UserInfo.query.filter_by(user_id=user_id, pw=pw).first()  # 데이터 베이스에 아디와 비밀번호 맞으면 통과
             if login is not None:
                 session["user_id"] = login.user_id
                 return redirect(url_for('메인화면'))  # 로그인 성공시 메인화면으로 이동
@@ -157,8 +163,8 @@ def AI추천():
                 {
                     "role": "system",
                     "content": "역할: 영화 평론가, 작업: 제목과 1점에서 10점사이의 추천도와 추천이유를 제공하여 사용자에게 영화를 추천하고,"
-                    + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
-                    + "또한 영화제목은 한글과 영문 모두 출력합니다.",
+                               + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
+                               + "또한 영화제목은 한글과 영문 모두 출력합니다.",
                 },
                 {"role": "user", "content": query},
             ],
@@ -236,8 +242,8 @@ def AI추천():
 
     query = m1_plus
     url = (
-        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-        + "%s" % query
+            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+            + "%s" % query
     )
     response = requests.get(url)
     html_text = response.text
@@ -366,8 +372,8 @@ def 게시글조회():
     query = posts.movie_title + "영화"
     print(query)
     url = (
-        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-        + "%s" % query
+            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+            + "%s" % query
     )
     response = requests.get(url)
     html_text = response.text
@@ -416,8 +422,7 @@ def 게시글조회():
 
     print(data1)
     return render_template(
-        "게시글 조회.html", data=data1, comments=comments, posts=posts
-    )
+        "게시글 조회.html", data=data1, comments=comments, posts=posts , login_id=session.get('user_id'))
 
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -12,23 +14,10 @@
             </script>
         {% endif %}
     {% endwith %}
-    <link rel="stylesheet" href="styles.css">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
-        :root {
-            --primary-color: #000000;
-            --secondary-color: #757575;
-            --black: #000000;
-            --white: #ffffff;
-            --gray: #f4f4f4;
-            --gray-2: #757575;
-
-            --facebook-color: #4267B2;
-            --google-color: #DB4437;
-            --twitter-color: #1DA1F2;
-            --insta-color: #E1306C;
-        }
 
         * {
             font-family: 'Poppins', sans-serif;
@@ -126,7 +115,8 @@
             border-radius: 5px;
             cursor: pointer;
         }
-{# ----------------------------- 홈 플로팅 버튼 ---------------------------#}
+
+        {# ----------------------------- 홈 플로팅 버튼 ---------------------------#}
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -142,7 +132,8 @@
             right: 20px;
             cursor: pointer;
         }
-{# ----------------------------- 반짝이 버튼 ---------------------------#}
+
+        {# ----------------------------- 반짝이 버튼 ---------------------------#}
         .btn {
             display: inline-block;
             background: transparent;
@@ -170,6 +161,7 @@
             border: 1px solid rgba(223, 190, 106, 0);
             background-position: 99% 50%;
         }
+
         {# ----------------------------- 헤더 반짝이 ---------------------------#}
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
@@ -346,18 +338,18 @@
 </head>
 <body>
 <header>
-        <div class="example-5">
+    <div class="example-5">
    <span class="heading-line--container">
      <span class="heading-line--left"><span class="animate"></span><span class="hexa"></span></span>
         <h2>게시글 조회</h2>
        <span class="heading-line--right"><span class="animate"></span><span class="hexa"></span></span>
     </span>
-        </div>
-    </header>
+    </div>
+</header>
 <div class="container">
     <div class="post">
         <h2>{{ posts.movie_title }}
-            {% if posts.user_id == login_id %}
+            {% if posts.user_id == login_id or "adnim_team8" == login_id %}
                 <div class="edit-buttons">
                     <button class="btn" type="submit">수정</button>
                     <button class="btn" type="submit">삭제</button>
@@ -384,7 +376,7 @@
                 <div class="comment">
                     <p>{{ comment.detail }}</p>
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
-                    {% if comment.user_id == login_id %}
+                    {% if comment.user_id == login_id or "adnim_team8" == login_id %}
                         <div class="comment-buttons">
                             <button class="btn" type="submit">수정</button>
                             <button class="btn" type="submit">삭제</button>
@@ -405,7 +397,7 @@
     </div>
 </div>
 
-    <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
+<a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
 
 </body>
 </html>

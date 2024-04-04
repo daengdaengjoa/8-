@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 조회 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -13,23 +15,10 @@
             </script>
         {% endif %}
     {% endwith %}
-    <link rel="stylesheet" href="styles.css">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
-        :root {
-            --primary-color: #000000;
-            --secondary-color: #757575;
-            --black: #000000;
-            --white: #ffffff;
-            --gray: #f4f4f4;
-            --gray-2: #757575;
-
-            --facebook-color: #4267B2;
-            --google-color: #DB4437;
-            --twitter-color: #1DA1F2;
-            --insta-color: #E1306C;
-        }
 
         * {
             font-family: 'Poppins', sans-serif;
@@ -457,11 +446,11 @@
         {% for post in posts %}
             <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
                 <blockquote class="default">
-                    <h2><span class="Cdefault">{{ post.movie_title }}</span></h2>
-                    <p>글 제목: {{ post.posting_title }}</p>
-                    <p>작성자: 리뷰 내용</p>
-                    <p>평점: 리뷰 내용</p>
-                    <p>리뷰 내용: 리뷰 내용</p>
+                    <h2><span class="Cdefault">{{ post.posting_title }}</span></h2>
+                    <p>영화 제목: {{ post.movie_title }}</p>
+                    <p>작성자: {{ post.username }}</p>
+                    <p>평점: {{ post.grade }} / 5.0</p>
+                    <p>리뷰 내용: {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                 </blockquote>
             </a>
         {% endfor %}

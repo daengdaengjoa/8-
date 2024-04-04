@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 영화추천 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -12,22 +14,9 @@
             </script>
         {% endif %}
     {% endwith %}
-    <link rel="stylesheet" href="styles.css">
+
     <style>
 
-        :root {
-            --primary-color: #000000;
-            --secondary-color: #757575;
-            --black: #000000;
-            --white: #ffffff;
-            --gray: #f4f4f4;
-            --gray-2: #757575;
-
-            --facebook-color: #4267B2;
-            --google-color: #DB4437;
-            --twitter-color: #1DA1F2;
-            --insta-color: #E1306C;
-        }
 
         * {
             font-family: 'Poppins', sans-serif;

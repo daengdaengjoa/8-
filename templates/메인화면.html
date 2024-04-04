@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>영화 리뷰 게시판</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -13,26 +15,13 @@
             </script>
         {% endif %}
     {% endwith %}
-    <link rel="stylesheet" href="styles.css">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
         @import url('https://fonts.googleapis.com/css?family=Montez');
         @import url(https://fonts.googleapis.com/css?family=Francois+One);
         @import url('https://fonts.googleapis.com/css?family=Roboto:700');
 
-        :root {
-            --primary-color: #000000;
-            --secondary-color: #757575;
-            --black: #000000;
-            --white: #ffffff;
-            --gray: #f4f4f4;
-            --gray-2: #757575;
-
-            --facebook-color: #4267B2;
-            --google-color: #DB4437;
-            --twitter-color: #1DA1F2;
-            --insta-color: #E1306C;
-        }
 
         * {
             font-family: 'Poppins', sans-serif;
@@ -396,15 +385,6 @@
             }
         }
 
-        {#p {#}
-        {#    position: fixed;#}
-        {#    width: 100%;#}
-        {#    bottom: 30px;#}
-        {#    font-size: 12px;#}
-        {#    color: #999;#}
-        {#    margin-top: 200px;#}
-        {
-        #}#}
     </style>
 </head>
 
