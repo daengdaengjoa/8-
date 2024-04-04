@@ -20,17 +20,18 @@
 ![개발자 소개](이미지 링크 추후에 git헙에 추가)
 
 ## 💻 개발환경
-- **Version** : Java 17
-- **IDE** : IntelliJ
-- **Framework** : SpringBoot 2.7.11
-- **ORM** : JPA
+- **Programming Language** : Python 3.x
+- **Web Framework** : Flask
+- **Template Engine** : Jinja2
+- **Database** : SQLite (for development and testing), PostgreSQL (for deployment)
+- **IDE** : Visual Studio Code, PyCharm
+- **Version Control** : Git, GitHub
 
 ## ⚙️ 기술 스택
-- **Server** : AWS EC2
-- **DataBase** : AWS RDS, Datagrip, JPQL, ERD AqueryTool
-- **WS/WAS** : Nginx, Tomcat
-- **OCR** : AWS Textract, AWS S3
-- **아이디어 회의** : Slack, Zoom, Notion
+- **Frontend** : HTML, CSS, JavaScript
+- **Backend** : Flask
+- **Database ORMR** : SQLAlchemy
+- **Idea Brainstorming Tools and Environments** : Slack, Zep, Notion, figma
 
 ## 📝 프로젝트 아키텍쳐
 ![프로젝트 아키텍쳐]()
