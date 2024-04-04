@@ -34,7 +34,9 @@
             margin: auto;
             text-align: center;
         }
-        /* {# ----------------------------- 헤더_글자_효과 ---------------------------#} */
+
+        /*
+        {# ----------------------------- 헤더_글자_효과 ---------------------------#}  */
 
         header {
             background-color: var(--primary-color);
@@ -53,7 +55,7 @@
             position: relative;
             top: 20px;
             display: inline-block;
-            animation: bounce .3s ease infinite alternate;
+            animation: bounce 0.6s ease infinite alternate;
             font-family: 'Titan One', cursive;
             font-size: 80px;
             color: #FFF;
@@ -85,6 +87,21 @@
             animation-delay: .4s;
         }
 
+        h1 span:nth-child(6) {
+            animation-delay: .5s;
+        }
+
+        h1 span:nth-child(7) {
+            animation-delay: .6s;
+        }
+
+        h1 span:nth-child(8) {
+            animation-delay: .7s;
+        }
+
+        h1 span:nth-child(9) {
+            animation-delay: .8s;
+        }
 
         @keyframes bounce {
             100% {
@@ -101,7 +118,9 @@
                 0 50px 25px rgba(0, 0, 0, .2);
             }
         }
-        /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
+
+        /*
+        {# ----------------------------- 네비게이션 효과 ---------------------------#}  */
 
         .navigation {
             width: 100%;
@@ -218,7 +237,9 @@
             flex: 1;
             padding: 20px 0;
         }
-        /* {# ----------------------------- 풋터 ---------------------------#} */
+
+        /*
+        {# ----------------------------- 풋터 ---------------------------#}  */
 
         footer {
             background-color: var(--primary-color);
@@ -259,7 +280,8 @@
             top: 80px;
         }
 
-        /* {# ----------------------------- 게시글 표시 박스 ---------------------------#} */
+        /*
+        {# ----------------------------- 게시글 표시 박스 ---------------------------#}  */
 
         blockquote {
             display: block;
@@ -320,7 +342,9 @@
             border-left-color: #656d77;
             border-right-color: #434a53;
         }
-        /* {# ----------------------------- 메인 소개 글 ---------------------------#} */
+
+        /*
+        {# ----------------------------- 메인 소개 글 ---------------------------#}  */
 
         #containers {
             color: #999;
@@ -396,11 +420,15 @@
 <div class="container">
     <header>
         <h1>
-            <span>영</span>
-            <span>화</span>
-            <span>의</span>
-            <span>전</span>
-            <span>당</span>
+            <span>C</span>
+            <span>i</span>
+            <span>n</span>
+            <span>e</span>
+            <span> </span>
+            <span>C</span>
+            <span>h</span>
+            <span>a</span>
+            <span>t</span>
         </h1>
     </header>
     <nav class="navigation">
@@ -487,7 +515,7 @@
                     </a>
                 </li>
             {% endif %}
-        </ul>       
+        </ul>
     </nav>
     <div id=containers>
         이 곳에서
