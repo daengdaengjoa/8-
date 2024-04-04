@@ -6,8 +6,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
-
-# from openai import OpenAI
+from openai import OpenAI
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -141,8 +140,22 @@ def clear_session():
 @app.route("/")
 def 메인화면():
     # 로그인 세션정보가 없을 경우
-    posts = Posting.query.order_by(desc(Posting.date)).limit(3).all()
-    return render_template("메인화면.html", posts=posts, login=session.get('user_id'))
+    post1 = Posting.query.order_by(desc(Posting.date)).limit(5).all()
+    
+    
+    for post in post1:
+        post.review_short = post.review[:10]+'...'
+
+    data_list = []
+    for post in post1:
+        title = post.movie_title
+        data = Crawling.query.filter_by(title_user=title).limit(1).all()
+        data_list.extend(data)
+        
+    data1 = data_list
+    image_urls = [data.image_url for data in data1]
+    
+    return render_template("메인화면.html", post1=post1, login=session.get('user_id'),image_urls=image_urls)
 
 
 @app.route("/로그인화면", methods=["GET", "POST"])
@@ -434,6 +447,7 @@ def 게시글조회():
     # 전체글에서 게시글을 클릭해서 들어올 때에 해당하는 게시글에 맞추어서 글과 댓글을 가져올 수 있도록
     post_id = request.args.get("post_id")
     # 게시글 아이디에 맞추어 글의 내용을 가져온다.
+    # print(post_id)
     posts = Posting.query.filter_by(id=post_id).first()
 
     # 게시글을 이전에 방문했는지 확인하기 위해 세션 사용
