@@ -411,6 +411,8 @@
         </div>
         <p><strong>작성자:</strong> {{ posts.username }}</p>
         <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+        <p><strong>작성자 평점:</strong> {{ posts.grade }}/5.0</p>
+        <p><strong>내용:</strong></p>
         <p> {{ posts.review }}</p>
         {% if button %}
             <form method="POST">
