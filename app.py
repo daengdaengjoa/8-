@@ -7,7 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 
-from openai import OpenAI
+# from openai import OpenAI
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
