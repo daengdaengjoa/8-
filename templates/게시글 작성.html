@@ -6,7 +6,6 @@
     <title>게시글 작성 페이지</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <script type="text/javascript">
@@ -75,7 +74,7 @@
             cursor: pointer;
         }
 
-        {# ----------------------------- 홈 플로팅 버튼 ---------------------------#}
+        /*{# ----------------------------- 홈 플로팅 버튼 ---------------------------#}*/
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -135,10 +134,6 @@
             background-size: 40px;
         }
 
-        .rating__label .star-icon.filled {
-            background-image: url("https://velog.velcdn.com/images/jellykelly/post/10caf033-b0ef-4d58-804b-6e33395e4ea5/image.svg");
-        }
-
         .rating__label--full .star-icon {
             background-position: right;
         }
@@ -152,7 +147,7 @@
             cursor: default;
         }
 
-        {# ----------------------------- 반짝이 버튼 ---------------------------#}
+        /*{# ----------------------------- 반짝이 버튼 ---------------------------#}*/
         .btn {
             display: inline-block;
             background: transparent;
@@ -180,7 +175,7 @@
             border: 1px solid rgba(223, 190, 106, 0);
             background-position: 99% 50%;
         }
-        {# ----------------------------- 헤더 반짝이 ---------------------------#}
+        /*{# ----------------------------- 헤더 ---------------------------#}*/
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -284,7 +279,7 @@
 
         @-moz-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 filter: hue-rotate(0deg);
@@ -296,7 +291,7 @@
                 width: 90px;
             }
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 filter: hue-rotate(600deg);
             }
@@ -304,7 +299,7 @@
 
         @-webkit-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -317,7 +312,7 @@
                 width: 90px;
             }
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -326,7 +321,7 @@
 
         @keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -339,7 +334,7 @@
                 width: 90px;
             }
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);

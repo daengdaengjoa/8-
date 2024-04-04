@@ -7,13 +7,12 @@
     <title>메인 페이지</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <script type="text/javascript">
-        alert("{{ messages[-1] }}");
-    </script>
-    {% endif %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}");
+            </script>
+        {% endif %}
     {% endwith %}
 
     <style>
@@ -165,7 +164,11 @@
             background-position: 99% 50%;
         }
 
-        {# ----------------------------- 헤더 반짝이 ---------------------------#}
+        /*
+
+
+
+        {# ----------------------------- 헤더 반짝이 ---------------------------#}     */
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -269,7 +272,7 @@
 
         @-moz-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 filter: hue-rotate(0deg);
@@ -284,7 +287,7 @@
             }
 
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 filter: hue-rotate(600deg);
             }
@@ -292,7 +295,7 @@
 
         @-webkit-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -308,7 +311,7 @@
             }
 
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -317,7 +320,7 @@
 
         @keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -333,7 +336,7 @@
             }
 
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -346,6 +349,9 @@
             -webkit-transform: scale(-1, 1);
             transform: scale(-1, 1);
         }
+        .post-info {
+        margin-right: 8rem;
+    }
     </style>
 </head>
 
@@ -361,35 +367,50 @@
 </header>
 <div class="container">
     <div class="post">
-        <h2>{{ posts.movie_title }}
-            {% if posts.user_id == login_id or "adnim_team8" == login_id %}
+        <h2>
+            <span class="post-info">{{ posts.movie_title }}</span>
+            <span class="post-info">조회수: {{ posts.views }}</span>
+            <span class="post-info">좋아요: {{ posts.likes }}</span>
+            <span class="post-info">
+            {% if posts.user_id == login_id or "admin_team8" == login_id %}
                 <div class="edit-buttons">
                     <button class="btn" type="submit">수정</button>
                     <button class="btn" type="submit">삭제</button>
                 </div>
-                {% endif %}
-            </h2>
-            <div class="card">
-                <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
-                <h2>{{ data.title }}</h2>
-                <p><strong>개요:</strong> {{ data.info }}</p>
-                <p><strong>개봉:</strong> {{ data.date }}</p>
-                <p><strong>평점:</strong> {{ data.star }}</p>
-                <p><strong>관객수:</strong> {{ data.nums }}</p>
-                <p><strong>줄거리:</strong> {{ data.content }}</p>
-            </div>
-            <p><strong>작성자:</strong> {{ posts.username }}</p>
-            <p><strong>제목:</strong> {{ posts.posting_title }}</p>
-            <p> {{ posts.review }}</p>
+            {% endif %}
+            </span>
+        </h2>
+        <div class="card">
+            <img src="{{ data.image_url }}" alt="파이썬에서 가져온 이미지">
+            <h2>{{ data.title }}</h2>
+            <p><strong>개요:</strong> {{ data.info }}</p>
+            <p><strong>개봉:</strong> {{ data.date }}</p>
+            <p><strong>평점:</strong> {{ data.star }}</p>
+            <p><strong>관객수:</strong> {{ data.nums }}</p>
+            <p><strong>줄거리:</strong> {{ data.content }}</p>
         </div>
-        {% if comments %}
+        <p><strong>작성자:</strong> {{ posts.username }}</p>
+        <p><strong>제목:</strong> {{ posts.posting_title }}</p>
+        <p> {{ posts.review }}</p>
+        {% if button %}
+            <form method="POST">
+                <button class="btn" type="submit" name="like" value="1">안 좋아요</button>
+            </form>
+        {% else %}
+            <form method="POST">
+                <button class="btn" type="submit" name="like" value="1">좋아요</button>
+            </form>
+        {% endif %}
+
+    </div>
+    {% if comments %}
         {% for comment in comments %}
             <div class="comments">
                 <h3>{{ comment.user_id }}</h3>
                 <div class="comment">
                     <p>{{ comment.detail }}</p>
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
-                    {% if comment.user_id == login_id or "adnim_team8" == login_id %}
+                    {% if comment.user_id == login_id or "admin_team8" == login_id %}
                         <div class="comment-buttons">
                             <button class="btn" type="submit">수정</button>
                             <button class="btn" type="submit">삭제</button>
@@ -398,17 +419,17 @@
                 </div>
             </div>
         {% endfor %}
-        {% endif %}
-        <div class="comment-form">
-            <h3>댓글 작성</h3>
-            <form method="POST">
-                <label>
-                    <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
-                </label><br>
-                <button class="btn" type="submit">댓글 작성</button>
-            </form>
-        </div>
+    {% endif %}
+    <div class="comment-form">
+        <h3>댓글 작성</h3>
+        <form method="POST">
+            <label>
+                <textarea name="detail" rows="4" cols="50" placeholder="댓글을 작성하세요..."></textarea>
+            </label><br>
+            <button class="btn" type="submit">댓글 작성</button>
+        </form>
     </div>
+</div>
 
 <a href="/" class="scroll-to-top" style="text-decoration: none; color: #ddd;">home</a>
 

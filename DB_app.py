@@ -33,6 +33,7 @@ class Posting(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.String, nullable=False)
     user_id = db.Column(db.String, nullable=False)
     detail = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)

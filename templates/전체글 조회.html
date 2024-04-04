@@ -7,7 +7,6 @@
     <title>게시글 조회 페이지</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <script type="text/javascript">
@@ -45,8 +44,8 @@
             margin: 0 auto;
             padding: 20px 0;
         }
+        /* {# ----------------------------- 게시판 버튼 ---------------------------#} */
 
-        {# ----------------------------- 게시판 버튼 ---------------------------#}
         blockquote {
             display: block;
             background: #fff;
@@ -116,8 +115,8 @@
             position: relative;
             top: 80px;
         }
+        /* {# ----------------------------- 리뷰 ---------------------------#} */
 
-        {# ----------------------------- 리뷰 ---------------------------#}
 
         .review h2 {
             margin-top: 0;
@@ -126,8 +125,8 @@
         .review p {
             margin-bottom: 10px;
         }
+        /* {# ----------------------------- 풋터 ---------------------------#} */
 
-        {# ----------------------------- 풋터 ---------------------------#}
         footer {
             background-color: #333;
             color: #fff;
@@ -135,8 +134,8 @@
             width: 100%;
             text-align: center;
         }
+        /* {# ----------------------------- 페이지 네이션 ---------------------------#} */
 
-        {# ----------------------------- 페이지 네이션 ---------------------------#}
         .pagination {
             display: inline-block;
         }
@@ -180,8 +179,8 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+        /* {# ----------------------------- 플로팅 홈버튼 ---------------------------#} */
 
-        {# ----------------------------- 플로팅 홈버튼 ---------------------------#}
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -222,8 +221,8 @@
                 transform: translateX(-170px);
             }
         }
+        /* {# ----------------------------- 버튼_반짝이_효과 ---------------------------#} */
 
-        {# ----------------------------- 버튼_반짝이_효과 ---------------------------#}
         .btn {
             padding: 10px 20px;
             border-radius: 5px;
@@ -264,8 +263,8 @@
             height: 2px;
             background: #999;
         }
+        /* {# ----------------------------- 헤더_글자_효과 ---------------------------#} */
 
-        {# ----------------------------- 헤더_글자_효과 ---------------------------#}
         .example-5 .heading-line--container {
             padding: 0 2em;
             width: auto;
@@ -358,7 +357,7 @@
 
         @-moz-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 filter: hue-rotate(0deg);
@@ -373,7 +372,7 @@
             }
 
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 filter: hue-rotate(600deg);
             }
@@ -381,7 +380,7 @@
 
         @-webkit-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -397,7 +396,7 @@
             }
 
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -406,7 +405,7 @@
 
         @keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -422,7 +421,7 @@
             }
 
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -459,6 +458,7 @@
                     <p>작성자: {{ post.username }}</p>
                     <p>평점: {{ post.grade }} / 5.0</p>
                     <p>리뷰 내용: {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+                    <p>조회수: {{ post.views }}  좋아요: {{ post.likes }}</p>
                 </blockquote>
             </a>
             {% endfor %}

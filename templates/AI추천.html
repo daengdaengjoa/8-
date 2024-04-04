@@ -6,7 +6,6 @@
     <title>AI 영화추천 페이지</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <script type="text/javascript">
@@ -75,7 +74,7 @@
             height: 200px;
         }
 
-        {# ----------------------------- 홈 플로팅 버튼 ---------------------------#}
+        /*{#----------------------------- 홈 플로팅 버튼 ---------------------------#}*/
         .scroll-to-top {
             width: 50px;
             height: 50px;
@@ -92,7 +91,7 @@
             cursor: pointer;
         }
 
-        {# ----------------------------- 반짝이 버튼 ---------------------------#}
+        /*{# ----------------------------- 반짝이 버튼 ---------------------------#}*/
         .btn {
             display: inline-block;
             background: transparent;
@@ -121,7 +120,7 @@
             background-position: 99% 50%;
         }
 
-        {# ----------------------------- 헤더 표시 ---------------------------#}
+        /*{# ----------------------------- 헤더 표시 ---------------------------#}*/
         .example-5 .heading-line--container .heading-line--left,
         .example-5 .heading-line--container .heading-line--right {
             position: absolute;
@@ -225,7 +224,7 @@
 
         @-moz-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 filter: hue-rotate(0deg);
@@ -237,7 +236,7 @@
                 width: 90px;
             }
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 filter: hue-rotate(600deg);
             }
@@ -245,7 +244,7 @@
 
         @-webkit-keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -258,7 +257,7 @@
                 width: 90px;
             }
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -267,7 +266,7 @@
 
         @keyframes beepbeep {
             0% {
-                width: 0px;
+                width: 0;
                 opacity: 0;
                 right: -10%;
                 -webkit-filter: hue-rotate(0deg);
@@ -280,7 +279,7 @@
                 width: 90px;
             }
             100% {
-                width: 0px;
+                width: 0;
                 right: 100%;
                 -webkit-filter: hue-rotate(600deg);
                 filter: hue-rotate(600deg);
@@ -322,7 +321,9 @@
     <form action="/AI추천" method="POST">
         <div>
             <label>질문:</label>
-            <textarea name="ask" placeholder="구체적으로 적어주세요" required></textarea>
+            <label>
+                <textarea name="ask" placeholder="구체적으로 적어주세요" required></textarea>
+            </label>
         </div>
         <button class="btn" type="submit">작성 완료</button>
     </form>

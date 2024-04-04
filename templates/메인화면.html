@@ -7,7 +7,6 @@
     <title>영화 리뷰 게시판</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    {#  알림창 팝업  #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <script type="text/javascript">
@@ -35,8 +34,8 @@
             margin: auto;
             text-align: center;
         }
+        /* {# ----------------------------- 헤더_글자_효과 ---------------------------#} */
 
-        {# ----------------------------- 헤더_글자_효과 ---------------------------#}
         header {
             background-color: var(--primary-color);
             color: var(--white);
@@ -102,8 +101,8 @@
                 0 50px 25px rgba(0, 0, 0, .2);
             }
         }
+        /* {# ----------------------------- 네비게이션 효과 ---------------------------#} */
 
-        {# ----------------------------- 네비게이션 효과 ---------------------------#}
         .navigation {
             width: 100%;
             border-bottom: 3px solid #ccd7d7;
@@ -218,8 +217,8 @@
         .content {
             padding: 20px 0;
         }
+        /* {# ----------------------------- 풋터 ---------------------------#} */
 
-        {# ----------------------------- 풋터 ---------------------------#}
         footer {
             background-color: var(--primary-color);
             color: var(--white);
@@ -255,8 +254,8 @@
             top: 80px;
         }
 
+        /* {# ----------------------------- 게시글 표시 박스 ---------------------------#} */
 
-        {# ----------------------------- 게시글 표시 박스 ---------------------------#}
         blockquote {
             display: block;
             background: #fff;
@@ -316,8 +315,8 @@
             border-left-color: #656d77;
             border-right-color: #434a53;
         }
+        /* {# ----------------------------- 메인 소개 글 ---------------------------#} */
 
-        {# ----------------------------- 메인 소개 글 ---------------------------#}
         #containers {
             color: #999;
             text-transform: uppercase;
@@ -336,7 +335,7 @@
 
         #flip > div > div {
             color: #fff;
-            padding: 0px 25px;
+            padding: 0 25px;
             height: 45px;
             margin-bottom: 45px;
             display: inline-block;
@@ -375,10 +374,10 @@
                 margin-top: -90px;
             }
             71% {
-                margin-top: 0px;
+                margin-top: 0;
             }
             99.99% {
-                margin-top: 0px;
+                margin-top: 0;
             }
             100% {
                 margin-top: -270px;

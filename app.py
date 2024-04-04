@@ -9,7 +9,6 @@ from datetime import datetime
 
 from openai import OpenAI
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config["SECRET_KEY"] = (
@@ -41,6 +40,8 @@ class Posting(db.Model):  # 게시글 정보 데이터
     review = db.Column(db.String, nullable=False)
     grade = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
+    views = db.Column(db.Integer, nullable=False)
+    likes = db.Column(db.Integer, nullable=False)
 
 
 class Comment(db.Model):  # 댓글 정보 데이터
@@ -150,13 +151,15 @@ def 게시글작성():
             review=request.form["review"],
             grade=request.form["rating"],
             date=datetime.now(),
+            views=0,
+            likes=0,
         )
 
         query = request.form["movie_title"] + "영화"
         print(query)
         url = (
-            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-            + "%s" % query
+                "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+                + "%s" % query
         )
         response = requests.get(url)
         html_text = response.text
@@ -239,8 +242,8 @@ def AI추천():
                 {
                     "role": "system",
                     "content": "역할: 영화 평론가, 작업: 제목과 1점에서 10점사이의 추천도와 추천이유를 제공하여 사용자에게 영화를 추천하고,"
-                    + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
-                    + "또한 같은영화를 추천하지 않으며 영화제목은 한글과 영문 모두 출력합니다.",
+                               + "선택 항목은 지난 30년간의 영화이며 TV 시리즈가 포함되지 않도록 합니다. 또한 추천도는 엄격한기준으로 매깁니다."
+                               + "또한 같은영화를 추천하지 않으며 영화제목은 한글과 영문 모두 출력합니다.",
                 },
                 {"role": "user", "content": query},
             ],
@@ -318,8 +321,8 @@ def AI추천():
 
     query = m1_plus
     url = (
-        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-        + "%s" % query
+            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+            + "%s" % query
     )
     response = requests.get(url)
     html_text = response.text
@@ -429,22 +432,58 @@ def 게시글조회():
     # 게시글 아이디에 맞추어 글의 내용을 가져온다.
     posts = Posting.query.filter_by(id=post_id).first()
 
+    # 게시글을 이전에 방문했는지 확인하기 위해 세션 사용
+    visited_posts = session.get('visited_posts', [])
+    if post_id not in visited_posts:
+        # 이전에 방문하지 않은 게시글일 경우 조회수 증가
+        posts.views += 1
+        visited_posts.append(post_id)
+        session['visited_posts'] = visited_posts
+
+        # 조회수를 데이터베이스에 반영
+        db.session.commit()
+
+    print(posts.views)
     # POST시 댓글 저장한다.
     if request.method == "POST":
         if not session.get("user_id"):
             flash("로그인이 필요한 기능입니다.")
             return render_template("로그인 화면.html")
-        new_Comment = Comment(
-            post_id=post_id,
-            user_id=session.get("user_id"),
-            detail=request.form["detail"],
-            date=datetime.now(),
-        )
-        # 데이터베이스 세션에 추가
-        db.session.add(new_Comment)
+        if request.form.get("detail"):
+            new_Comment = Comment(
+                post_id=post_id,
+                user_id=session.get("user_id"),
+                detail=request.form["detail"],
+                date=datetime.now(),
+            )
+            # 데이터베이스 세션에 추가
+            db.session.add(new_Comment)
 
-        # 변경 사항 커밋
-        db.session.commit()
+            # 변경 사항 커밋
+            db.session.commit()
+
+        elif request.form.get("like"):
+            # 게시글을 이전에 좋아요했는지 확인하기 위해 세션 사용
+            liked_posts = session.get('liked_posts', [])
+            if post_id in liked_posts:
+                # 이미 좋아요를 누른 게시글일 경우
+                # 좋아요를 취소하고 세션에서 해당 게시글을 제거
+                liked_posts.remove(post_id)
+                session['liked_posts'] = liked_posts
+                # 좋아요 횟수를 데이터베이스에서 차감
+                posts.likes -= 1
+
+            else:
+                # 이전에 좋아요를 누르지 않은 게시글일 경우
+                # 좋아요를 처리하고 좋아요한 게시글을 세션에 추가
+                liked_posts.append(post_id)
+                session['liked_posts'] = liked_posts
+                # 좋아요 횟수를 데이터베이스에 반영
+                posts.likes += 1
+
+            # 데이터베이스 변경 사항 커밋
+            db.session.commit()
+
     # 게시글 내용 표시
     comments = Comment.query.filter_by(post_id=post_id).all()
 
@@ -452,19 +491,9 @@ def 게시글조회():
 
     data1 = Crawling.query.filter_by(title_user=title).first()
 
-    data1 = {
-        "title": title,
-        "info": info,
-        "date": date,
-        "star": star,
-        "nums": nums,
-        "content": content,
-        "image_url": image_url,
-    }
-
     print(data1)
     return render_template(
-        "게시글 조회.html", data=data1, comments=comments, posts=posts , login_id=session.get('user_id'))
+        "게시글 조회.html", data=data1, comments=comments, posts=posts, login_id=session.get('user_id'), button=post_id in session.get('liked_posts', []))
 
 
 if __name__ == "__main__":
