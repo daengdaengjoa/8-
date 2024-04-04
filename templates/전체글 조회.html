@@ -48,6 +48,11 @@
             margin: 0 auto;
             padding: 20px 0;
         }
+
+        blockquote.default:hover {
+            transform: scale(1.1);
+            box-shadow: 10px 10px 10px var(--gray-2);
+        }
         /* {# ----------------------------- 게시판 버튼 ---------------------------#} */
 
         blockquote {
@@ -681,7 +686,7 @@
         </nav>
         <div class="content">
             {% for post in posts %}
-            <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit;">
+            <a href="/게시글조회?post_id={{ post.id }}" style="text-decoration: none; color: inherit; ">
                 <blockquote class="default">
                     <h2><span class="Cdefault">{{ post.posting_title }}</span></h2>
                     <p>영화 제목: {{ post.movie_title }}</p>
