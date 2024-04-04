@@ -51,6 +51,19 @@ class Comment(db.Model):  # 댓글 정보 데이터
     date = db.Column(db.DateTime, nullable=False)
 
 
+class Crawling(db.Model):  # 크롤링 정보 데이터
+    id = db.Column(db.Integer, primary_key=True)
+    title_user = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    info = db.Column(db.String, nullable=False)
+    date = db.Column(db.String, nullable=False)
+    star = db.Column(db.String, nullable=False)
+    nums = db.Column(db.String, nullable=False)
+    content = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
+    title_user = db.Column(db.String, nullable=False)
+
+
 @app.route("/")
 def 메인화면():
     print(session.get("user_id"))
@@ -131,10 +144,65 @@ def 게시글작성():
             grade=request.form["rating"],
             date=datetime.now(),
         )
-        # 데이터베이스 세션에 추가
-        db.session.add(new_Posting)
+        
+        query = request.form["movie_title"] + "영화"
+        print(query)
+        url = (
+            "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
+            + "%s" % query
+        )
+        response = requests.get(url)
+        html_text = response.text
+        soup = BeautifulSoup(response.text, "html.parser")
 
-        # 변경 사항 커밋
+        data1 = {}
+        try:
+            title = soup.select_one("._text").text.strip()
+        except AttributeError:
+            title = "-"
+        try:
+            info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
+        except AttributeError:
+            info = "-"
+        try:
+            date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
+        except AttributeError:
+            date = "-"
+        try:
+            star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
+        except AttributeError:
+            star = "-"
+        try:
+            nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
+        except AttributeError:
+            nums = "-"
+        try:
+            content = soup.select_one(".desc._text").text.strip()
+        except AttributeError:
+            content = "-"
+        image_element = soup.select_one("a.thumb._item img")
+        if image_element:
+            image_url = image_element["src"]
+        else:
+            image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
+
+        existing_entry = Crawling.query.filter_by(title=title).first()
+        if existing_entry:
+            print("이미존제하는영화")
+        else:
+            new_Crawling = Crawling(
+                title=title,
+                info=info,
+                date=date,
+                star=star,
+                nums=nums,
+                content=content,
+                image_url=image_url,
+                title_user=request.form["movie_title"]
+            )
+            db.session.add(new_Crawling)
+        
+        db.session.add(new_Posting)
         db.session.commit()
         flash("게시글이 등록 되었습니다.")
         return redirect("/")
@@ -370,58 +438,11 @@ def 게시글조회():
         db.session.commit()
     # 게시글 내용 표시
     comments = Comment.query.filter_by(post_id=post_id).all()
+    
+    title = posts.movie_title
 
-    # query = input('검색할 영화를 입력하세요: ')
-    query = posts.movie_title + "영화"
-    print(query)
-    url = (
-        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query="
-        + "%s" % query
-    )
-    response = requests.get(url)
-    html_text = response.text
-    soup = BeautifulSoup(response.text, "html.parser")
+    data1 = Crawling.query.filter_by(title_user=title).first()
 
-    data1 = {}
-    try:
-        title = soup.select_one("._text").text.strip()
-    except AttributeError:
-        title = "-"
-    try:
-        info = soup.select_one('.info_group dt:contains("개요") + dd').text.strip()
-    except AttributeError:
-        info = "-"
-    try:
-        date = soup.select_one('.info_group dt:contains("개봉") + dd').text.strip()
-    except AttributeError:
-        date = "-"
-    try:
-        star = soup.select_one('.info_group dt:contains("평점") + dd').text.strip()
-    except AttributeError:
-        star = "-"
-    try:
-        nums = soup.select_one('.info_group dt:contains("관객수") + dd').text.strip()
-    except AttributeError:
-        nums = "-"
-    try:
-        content = soup.select_one(".desc._text").text.strip()
-    except AttributeError:
-        content = "-"
-    image_element = soup.select_one("a.thumb._item img")
-    if image_element:
-        image_url = image_element["src"]
-    else:
-        image_url = "https://lh6.googleusercontent.com/proxy/fDnxsdswqStDDt7hMOlRk6C7OMjZD1dJ2SYJjdQ-UEb83LfqzWqljAIS4F0oN9Q9L1vl4bK87cmATi5ueHvTbA"
-
-    data1 = {
-        "title": title,
-        "info": info,
-        "date": date,
-        "star": star,
-        "nums": nums,
-        "content": content,
-        "image_url": image_url,
-    }
 
     print(data1)
     return render_template(
