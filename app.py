@@ -170,12 +170,6 @@ def delete_post(post_id):
     return redirect(url_for('메인화면'))
 
 
-@app.route("/edit_comment/<int:post_id>", methods=['GET', 'POST'])
-def edit_comment(post_id):
-    comments = Comment.query.get_or_404(post_id)
-    return render_template('댓글 수정.html', comments=comments, post_id=post_id)
-
-
 @app.route("/update_comment/<int:post_id>", methods=['GET', 'POST'])
 def update_comment(post_id):
     comment = Comment.query.get_or_404(post_id)
