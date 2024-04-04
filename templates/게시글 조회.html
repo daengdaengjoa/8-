@@ -610,7 +610,7 @@
                     <form method="POST" action="/edit/{{ posts.id }}">
                         <button type="submit" class="btn-btn">수정</button>
                     </form>
-                    <form method="POST" action="/delete_post/{{ posts.id }}">
+                    <form method="POST" action="/delete_post/{{ posts.id }}" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
                         <button type="submit" class="btn-btn">삭제</button>
                     </form>
                 </div>
