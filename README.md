@@ -1,16 +1,25 @@
-# Team-8
-소개글
+# 🗣️Project: CineChat
+#### 영화 리뷰와 댓글로 소통하고, AI가 취향맞춤 영화 추천을 해주는 웹사이트
 
-## 👨‍🏫 Project Introduction: CineMind
-소개글
+<br>
 
-## ⏲️ Development time 
+## 👨‍🏫 Project Introduction
+<p>프로젝트의 시작점은 영화를 좋아하는 Team-8의 구성원들이 서로의 취향과 의견을 공유할 수 있는 웹사이트를 만들어 보기로 한 것입니다.</p>
+<p>저희는 CineChat을 통해 Team-8 구성원 뿐만 아니라 영화를 사랑하는 모든 분들이 다양한 의견을 나눌 수 있게 하는 것을 목표로 했습니다.</p>
+<p>이를 위해 CineChat은 영화 리뷰 작성과 그에 대한 댓글 작성, 그리고 Chat GPT를 통한 영화추천 기능을 제공합니다.</p>
+
+<br>
+
+## ⏲️ Development time
 - 2024.04.01(월) ~ 2023.04.05(금)
 - 아이디어 노트 작성
 - 아이디어 발표
+- 와이어프레임 및 SA문서 작성
+- 기능구현
 - 발표
-  
-## 🧑‍🤝‍🧑 Development Team 
+<br>
+
+## 🧑‍🤝‍🧑 Development Team: Team-8 
 - **김도연** : 
 - **김준수** : 
 - **박현준** : 게시글 검색 기능, 로그인/로그아웃 및 로그인 상태에서 게시물 작성 가능여부, 관리자 계정 생성후 관리기능, merge 후 오류수정, 좋아요/조회수 기능
@@ -27,6 +36,8 @@
   
 ![개발자 소개](이미지 링크 추후에 git헙에 추가)
 
+<br>
+
 ## 💻 Development Environment
 - **Programming Language** : Python 3.x
 - **Web Framework** : Flask
@@ -34,15 +45,19 @@
 - **Database** : SQLite (for development and testing), PostgreSQL (for deployment)
 - **IDE** : Visual Studio Code, PyCharm
 - **Version Control** : Git, GitHub
+<br>
 
 ## ⚙️ Technology Stack
 - **Frontend** : HTML, CSS, JavaScript
 - **Backend** : Flask
 - **Database ORMR** : SQLAlchemy
 - **Idea Brainstorming Tools and Environments** : Slack, Zep, Notion, figma
+<br>
 
 ## 📝 Project Architecture
 ![프로젝트 아키텍쳐]()
+
+<br>
 
 ## 📌 Key Features
 
