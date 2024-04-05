@@ -46,7 +46,7 @@
 <br>
 
 ## 📝 Project Architecture
-![image](https://github.com/daengdaengjoa/Team-8/assets/157565164/bca5d394-33ee-431e-a238-b698764cac9b)
+S.A. 노션 : https://www.notion.so/teamsparta/S-A-8-a04adb1fb1884d80aa92feea44fb70d0
 
 
 <br>
