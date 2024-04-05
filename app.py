@@ -253,7 +253,7 @@ def AI추천():
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
 
-        client = OpenAI(api_key="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")
+        client = OpenAI(api_key="sk-xxxxx")
 
         query = request.form["ask"]
 
