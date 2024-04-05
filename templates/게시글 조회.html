@@ -121,18 +121,18 @@
             margin-bottom: 10px;
         }
 
-        form button {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            font-size: 16px;
-            font-weight: 400;
-            width: 80px;
-            height: 50px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+        {#form button {#}
+        {#    background-color: #333;#}
+        {#    color: #fff;#}
+        {#    border: none;#}
+        {#    font-size: 16px;#}
+        {#    font-weight: 400;#}
+        {#    width: 80px;#}
+        {#    height: 50px;#}
+        {#    padding: 10px 20px;#}
+        {#    border-radius: 10px;#}
+        {#    cursor: pointer;#}
+        {#}#}
 
         .btn {
 
@@ -699,13 +699,13 @@
                     {% if comment.user_id == login_id or "admin_team8" == login_id %}
                         <div class="comment-buttons" style="display: flex; justify-content: flex-start">
 
-                            <button type="submit" class="update-comment-btn{{ loop.index }}"
+                            <button type="submit" class="update-comment-btn{{ loop.index }}" style="border-radius: 10px"
                                     id="update-comment-btn{{ loop.index }}">수정
                             </button>
 
                             <form method="POST" action="/delete_comment/{{ comment.id }}">
 
-                                <button type="submit" class="delete-comment-btn">삭제</button>
+                                <button type="submit" class="delete-comment-btn" style="border-radius: 10px">삭제</button>
 
                             </form>
                         </div>
