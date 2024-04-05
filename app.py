@@ -191,6 +191,9 @@ def 로그인화면():
             if login is not None:
                 session["user_id"] = login.user_id
                 return redirect(url_for("메인화면"))  # 로그인 성공시 메인화면으로 이동
+            else:
+                flash("입력값이 잘못 되었습니다.")
+                return render_template("로그인 화면.html", login=session.get('user_id'))
         # 오류시 로그인 화면 다시 출력
         except:
             flash("입력값이 잘못 되었습니다.")
@@ -250,7 +253,7 @@ def AI추천():
     # 글작성의 내용을 입력하고 작성 완료를 누르면 동작
     if request.method == "POST":
 
-        client = OpenAI(api_key="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")
+        client = OpenAI(api_key="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")
 
         query = request.form["ask"]
 
@@ -272,7 +275,7 @@ def AI추천():
         function1 = [
             {
                 "name": "get_movie_title",
-                "description": "영화의영문 제목을 찾아서 알려줍니다.",
+                "description": "영화의 한글 제목을 찾아서 알려줍니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
