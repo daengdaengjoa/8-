@@ -47,6 +47,7 @@
 
 ## 📝 Project Architecture
 S.A. 노션 : https://www.notion.so/teamsparta/S-A-8-a04adb1fb1884d80aa92feea44fb70d0
+![image](https://github.com/daengdaengjoa/Team-8/assets/157565164/a8ab58ef-e818-44f3-a27e-32b8c3ed7c40)
 
 
 <br>
