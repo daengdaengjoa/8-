@@ -135,12 +135,13 @@
         }
 
         .btn {
+
             background-color: #333;
             color: #fff;
             border: none;
             font-size: 16px;
             font-weight: 400;
-            width: 120px;
+            width: 150px;
             height: 50px;
             padding: 10px 20px;
             border-radius: 10px;
@@ -160,6 +161,18 @@
             cursor: pointer;
         }
 
+        .btn-btn {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            font-size: 10px;
+            font-weight: 400;
+            width: 80px;
+            height: 30px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
 
         .scroll-to-top {
             width: 50px;
@@ -521,6 +534,11 @@
         .post-info {
             margin-right: 8rem;
         }
+
+        .post-info-g {
+            font-size: 16px;
+            margin-right: 8rem;
+        }
     </style>
 </head>
 
@@ -624,8 +642,8 @@
     <div class="post">
         <h2>
             <span class="post-info">{{ posts.movie_title }}</span>
-            <span class="post-info">조회수: {{ posts.views }}</span>
-            <span class="post-info">좋아요: {{ posts.likes }}</span>
+            <span class="post-info-g">조회수: {{ posts.views }}</span>
+            <span class="post-info-g">좋아요: {{ posts.likes }}</span>
             <span class="post-info">
             {% if posts.user_id == login_id or "admin_team8" == login_id %}
                 <div class="edit-buttons" style="display: flex; justify-content: flex-start">
@@ -680,11 +698,15 @@
                     <p>{{ comment.date.strftime("%Y-%m-%d %H:%M:%S") }}</p>
                     {% if comment.user_id == login_id or "admin_team8" == login_id %}
                         <div class="comment-buttons" style="display: flex; justify-content: flex-start">
+
                             <button type="submit" class="update-comment-btn{{ loop.index }}"
                                     id="update-comment-btn{{ loop.index }}">수정
                             </button>
+
                             <form method="POST" action="/delete_comment/{{ comment.id }}">
+
                                 <button type="submit" class="delete-comment-btn">삭제</button>
+
                             </form>
                         </div>
                     {% endif %}
@@ -697,7 +719,7 @@
                         <textarea name="detail" rows="4" cols="50"
                                   placeholder="댓글을 수정하세요...">{{ comment.detail }}</textarea>
                     </label><br>
-                    <button type="submit">댓글 수정</button>
+                    <button type="submit" class="btn">댓글 수정</button>
                 </form>
             </div>
             <script>
