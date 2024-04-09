@@ -47,6 +47,7 @@ CineChat은 영화 리뷰 작성과 그에 대한 댓글 작성, 그리고 Chat 
 S.A. 노션 : https://www.notion.so/teamsparta/S-A-8-a04adb1fb1884d80aa92feea44fb70d0
 ![image](https://github.com/daengdaengjoa/Team-8/assets/157565164/a8ab58ef-e818-44f3-a27e-32b8c3ed7c40)
 
+시연영상
 https://www.youtube.com/watch?v=lOL_L8jN1uk
 <br>
 
